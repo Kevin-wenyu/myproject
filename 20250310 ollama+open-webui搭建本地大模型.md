@@ -4,7 +4,10 @@
 curl http://localhost:11434/api/version
 
 ### 第一种方法：
-```launchctl setenv OLLAMA_HOST "0.0.0.0" ``` 
+```
+launchctl setenv OLLAMA_HOST "0.0.0.0" 
+launchctl setenv OLLAMA_KEEP_ALIVE "-1"
+``` 
 ### 第二种方法：
 ```
 OLLAMA_HOST=0.0.0.0:11434 OLLAMA_KEEP_ALIVE=-1 ollama serve
