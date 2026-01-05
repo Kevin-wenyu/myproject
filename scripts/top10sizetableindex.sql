@@ -1,0 +1,1 @@
+select schemaname,tablename,pg_size_pretty(pg_total_relation_size((quote_ident(schemaname)||'.'||quote_ident(tablename))::regclass)) from pg_tables order by pg_total_relation_size((quote_ident(schemaname)||'.'||quote_ident(tablename))::regclass) desc limit 10; 

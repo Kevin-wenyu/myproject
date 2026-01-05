@@ -48,11 +48,23 @@ select to_char(now(),'YYYYMMDDHH24MISS') as "spooltime",current_database() as "d
 \echo 
 \echo '>>> Creating ':datname' database report...'
 \echo
+-- ==============================================================================
+--                            Basic Check
+-- ==============================================================================
+-- 新增权限验证
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = current_user AND rolsuper) THEN
+    RAISE EXCEPTION '必须使用超级用户权限执行此脚本';
+  END IF;
+END $$;
 
 -- ==============================================================================
 --                            Script Settings
 -- ==============================================================================
-\set internalVersion V1.1
+\set internalVersion V1.2
+\set internalDate 2023/03/10
+\set internalAuthor Kevin Ge
 \r
 \pset format html
 \pset footer off

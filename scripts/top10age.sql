@@ -1,0 +1,2 @@
+--select relnamespace::regnamespace,relname,pg_size_pretty(pg_relation_size(oid)),age(relfrozenxid) from pg_class where relkind='r' and relnamespace<>'pg_catalog'::regnamespace and relnamespace<>'information_schema'::regnamespace order by age(relfrozenxid) desc,pg_relation_size(oid) desc limit 10; 
+select relnamespace::regnamespace,relname,pg_size_pretty(pg_relation_size(oid)),age(relfrozenxid) from pg_class where relkind='r' and relpersistence !='x' order by age(relfrozenxid) desc,pg_relation_size(oid) desc limit 10; 

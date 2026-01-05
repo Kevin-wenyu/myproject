@@ -1,0 +1,1 @@
+select rolname,oid,rolconnlimit as connlimit,rolsuper as super,rolcanlogin as canlogin,pg_catalog.shobj_description(pg_roles.oid, 'pg_authid') AS description,rolconfig from pg_roles where rolcanlogin order by oid;

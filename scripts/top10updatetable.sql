@@ -1,0 +1,1 @@
+select schemaname,relname,n_live_tup,n_tup_upd,n_tup_del,round(n_tup_hot_upd/(case when n_tup_upd=0 then 1.0 else n_tup_upd::numeric end),4) from pg_stat_all_tables order by n_tup_upd+n_tup_del desc limit 10;

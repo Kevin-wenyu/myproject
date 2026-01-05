@@ -1,0 +1,4957 @@
+kingbase database logical backup begin : 2022-11-05 03:00:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kingbase database logical backup end : 2022-11-05 03:00:01
+
+kingbase database logical backup begin : 2022-11-06 03:00:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kingbase database logical backup end : 2022-11-06 03:00:01
+
+kingbase database logical backup begin : 2022-11-07 03:00:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kingbase database logical backup end : 2022-11-07 03:00:01
+
+kingbase database logical backup begin : 2022-11-08 03:00:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kingbase database logical backup end : 2022-11-08 03:00:01
+
+kingbase database logical backup begin : 2022-11-09 03:00:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+ksql: 错误: 无法连接到服务器：无法联接到服务器: 没有那个文件或目录
+	服务器是否在本地运行并且在 Unix 域套接字
+	"/tmp/.s.KINGBASE.54321"上准备接受联接?
+kingbase database logical backup end : 2022-11-09 03:00:01
+
+kingbase database logical backup begin : 2022-11-10 03:00:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022111003.dmp
+backup_openfalcon_2022111003.log
+kmoa_2022111003.dmp
+backup_kmoa_2022111003.log
+kingbase database logical backup end : 2022-11-10 03:00:03
+
+kingbase database logical backup begin : 2022-11-11 03:00:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022111103.dmp
+backup_openfalcon_2022111103.log
+kmoa_2022111103.dmp
+backup_kmoa_2022111103.log
+kingbase database logical backup end : 2022-11-11 03:00:03
+
+kingbase database logical backup begin : 2022-11-12 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022111200.dmp
+backup_openfalcon_2022111200.log
+kmoa_2022111200.dmp
+backup_kmoa_2022111200.log
+kingbase database logical backup end : 2022-11-12 00:30:03
+
+kingbase database logical backup begin : 2022-11-13 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022111300.dmp
+backup_openfalcon_2022111300.log
+kmoa_2022111300.dmp
+backup_kmoa_2022111300.log
+kingbase database logical backup end : 2022-11-13 00:30:03
+
+kingbase database logical backup begin : 2022-11-14 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022111400.dmp
+backup_openfalcon_2022111400.log
+kmoa_2022111400.dmp
+backup_kmoa_2022111400.log
+kingbase database logical backup end : 2022-11-14 00:30:03
+
+kingbase database logical backup begin : 2022-11-15 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022111500.dmp
+backup_openfalcon_2022111500.log
+kmoa_2022111500.dmp
+backup_kmoa_2022111500.log
+kingbase database logical backup end : 2022-11-15 00:30:03
+
+kingbase database logical backup begin : 2022-11-16 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022111600.dmp
+backup_openfalcon_2022111600.log
+kmoa_2022111600.dmp
+backup_kmoa_2022111600.log
+kingbase database logical backup end : 2022-11-16 00:30:03
+
+kingbase database logical backup begin : 2022-11-17 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022111700.dmp
+backup_openfalcon_2022111700.log
+kmoa_2022111700.dmp
+backup_kmoa_2022111700.log
+kingbase database logical backup end : 2022-11-17 00:30:04
+
+kingbase database logical backup begin : 2022-11-18 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022111800.dmp
+backup_openfalcon_2022111800.log
+kmoa_2022111800.dmp
+backup_kmoa_2022111800.log
+kingbase database logical backup end : 2022-11-18 00:30:04
+
+kingbase database logical backup begin : 2022-11-19 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022111900.dmp
+backup_openfalcon_2022111900.log
+kmoa_2022111900.dmp
+backup_kmoa_2022111900.log
+kingbase database logical backup end : 2022-11-19 00:30:03
+
+kingbase database logical backup begin : 2022-11-20 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022112000.dmp
+backup_openfalcon_2022112000.log
+kmoa_2022112000.dmp
+backup_kmoa_2022112000.log
+kingbase database logical backup end : 2022-11-20 00:30:04
+
+kingbase database logical backup begin : 2022-11-21 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022112100.dmp
+backup_openfalcon_2022112100.log
+kmoa_2022112100.dmp
+backup_kmoa_2022112100.log
+kingbase database logical backup end : 2022-11-21 00:30:03
+
+kingbase database logical backup begin : 2022-11-22 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022112200.dmp
+backup_openfalcon_2022112200.log
+kmoa_2022112200.dmp
+backup_kmoa_2022112200.log
+kingbase database logical backup end : 2022-11-22 00:30:03
+
+kingbase database logical backup begin : 2022-11-23 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022112300.dmp
+backup_openfalcon_2022112300.log
+kmoa_2022112300.dmp
+backup_kmoa_2022112300.log
+kingbase database logical backup end : 2022-11-23 00:30:03
+
+kingbase database logical backup begin : 2022-11-24 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022112400.dmp
+backup_openfalcon_2022112400.log
+kmoa_2022112400.dmp
+backup_kmoa_2022112400.log
+kingbase database logical backup end : 2022-11-24 00:30:04
+
+kingbase database logical backup begin : 2022-11-25 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022112500.dmp
+backup_openfalcon_2022112500.log
+kmoa_2022112500.dmp
+backup_kmoa_2022112500.log
+kingbase database logical backup end : 2022-11-25 00:30:03
+
+kingbase database logical backup begin : 2022-11-26 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022112600.dmp
+backup_openfalcon_2022112600.log
+kmoa_2022112600.dmp
+backup_kmoa_2022112600.log
+kingbase database logical backup end : 2022-11-26 00:30:04
+
+kingbase database logical backup begin : 2022-11-27 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022112700.dmp
+backup_openfalcon_2022112700.log
+kmoa_2022112700.dmp
+backup_kmoa_2022112700.log
+kingbase database logical backup end : 2022-11-27 00:30:04
+
+kingbase database logical backup begin : 2022-11-28 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022112800.dmp
+backup_openfalcon_2022112800.log
+kmoa_2022112800.dmp
+backup_kmoa_2022112800.log
+kingbase database logical backup end : 2022-11-28 00:30:03
+
+kingbase database logical backup begin : 2022-11-29 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022112900.dmp
+backup_openfalcon_2022112900.log
+kmoa_2022112900.dmp
+backup_kmoa_2022112900.log
+kingbase database logical backup end : 2022-11-29 00:30:10
+
+kingbase database logical backup begin : 2022-11-30 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022113000.dmp
+backup_openfalcon_2022113000.log
+kmoa_2022113000.dmp
+backup_kmoa_2022113000.log
+kingbase database logical backup end : 2022-11-30 00:30:12
+
+kingbase database logical backup begin : 2022-12-01 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022120100.dmp
+backup_openfalcon_2022120100.log
+kmoa_2022120100.dmp
+backup_kmoa_2022120100.log
+kingbase database logical backup end : 2022-12-01 00:30:17
+
+kingbase database logical backup begin : 2022-12-02 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022120200.dmp
+backup_openfalcon_2022120200.log
+kmoa_2022120200.dmp
+backup_kmoa_2022120200.log
+kingbase database logical backup end : 2022-12-02 00:30:17
+
+kingbase database logical backup begin : 2022-12-03 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022120300.dmp
+backup_openfalcon_2022120300.log
+kmoa_2022120300.dmp
+backup_kmoa_2022120300.log
+kingbase database logical backup end : 2022-12-03 00:30:17
+
+kingbase database logical backup begin : 2022-12-04 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022120400.dmp
+backup_openfalcon_2022120400.log
+kmoa_2022120400.dmp
+backup_kmoa_2022120400.log
+kingbase database logical backup end : 2022-12-04 00:30:17
+
+kingbase database logical backup begin : 2022-12-05 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022120500.dmp
+backup_openfalcon_2022120500.log
+kmoa_2022120500.dmp
+backup_kmoa_2022120500.log
+kingbase database logical backup end : 2022-12-05 00:30:17
+
+kingbase database logical backup begin : 2022-12-06 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022120600.dmp
+backup_openfalcon_2022120600.log
+kmoa_2022120600.dmp
+backup_kmoa_2022120600.log
+kingbase database logical backup end : 2022-12-06 00:30:18
+
+kingbase database logical backup begin : 2022-12-07 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022120700.dmp
+backup_openfalcon_2022120700.log
+kmoa_2022120700.dmp
+backup_kmoa_2022120700.log
+kingbase database logical backup end : 2022-12-07 00:30:18
+
+kingbase database logical backup begin : 2022-12-08 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022120800.dmp
+backup_openfalcon_2022120800.log
+kmoa_2022120800.dmp
+backup_kmoa_2022120800.log
+kingbase database logical backup end : 2022-12-08 00:30:18
+
+kingbase database logical backup begin : 2022-12-09 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022120900.dmp
+backup_openfalcon_2022120900.log
+kmoa_2022120900.dmp
+backup_kmoa_2022120900.log
+kingbase database logical backup end : 2022-12-09 00:30:18
+
+kingbase database logical backup begin : 2022-12-10 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022121000.dmp
+backup_openfalcon_2022121000.log
+kmoa_2022121000.dmp
+backup_kmoa_2022121000.log
+kingbase database logical backup end : 2022-12-10 00:30:18
+
+kingbase database logical backup begin : 2022-12-11 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022121100.dmp
+backup_openfalcon_2022121100.log
+kmoa_2022121100.dmp
+backup_kmoa_2022121100.log
+kingbase database logical backup end : 2022-12-11 00:30:18
+
+kingbase database logical backup begin : 2022-12-12 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022121200.dmp
+backup_openfalcon_2022121200.log
+kmoa_2022121200.dmp
+backup_kmoa_2022121200.log
+kingbase database logical backup end : 2022-12-12 00:30:18
+
+kingbase database logical backup begin : 2022-12-13 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022121300.dmp
+backup_openfalcon_2022121300.log
+kmoa_2022121300.dmp
+backup_kmoa_2022121300.log
+kingbase database logical backup end : 2022-12-13 00:30:18
+
+kingbase database logical backup begin : 2022-12-14 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022121400.dmp
+backup_openfalcon_2022121400.log
+kmoa_2022121400.dmp
+backup_kmoa_2022121400.log
+kingbase database logical backup end : 2022-12-14 00:30:18
+
+kingbase database logical backup begin : 2022-12-15 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022121500.dmp
+backup_openfalcon_2022121500.log
+kmoa_2022121500.dmp
+backup_kmoa_2022121500.log
+kingbase database logical backup end : 2022-12-15 00:30:18
+
+kingbase database logical backup begin : 2022-12-16 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022121600.dmp
+backup_openfalcon_2022121600.log
+kmoa_2022121600.dmp
+backup_kmoa_2022121600.log
+kingbase database logical backup end : 2022-12-16 00:30:19
+
+kingbase database logical backup begin : 2022-12-17 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022121700.dmp
+backup_openfalcon_2022121700.log
+kmoa_2022121700.dmp
+backup_kmoa_2022121700.log
+kingbase database logical backup end : 2022-12-17 00:30:19
+
+kingbase database logical backup begin : 2022-12-18 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022121800.dmp
+backup_openfalcon_2022121800.log
+kmoa_2022121800.dmp
+backup_kmoa_2022121800.log
+kingbase database logical backup end : 2022-12-18 00:30:19
+
+kingbase database logical backup begin : 2022-12-19 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022121900.dmp
+backup_openfalcon_2022121900.log
+kmoa_2022121900.dmp
+backup_kmoa_2022121900.log
+kingbase database logical backup end : 2022-12-19 00:30:18
+
+kingbase database logical backup begin : 2022-12-20 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022122000.dmp
+backup_openfalcon_2022122000.log
+kmoa_2022122000.dmp
+backup_kmoa_2022122000.log
+kingbase database logical backup end : 2022-12-20 00:30:19
+
+kingbase database logical backup begin : 2022-12-21 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022122100.dmp
+backup_openfalcon_2022122100.log
+kmoa_2022122100.dmp
+backup_kmoa_2022122100.log
+kingbase database logical backup end : 2022-12-21 00:30:19
+
+kingbase database logical backup begin : 2022-12-22 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022122200.dmp
+backup_openfalcon_2022122200.log
+kmoa_2022122200.dmp
+backup_kmoa_2022122200.log
+kingbase database logical backup end : 2022-12-22 00:30:18
+
+kingbase database logical backup begin : 2022-12-23 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022122300.dmp
+backup_openfalcon_2022122300.log
+kmoa_2022122300.dmp
+backup_kmoa_2022122300.log
+kingbase database logical backup end : 2022-12-23 00:30:19
+
+kingbase database logical backup begin : 2022-12-24 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022122400.dmp
+backup_openfalcon_2022122400.log
+kmoa_2022122400.dmp
+backup_kmoa_2022122400.log
+kingbase database logical backup end : 2022-12-24 00:30:20
+
+kingbase database logical backup begin : 2022-12-25 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022122500.dmp
+backup_openfalcon_2022122500.log
+kmoa_2022122500.dmp
+backup_kmoa_2022122500.log
+kingbase database logical backup end : 2022-12-25 00:30:19
+
+kingbase database logical backup begin : 2022-12-26 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022122600.dmp
+backup_openfalcon_2022122600.log
+kmoa_2022122600.dmp
+backup_kmoa_2022122600.log
+kingbase database logical backup end : 2022-12-26 00:30:20
+
+kingbase database logical backup begin : 2022-12-27 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022122700.dmp
+backup_openfalcon_2022122700.log
+kmoa_2022122700.dmp
+backup_kmoa_2022122700.log
+kingbase database logical backup end : 2022-12-27 00:30:20
+
+kingbase database logical backup begin : 2022-12-28 00:30:02
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022122800.dmp
+backup_openfalcon_2022122800.log
+kmoa_2022122800.dmp
+backup_kmoa_2022122800.log
+kingbase database logical backup end : 2022-12-28 00:30:20
+
+kingbase database logical backup begin : 2022-12-29 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+openfalcon_2022122900.dmp
+backup_openfalcon_2022122900.log
+kmoa_2022122900.dmp
+backup_kmoa_2022122900.log
+kingbase database logical backup end : 2022-12-29 00:30:20
+
+kingbase database logical backup begin : 2022-12-30 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2022123000.dmp
+backup_kmoa_2022123000.log
+openfalcon_2022123000.dmp
+backup_openfalcon_2022123000.log
+kingbase database logical backup end : 2022-12-30 00:30:20
+
+kingbase database logical backup begin : 2022-12-31 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2022123100.dmp
+backup_kmoa_2022123100.log
+openfalcon_2022123100.dmp
+backup_openfalcon_2022123100.log
+kingbase database logical backup end : 2022-12-31 00:30:20
+
+kingbase database logical backup begin : 2023-01-01 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023010100.dmp
+backup_kmoa_2023010100.log
+openfalcon_2023010100.dmp
+backup_openfalcon_2023010100.log
+kingbase database logical backup end : 2023-01-01 00:30:21
+
+kingbase database logical backup begin : 2023-01-02 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023010200.dmp
+backup_kmoa_2023010200.log
+openfalcon_2023010200.dmp
+backup_openfalcon_2023010200.log
+kingbase database logical backup end : 2023-01-02 00:30:20
+
+kingbase database logical backup begin : 2023-01-03 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023010300.dmp
+backup_kmoa_2023010300.log
+openfalcon_2023010300.dmp
+backup_openfalcon_2023010300.log
+kingbase database logical backup end : 2023-01-03 00:30:21
+
+kingbase database logical backup begin : 2023-01-04 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023010400.dmp
+backup_kmoa_2023010400.log
+openfalcon_2023010400.dmp
+backup_openfalcon_2023010400.log
+kingbase database logical backup end : 2023-01-04 00:30:21
+
+kingbase database logical backup begin : 2023-01-05 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023010500.dmp
+backup_kmoa_2023010500.log
+openfalcon_2023010500.dmp
+backup_openfalcon_2023010500.log
+kingbase database logical backup end : 2023-01-05 00:30:21
+
+kingbase database logical backup begin : 2023-01-06 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023010600.dmp
+backup_kmoa_2023010600.log
+openfalcon_2023010600.dmp
+backup_openfalcon_2023010600.log
+kingbase database logical backup end : 2023-01-06 00:30:21
+
+kingbase database logical backup begin : 2023-01-07 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023010700.dmp
+backup_kmoa_2023010700.log
+openfalcon_2023010700.dmp
+backup_openfalcon_2023010700.log
+kingbase database logical backup end : 2023-01-07 00:30:21
+
+kingbase database logical backup begin : 2023-01-08 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023010800.dmp
+backup_kmoa_2023010800.log
+openfalcon_2023010800.dmp
+backup_openfalcon_2023010800.log
+kingbase database logical backup end : 2023-01-08 00:30:22
+
+kingbase database logical backup begin : 2023-01-09 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023010900.dmp
+backup_kmoa_2023010900.log
+openfalcon_2023010900.dmp
+backup_openfalcon_2023010900.log
+kingbase database logical backup end : 2023-01-09 00:30:22
+
+kingbase database logical backup begin : 2023-01-10 00:30:02
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023011000.dmp
+backup_kmoa_2023011000.log
+openfalcon_2023011000.dmp
+backup_openfalcon_2023011000.log
+kingbase database logical backup end : 2023-01-10 00:30:23
+
+kingbase database logical backup begin : 2023-01-11 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023011100.dmp
+backup_kmoa_2023011100.log
+openfalcon_2023011100.dmp
+backup_openfalcon_2023011100.log
+kingbase database logical backup end : 2023-01-11 00:30:23
+
+kingbase database logical backup begin : 2023-01-12 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023011200.dmp
+backup_kmoa_2023011200.log
+openfalcon_2023011200.dmp
+backup_openfalcon_2023011200.log
+kingbase database logical backup end : 2023-01-12 00:30:22
+
+kingbase database logical backup begin : 2023-01-13 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023011300.dmp
+backup_kmoa_2023011300.log
+openfalcon_2023011300.dmp
+backup_openfalcon_2023011300.log
+kingbase database logical backup end : 2023-01-13 00:30:23
+
+kingbase database logical backup begin : 2023-01-14 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023011400.dmp
+backup_kmoa_2023011400.log
+openfalcon_2023011400.dmp
+backup_openfalcon_2023011400.log
+kingbase database logical backup end : 2023-01-14 00:30:23
+
+kingbase database logical backup begin : 2023-01-15 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023011500.dmp
+backup_kmoa_2023011500.log
+openfalcon_2023011500.dmp
+backup_openfalcon_2023011500.log
+kingbase database logical backup end : 2023-01-15 00:30:24
+
+kingbase database logical backup begin : 2023-01-16 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023011600.dmp
+backup_kmoa_2023011600.log
+openfalcon_2023011600.dmp
+backup_openfalcon_2023011600.log
+kingbase database logical backup end : 2023-01-16 00:30:24
+
+kingbase database logical backup begin : 2023-01-17 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023011700.dmp
+backup_kmoa_2023011700.log
+openfalcon_2023011700.dmp
+backup_openfalcon_2023011700.log
+kingbase database logical backup end : 2023-01-17 00:30:24
+
+kingbase database logical backup begin : 2023-01-18 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023011800.dmp
+backup_kmoa_2023011800.log
+openfalcon_2023011800.dmp
+backup_openfalcon_2023011800.log
+kingbase database logical backup end : 2023-01-18 00:30:24
+
+kingbase database logical backup begin : 2023-01-19 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023011900.dmp
+backup_kmoa_2023011900.log
+openfalcon_2023011900.dmp
+backup_openfalcon_2023011900.log
+kingbase database logical backup end : 2023-01-19 00:30:25
+
+kingbase database logical backup begin : 2023-01-20 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023012000.dmp
+backup_kmoa_2023012000.log
+openfalcon_2023012000.dmp
+backup_openfalcon_2023012000.log
+kingbase database logical backup end : 2023-01-20 00:30:24
+
+kingbase database logical backup begin : 2023-01-21 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023012100.dmp
+backup_kmoa_2023012100.log
+openfalcon_2023012100.dmp
+backup_openfalcon_2023012100.log
+kingbase database logical backup end : 2023-01-21 00:30:24
+
+kingbase database logical backup begin : 2023-01-22 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023012200.dmp
+backup_kmoa_2023012200.log
+openfalcon_2023012200.dmp
+backup_openfalcon_2023012200.log
+kingbase database logical backup end : 2023-01-22 00:30:25
+
+kingbase database logical backup begin : 2023-01-23 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023012300.dmp
+backup_kmoa_2023012300.log
+openfalcon_2023012300.dmp
+backup_openfalcon_2023012300.log
+kingbase database logical backup end : 2023-01-23 00:30:25
+
+kingbase database logical backup begin : 2023-01-24 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023012400.dmp
+backup_kmoa_2023012400.log
+openfalcon_2023012400.dmp
+backup_openfalcon_2023012400.log
+kingbase database logical backup end : 2023-01-24 00:30:25
+
+kingbase database logical backup begin : 2023-01-25 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023012500.dmp
+backup_kmoa_2023012500.log
+openfalcon_2023012500.dmp
+backup_openfalcon_2023012500.log
+kingbase database logical backup end : 2023-01-25 00:30:25
+
+kingbase database logical backup begin : 2023-01-26 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023012600.dmp
+backup_kmoa_2023012600.log
+openfalcon_2023012600.dmp
+backup_openfalcon_2023012600.log
+kingbase database logical backup end : 2023-01-26 00:30:25
+
+kingbase database logical backup begin : 2023-01-27 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023012700.dmp
+backup_kmoa_2023012700.log
+openfalcon_2023012700.dmp
+backup_openfalcon_2023012700.log
+kingbase database logical backup end : 2023-01-27 00:30:25
+
+kingbase database logical backup begin : 2023-01-28 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023012800.dmp
+backup_kmoa_2023012800.log
+openfalcon_2023012800.dmp
+backup_openfalcon_2023012800.log
+kingbase database logical backup end : 2023-01-28 00:30:24
+
+kingbase database logical backup begin : 2023-01-29 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023012900.dmp
+backup_kmoa_2023012900.log
+openfalcon_2023012900.dmp
+backup_openfalcon_2023012900.log
+kingbase database logical backup end : 2023-01-29 00:30:25
+
+kingbase database logical backup begin : 2023-01-30 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023013000.dmp
+backup_kmoa_2023013000.log
+openfalcon_2023013000.dmp
+backup_openfalcon_2023013000.log
+kingbase database logical backup end : 2023-01-30 00:30:25
+
+kingbase database logical backup begin : 2023-01-31 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023013100.dmp
+backup_kmoa_2023013100.log
+openfalcon_2023013100.dmp
+backup_openfalcon_2023013100.log
+kingbase database logical backup end : 2023-01-31 00:30:25
+
+kingbase database logical backup begin : 2023-02-01 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023020100.dmp
+backup_kmoa_2023020100.log
+openfalcon_2023020100.dmp
+backup_openfalcon_2023020100.log
+kingbase database logical backup end : 2023-02-01 00:30:26
+
+kingbase database logical backup begin : 2023-02-02 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023020200.dmp
+backup_kmoa_2023020200.log
+openfalcon_2023020200.dmp
+backup_openfalcon_2023020200.log
+kingbase database logical backup end : 2023-02-02 00:30:26
+
+kingbase database logical backup begin : 2023-02-03 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023020300.dmp
+backup_kmoa_2023020300.log
+openfalcon_2023020300.dmp
+backup_openfalcon_2023020300.log
+kingbase database logical backup end : 2023-02-03 00:30:26
+
+kingbase database logical backup begin : 2023-02-04 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023020400.dmp
+backup_kmoa_2023020400.log
+openfalcon_2023020400.dmp
+backup_openfalcon_2023020400.log
+kingbase database logical backup end : 2023-02-04 00:30:26
+
+kingbase database logical backup begin : 2023-02-05 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023020500.dmp
+backup_kmoa_2023020500.log
+openfalcon_2023020500.dmp
+backup_openfalcon_2023020500.log
+kingbase database logical backup end : 2023-02-05 00:30:27
+
+kingbase database logical backup begin : 2023-02-06 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023020600.dmp
+backup_kmoa_2023020600.log
+openfalcon_2023020600.dmp
+backup_openfalcon_2023020600.log
+kingbase database logical backup end : 2023-02-06 00:30:27
+
+kingbase database logical backup begin : 2023-02-07 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023020700.dmp
+backup_kmoa_2023020700.log
+openfalcon_2023020700.dmp
+backup_openfalcon_2023020700.log
+kingbase database logical backup end : 2023-02-07 00:30:27
+
+kingbase database logical backup begin : 2023-02-08 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023020800.dmp
+backup_kmoa_2023020800.log
+openfalcon_2023020800.dmp
+backup_openfalcon_2023020800.log
+kingbase database logical backup end : 2023-02-08 00:30:27
+
+kingbase database logical backup begin : 2023-02-09 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023020900.dmp
+backup_kmoa_2023020900.log
+openfalcon_2023020900.dmp
+backup_openfalcon_2023020900.log
+kingbase database logical backup end : 2023-02-09 00:30:27
+
+kingbase database logical backup begin : 2023-02-10 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023021000.dmp
+backup_kmoa_2023021000.log
+openfalcon_2023021000.dmp
+backup_openfalcon_2023021000.log
+kingbase database logical backup end : 2023-02-10 00:30:28
+
+kingbase database logical backup begin : 2023-02-11 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023021100.dmp
+backup_kmoa_2023021100.log
+openfalcon_2023021100.dmp
+backup_openfalcon_2023021100.log
+kingbase database logical backup end : 2023-02-11 00:30:27
+
+kingbase database logical backup begin : 2023-02-12 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023021200.dmp
+backup_kmoa_2023021200.log
+openfalcon_2023021200.dmp
+backup_openfalcon_2023021200.log
+kingbase database logical backup end : 2023-02-12 00:30:28
+
+kingbase database logical backup begin : 2023-02-13 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023021300.dmp
+backup_kmoa_2023021300.log
+openfalcon_2023021300.dmp
+backup_openfalcon_2023021300.log
+kingbase database logical backup end : 2023-02-13 00:30:28
+
+kingbase database logical backup begin : 2023-02-14 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023021400.dmp
+backup_kmoa_2023021400.log
+openfalcon_2023021400.dmp
+backup_openfalcon_2023021400.log
+kingbase database logical backup end : 2023-02-14 00:30:29
+
+kingbase database logical backup begin : 2023-02-15 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023021500.dmp
+backup_kmoa_2023021500.log
+openfalcon_2023021500.dmp
+backup_openfalcon_2023021500.log
+kingbase database logical backup end : 2023-02-15 00:30:29
+
+kingbase database logical backup begin : 2023-02-16 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023021600.dmp
+backup_kmoa_2023021600.log
+openfalcon_2023021600.dmp
+backup_openfalcon_2023021600.log
+kingbase database logical backup end : 2023-02-16 00:30:28
+
+kingbase database logical backup begin : 2023-02-17 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023021700.dmp
+backup_kmoa_2023021700.log
+openfalcon_2023021700.dmp
+backup_openfalcon_2023021700.log
+kingbase database logical backup end : 2023-02-17 00:30:29
+
+kingbase database logical backup begin : 2023-02-18 00:30:02
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023021800.dmp
+backup_kmoa_2023021800.log
+openfalcon_2023021800.dmp
+backup_openfalcon_2023021800.log
+kingbase database logical backup end : 2023-02-18 00:30:30
+
+kingbase database logical backup begin : 2023-02-19 00:30:02
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023021900.dmp
+backup_kmoa_2023021900.log
+openfalcon_2023021900.dmp
+backup_openfalcon_2023021900.log
+kingbase database logical backup end : 2023-02-19 00:30:29
+
+kingbase database logical backup begin : 2023-02-20 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023022000.dmp
+backup_kmoa_2023022000.log
+openfalcon_2023022000.dmp
+backup_openfalcon_2023022000.log
+kingbase database logical backup end : 2023-02-20 00:30:29
+
+kingbase database logical backup begin : 2023-02-21 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023022100.dmp
+backup_kmoa_2023022100.log
+openfalcon_2023022100.dmp
+backup_openfalcon_2023022100.log
+kingbase database logical backup end : 2023-02-21 00:30:29
+
+kingbase database logical backup begin : 2023-02-22 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023022200.dmp
+backup_kmoa_2023022200.log
+openfalcon_2023022200.dmp
+backup_openfalcon_2023022200.log
+kingbase database logical backup end : 2023-02-22 00:30:29
+
+kingbase database logical backup begin : 2023-02-23 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023022300.dmp
+backup_kmoa_2023022300.log
+openfalcon_2023022300.dmp
+backup_openfalcon_2023022300.log
+kingbase database logical backup end : 2023-02-23 00:30:30
+
+kingbase database logical backup begin : 2023-02-24 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023022400.dmp
+backup_kmoa_2023022400.log
+openfalcon_2023022400.dmp
+backup_openfalcon_2023022400.log
+kingbase database logical backup end : 2023-02-24 00:30:29
+
+kingbase database logical backup begin : 2023-02-25 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023022500.dmp
+backup_kmoa_2023022500.log
+openfalcon_2023022500.dmp
+backup_openfalcon_2023022500.log
+kingbase database logical backup end : 2023-02-25 00:30:30
+
+kingbase database logical backup begin : 2023-02-26 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023022600.dmp
+backup_kmoa_2023022600.log
+openfalcon_2023022600.dmp
+backup_openfalcon_2023022600.log
+kingbase database logical backup end : 2023-02-26 00:30:29
+
+kingbase database logical backup begin : 2023-02-27 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023022700.dmp
+backup_kmoa_2023022700.log
+openfalcon_2023022700.dmp
+backup_openfalcon_2023022700.log
+kingbase database logical backup end : 2023-02-27 00:30:30
+
+kingbase database logical backup begin : 2023-02-28 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023022800.dmp
+backup_kmoa_2023022800.log
+openfalcon_2023022800.dmp
+backup_openfalcon_2023022800.log
+kingbase database logical backup end : 2023-02-28 00:30:31
+
+kingbase database logical backup begin : 2023-03-01 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023030100.dmp
+backup_kmoa_2023030100.log
+openfalcon_2023030100.dmp
+backup_openfalcon_2023030100.log
+kingbase database logical backup end : 2023-03-01 00:30:30
+
+kingbase database logical backup begin : 2023-03-02 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023030200.dmp
+backup_kmoa_2023030200.log
+openfalcon_2023030200.dmp
+backup_openfalcon_2023030200.log
+kingbase database logical backup end : 2023-03-02 00:30:30
+
+kingbase database logical backup begin : 2023-03-03 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023030300.dmp
+backup_kmoa_2023030300.log
+openfalcon_2023030300.dmp
+backup_openfalcon_2023030300.log
+kingbase database logical backup end : 2023-03-03 00:30:31
+
+kingbase database logical backup begin : 2023-03-04 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023030400.dmp
+backup_kmoa_2023030400.log
+openfalcon_2023030400.dmp
+backup_openfalcon_2023030400.log
+kingbase database logical backup end : 2023-03-04 00:30:30
+
+kingbase database logical backup begin : 2023-03-05 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023030500.dmp
+backup_kmoa_2023030500.log
+openfalcon_2023030500.dmp
+backup_openfalcon_2023030500.log
+kingbase database logical backup end : 2023-03-05 00:30:31
+
+kingbase database logical backup begin : 2023-03-06 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023030600.dmp
+backup_kmoa_2023030600.log
+openfalcon_2023030600.dmp
+backup_openfalcon_2023030600.log
+kingbase database logical backup end : 2023-03-06 00:30:31
+
+kingbase database logical backup begin : 2023-03-07 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023030700.dmp
+backup_kmoa_2023030700.log
+openfalcon_2023030700.dmp
+backup_openfalcon_2023030700.log
+kingbase database logical backup end : 2023-03-07 00:30:31
+
+kingbase database logical backup begin : 2023-03-08 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023030800.dmp
+backup_kmoa_2023030800.log
+openfalcon_2023030800.dmp
+backup_openfalcon_2023030800.log
+kingbase database logical backup end : 2023-03-08 00:30:32
+
+kingbase database logical backup begin : 2023-03-09 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023030900.dmp
+backup_kmoa_2023030900.log
+openfalcon_2023030900.dmp
+backup_openfalcon_2023030900.log
+kingbase database logical backup end : 2023-03-09 00:30:31
+
+kingbase database logical backup begin : 2023-03-10 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023031000.dmp
+backup_kmoa_2023031000.log
+openfalcon_2023031000.dmp
+backup_openfalcon_2023031000.log
+kingbase database logical backup end : 2023-03-10 00:30:31
+
+kingbase database logical backup begin : 2023-03-11 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023031100.dmp
+backup_kmoa_2023031100.log
+openfalcon_2023031100.dmp
+backup_openfalcon_2023031100.log
+kingbase database logical backup end : 2023-03-11 00:30:32
+
+kingbase database logical backup begin : 2023-03-12 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023031200.dmp
+backup_kmoa_2023031200.log
+openfalcon_2023031200.dmp
+backup_openfalcon_2023031200.log
+kingbase database logical backup end : 2023-03-12 00:30:32
+
+kingbase database logical backup begin : 2023-03-13 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023031300.dmp
+backup_kmoa_2023031300.log
+openfalcon_2023031300.dmp
+backup_openfalcon_2023031300.log
+kingbase database logical backup end : 2023-03-13 00:30:31
+
+kingbase database logical backup begin : 2023-03-14 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023031400.dmp
+backup_kmoa_2023031400.log
+openfalcon_2023031400.dmp
+backup_openfalcon_2023031400.log
+kingbase database logical backup end : 2023-03-14 00:30:32
+
+kingbase database logical backup begin : 2023-03-15 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023031500.dmp
+backup_kmoa_2023031500.log
+openfalcon_2023031500.dmp
+backup_openfalcon_2023031500.log
+kingbase database logical backup end : 2023-03-15 00:30:32
+
+kingbase database logical backup begin : 2023-03-16 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023031600.dmp
+backup_kmoa_2023031600.log
+openfalcon_2023031600.dmp
+backup_openfalcon_2023031600.log
+kingbase database logical backup end : 2023-03-16 00:30:32
+
+kingbase database logical backup begin : 2023-03-17 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023031700.dmp
+backup_kmoa_2023031700.log
+openfalcon_2023031700.dmp
+backup_openfalcon_2023031700.log
+kingbase database logical backup end : 2023-03-17 00:30:33
+
+kingbase database logical backup begin : 2023-03-18 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023031800.dmp
+backup_kmoa_2023031800.log
+openfalcon_2023031800.dmp
+backup_openfalcon_2023031800.log
+kingbase database logical backup end : 2023-03-18 00:30:33
+
+kingbase database logical backup begin : 2023-03-19 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023031900.dmp
+backup_kmoa_2023031900.log
+openfalcon_2023031900.dmp
+backup_openfalcon_2023031900.log
+kingbase database logical backup end : 2023-03-19 00:30:33
+
+kingbase database logical backup begin : 2023-03-20 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023032000.dmp
+backup_kmoa_2023032000.log
+openfalcon_2023032000.dmp
+backup_openfalcon_2023032000.log
+kingbase database logical backup end : 2023-03-20 00:30:33
+
+kingbase database logical backup begin : 2023-03-21 00:30:02
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023032100.dmp
+backup_kmoa_2023032100.log
+openfalcon_2023032100.dmp
+backup_openfalcon_2023032100.log
+kingbase database logical backup end : 2023-03-21 00:30:33
+
+kingbase database logical backup begin : 2023-03-22 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023032200.dmp
+backup_kmoa_2023032200.log
+openfalcon_2023032200.dmp
+backup_openfalcon_2023032200.log
+kingbase database logical backup end : 2023-03-22 00:30:33
+
+kingbase database logical backup begin : 2023-03-23 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023032300.dmp
+backup_kmoa_2023032300.log
+openfalcon_2023032300.dmp
+backup_openfalcon_2023032300.log
+kingbase database logical backup end : 2023-03-23 00:30:34
+
+kingbase database logical backup begin : 2023-03-24 00:30:02
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023032400.dmp
+backup_kmoa_2023032400.log
+openfalcon_2023032400.dmp
+backup_openfalcon_2023032400.log
+kingbase database logical backup end : 2023-03-24 00:30:34
+
+kingbase database logical backup begin : 2023-03-25 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023032500.dmp
+backup_kmoa_2023032500.log
+openfalcon_2023032500.dmp
+backup_openfalcon_2023032500.log
+kingbase database logical backup end : 2023-03-25 00:30:33
+
+kingbase database logical backup begin : 2023-03-26 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023032600.dmp
+backup_kmoa_2023032600.log
+openfalcon_2023032600.dmp
+backup_openfalcon_2023032600.log
+kingbase database logical backup end : 2023-03-26 00:30:34
+
+kingbase database logical backup begin : 2023-03-27 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023032700.dmp
+backup_kmoa_2023032700.log
+openfalcon_2023032700.dmp
+backup_openfalcon_2023032700.log
+kingbase database logical backup end : 2023-03-27 00:30:33
+
+kingbase database logical backup begin : 2023-03-28 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023032800.dmp
+backup_kmoa_2023032800.log
+openfalcon_2023032800.dmp
+backup_openfalcon_2023032800.log
+kingbase database logical backup end : 2023-03-28 00:30:34
+
+kingbase database logical backup begin : 2023-03-29 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023032900.dmp
+backup_kmoa_2023032900.log
+openfalcon_2023032900.dmp
+backup_openfalcon_2023032900.log
+kingbase database logical backup end : 2023-03-29 00:30:34
+
+kingbase database logical backup begin : 2023-03-30 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023033000.dmp
+backup_kmoa_2023033000.log
+openfalcon_2023033000.dmp
+backup_openfalcon_2023033000.log
+kingbase database logical backup end : 2023-03-30 00:30:35
+
+kingbase database logical backup begin : 2023-03-31 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023033100.dmp
+backup_kmoa_2023033100.log
+openfalcon_2023033100.dmp
+backup_openfalcon_2023033100.log
+marketfactory_2023033100.dmp
+backup_marketfactory_2023033100.log
+kingbase database logical backup end : 2023-03-31 00:30:35
+
+kingbase database logical backup begin : 2023-04-01 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023040100.dmp
+backup_kmoa_2023040100.log
+openfalcon_2023040100.dmp
+backup_openfalcon_2023040100.log
+marketfactory_2023040100.dmp
+backup_marketfactory_2023040100.log
+kingbase database logical backup end : 2023-04-01 00:30:36
+
+kingbase database logical backup begin : 2023-04-02 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023040200.dmp
+backup_kmoa_2023040200.log
+openfalcon_2023040200.dmp
+backup_openfalcon_2023040200.log
+marketfactory_2023040200.dmp
+backup_marketfactory_2023040200.log
+kingbase database logical backup end : 2023-04-02 00:30:35
+
+kingbase database logical backup begin : 2023-04-03 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023040300.dmp
+backup_kmoa_2023040300.log
+openfalcon_2023040300.dmp
+backup_openfalcon_2023040300.log
+marketfactory_2023040300.dmp
+backup_marketfactory_2023040300.log
+kingbase database logical backup end : 2023-04-03 00:30:36
+
+kingbase database logical backup begin : 2023-04-04 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023040400.dmp
+backup_kmoa_2023040400.log
+openfalcon_2023040400.dmp
+backup_openfalcon_2023040400.log
+marketfactory_2023040400.dmp
+backup_marketfactory_2023040400.log
+kingbase database logical backup end : 2023-04-04 00:30:36
+
+kingbase database logical backup begin : 2023-04-05 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023040500.dmp
+backup_kmoa_2023040500.log
+openfalcon_2023040500.dmp
+backup_openfalcon_2023040500.log
+marketfactory_2023040500.dmp
+backup_marketfactory_2023040500.log
+kingbase database logical backup end : 2023-04-05 00:30:36
+
+kingbase database logical backup begin : 2023-04-06 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023040600.dmp
+backup_kmoa_2023040600.log
+openfalcon_2023040600.dmp
+backup_openfalcon_2023040600.log
+marketfactory_2023040600.dmp
+backup_marketfactory_2023040600.log
+kingbase database logical backup end : 2023-04-06 00:30:36
+
+kingbase database logical backup begin : 2023-04-07 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023040700.dmp
+backup_kmoa_2023040700.log
+openfalcon_2023040700.dmp
+backup_openfalcon_2023040700.log
+marketfactory_2023040700.dmp
+backup_marketfactory_2023040700.log
+kingbase database logical backup end : 2023-04-07 00:30:37
+
+kingbase database logical backup begin : 2023-04-08 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023040800.dmp
+backup_kmoa_2023040800.log
+openfalcon_2023040800.dmp
+backup_openfalcon_2023040800.log
+marketfactory_2023040800.dmp
+backup_marketfactory_2023040800.log
+kingbase database logical backup end : 2023-04-08 00:30:37
+
+kingbase database logical backup begin : 2023-04-09 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023040900.dmp
+backup_kmoa_2023040900.log
+openfalcon_2023040900.dmp
+backup_openfalcon_2023040900.log
+marketfactory_2023040900.dmp
+backup_marketfactory_2023040900.log
+kingbase database logical backup end : 2023-04-09 00:30:37
+
+kingbase database logical backup begin : 2023-04-10 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023041000.dmp
+backup_kmoa_2023041000.log
+openfalcon_2023041000.dmp
+backup_openfalcon_2023041000.log
+marketfactory_2023041000.dmp
+backup_marketfactory_2023041000.log
+kingbase database logical backup end : 2023-04-10 00:30:37
+
+kingbase database logical backup begin : 2023-04-11 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023041100.dmp
+backup_kmoa_2023041100.log
+marketfactory_2023041100.dmp
+backup_marketfactory_2023041100.log
+openfalcon_2023041100.dmp
+backup_openfalcon_2023041100.log
+kingbase database logical backup end : 2023-04-11 00:30:38
+
+kingbase database logical backup begin : 2023-04-12 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023041200.dmp
+backup_kmoa_2023041200.log
+marketfactory_2023041200.dmp
+backup_marketfactory_2023041200.log
+openfalcon_2023041200.dmp
+backup_openfalcon_2023041200.log
+kingbase database logical backup end : 2023-04-12 00:30:38
+
+kingbase database logical backup begin : 2023-04-13 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023041300.dmp
+backup_kmoa_2023041300.log
+marketfactory_2023041300.dmp
+backup_marketfactory_2023041300.log
+openfalcon_2023041300.dmp
+backup_openfalcon_2023041300.log
+kingbase database logical backup end : 2023-04-13 00:30:37
+
+kingbase database logical backup begin : 2023-04-14 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023041400.dmp
+backup_kmoa_2023041400.log
+marketfactory_2023041400.dmp
+backup_marketfactory_2023041400.log
+openfalcon_2023041400.dmp
+backup_openfalcon_2023041400.log
+kingbase database logical backup end : 2023-04-14 00:30:38
+
+kingbase database logical backup begin : 2023-04-15 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023041500.dmp
+backup_kmoa_2023041500.log
+marketfactory_2023041500.dmp
+backup_marketfactory_2023041500.log
+openfalcon_2023041500.dmp
+backup_openfalcon_2023041500.log
+kingbase database logical backup end : 2023-04-15 00:30:38
+
+kingbase database logical backup begin : 2023-04-16 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023041600.dmp
+backup_kmoa_2023041600.log
+marketfactory_2023041600.dmp
+backup_marketfactory_2023041600.log
+openfalcon_2023041600.dmp
+backup_openfalcon_2023041600.log
+kingbase database logical backup end : 2023-04-16 00:30:38
+
+kingbase database logical backup begin : 2023-04-17 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023041700.dmp
+backup_kmoa_2023041700.log
+marketfactory_2023041700.dmp
+backup_marketfactory_2023041700.log
+openfalcon_2023041700.dmp
+backup_openfalcon_2023041700.log
+kingbase database logical backup end : 2023-04-17 00:30:37
+
+kingbase database logical backup begin : 2023-04-18 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023041800.dmp
+backup_kmoa_2023041800.log
+marketfactory_2023041800.dmp
+backup_marketfactory_2023041800.log
+openfalcon_2023041800.dmp
+backup_openfalcon_2023041800.log
+kingbase database logical backup end : 2023-04-18 00:30:38
+
+kingbase database logical backup begin : 2023-04-19 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023041900.dmp
+backup_kmoa_2023041900.log
+marketfactory_2023041900.dmp
+backup_marketfactory_2023041900.log
+openfalcon_2023041900.dmp
+backup_openfalcon_2023041900.log
+kingbase database logical backup end : 2023-04-19 00:30:38
+
+kingbase database logical backup begin : 2023-04-20 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023042000.dmp
+backup_kmoa_2023042000.log
+marketfactory_2023042000.dmp
+backup_marketfactory_2023042000.log
+openfalcon_2023042000.dmp
+backup_openfalcon_2023042000.log
+kingbase database logical backup end : 2023-04-20 00:30:39
+
+kingbase database logical backup begin : 2023-04-21 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023042100.dmp
+backup_kmoa_2023042100.log
+marketfactory_2023042100.dmp
+backup_marketfactory_2023042100.log
+openfalcon_2023042100.dmp
+backup_openfalcon_2023042100.log
+kingbase database logical backup end : 2023-04-21 00:30:39
+
+kingbase database logical backup begin : 2023-04-22 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023042200.dmp
+backup_kmoa_2023042200.log
+marketfactory_2023042200.dmp
+backup_marketfactory_2023042200.log
+openfalcon_2023042200.dmp
+backup_openfalcon_2023042200.log
+kingbase database logical backup end : 2023-04-22 00:30:39
+
+kingbase database logical backup begin : 2023-04-23 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023042300.dmp
+backup_kmoa_2023042300.log
+marketfactory_2023042300.dmp
+backup_marketfactory_2023042300.log
+openfalcon_2023042300.dmp
+backup_openfalcon_2023042300.log
+kingbase database logical backup end : 2023-04-23 00:30:39
+
+kingbase database logical backup begin : 2023-04-24 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023042400.dmp
+backup_kmoa_2023042400.log
+marketfactory_2023042400.dmp
+backup_marketfactory_2023042400.log
+openfalcon_2023042400.dmp
+backup_openfalcon_2023042400.log
+kingbase database logical backup end : 2023-04-24 00:30:39
+
+kingbase database logical backup begin : 2023-04-25 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023042500.dmp
+backup_kmoa_2023042500.log
+marketfactory_2023042500.dmp
+backup_marketfactory_2023042500.log
+openfalcon_2023042500.dmp
+backup_openfalcon_2023042500.log
+kingbase database logical backup end : 2023-04-25 00:30:38
+
+kingbase database logical backup begin : 2023-04-26 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023042600.dmp
+backup_kmoa_2023042600.log
+marketfactory_2023042600.dmp
+backup_marketfactory_2023042600.log
+openfalcon_2023042600.dmp
+backup_openfalcon_2023042600.log
+kingbase database logical backup end : 2023-04-26 00:30:40
+
+kingbase database logical backup begin : 2023-04-27 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023042700.dmp
+backup_kmoa_2023042700.log
+marketfactory_2023042700.dmp
+backup_marketfactory_2023042700.log
+openfalcon_2023042700.dmp
+backup_openfalcon_2023042700.log
+kingbase database logical backup end : 2023-04-27 00:30:40
+
+kingbase database logical backup begin : 2023-04-28 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023042800.dmp
+backup_kmoa_2023042800.log
+marketfactory_2023042800.dmp
+backup_marketfactory_2023042800.log
+openfalcon_2023042800.dmp
+backup_openfalcon_2023042800.log
+kingbase database logical backup end : 2023-04-28 00:30:39
+
+kingbase database logical backup begin : 2023-04-29 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023042900.dmp
+backup_kmoa_2023042900.log
+marketfactory_2023042900.dmp
+backup_marketfactory_2023042900.log
+openfalcon_2023042900.dmp
+backup_openfalcon_2023042900.log
+kingbase database logical backup end : 2023-04-29 00:30:40
+
+kingbase database logical backup begin : 2023-04-30 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023043000.dmp
+backup_kmoa_2023043000.log
+marketfactory_2023043000.dmp
+backup_marketfactory_2023043000.log
+openfalcon_2023043000.dmp
+backup_openfalcon_2023043000.log
+kingbase database logical backup end : 2023-04-30 00:30:39
+
+kingbase database logical backup begin : 2023-05-01 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023050100.dmp
+backup_kmoa_2023050100.log
+marketfactory_2023050100.dmp
+backup_marketfactory_2023050100.log
+openfalcon_2023050100.dmp
+backup_openfalcon_2023050100.log
+kingbase database logical backup end : 2023-05-01 00:30:39
+
+kingbase database logical backup begin : 2023-05-02 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023050200.dmp
+backup_kmoa_2023050200.log
+marketfactory_2023050200.dmp
+backup_marketfactory_2023050200.log
+openfalcon_2023050200.dmp
+backup_openfalcon_2023050200.log
+kingbase database logical backup end : 2023-05-02 00:30:40
+
+kingbase database logical backup begin : 2023-05-03 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023050300.dmp
+backup_kmoa_2023050300.log
+marketfactory_2023050300.dmp
+backup_marketfactory_2023050300.log
+openfalcon_2023050300.dmp
+backup_openfalcon_2023050300.log
+kingbase database logical backup end : 2023-05-03 00:30:40
+
+kingbase database logical backup begin : 2023-05-04 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023050400.dmp
+backup_kmoa_2023050400.log
+marketfactory_2023050400.dmp
+backup_marketfactory_2023050400.log
+openfalcon_2023050400.dmp
+backup_openfalcon_2023050400.log
+kingbase database logical backup end : 2023-05-04 00:30:40
+
+kingbase database logical backup begin : 2023-05-05 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023050500.dmp
+backup_kmoa_2023050500.log
+marketfactory_2023050500.dmp
+backup_marketfactory_2023050500.log
+openfalcon_2023050500.dmp
+backup_openfalcon_2023050500.log
+kingbase database logical backup end : 2023-05-05 00:30:39
+
+kingbase database logical backup begin : 2023-05-06 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023050600.dmp
+backup_kmoa_2023050600.log
+marketfactory_2023050600.dmp
+backup_marketfactory_2023050600.log
+openfalcon_2023050600.dmp
+backup_openfalcon_2023050600.log
+kingbase database logical backup end : 2023-05-06 00:30:39
+
+kingbase database logical backup begin : 2023-05-07 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023050700.dmp
+backup_kmoa_2023050700.log
+marketfactory_2023050700.dmp
+backup_marketfactory_2023050700.log
+openfalcon_2023050700.dmp
+backup_openfalcon_2023050700.log
+kingbase database logical backup end : 2023-05-07 00:30:39
+
+kingbase database logical backup begin : 2023-05-08 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023050800.dmp
+backup_kmoa_2023050800.log
+marketfactory_2023050800.dmp
+backup_marketfactory_2023050800.log
+openfalcon_2023050800.dmp
+backup_openfalcon_2023050800.log
+kingbase database logical backup end : 2023-05-08 00:30:39
+
+kingbase database logical backup begin : 2023-05-09 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023050900.dmp
+backup_kmoa_2023050900.log
+marketfactory_2023050900.dmp
+backup_marketfactory_2023050900.log
+openfalcon_2023050900.dmp
+backup_openfalcon_2023050900.log
+kingbase database logical backup end : 2023-05-09 00:30:40
+
+kingbase database logical backup begin : 2023-05-10 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023051000.dmp
+backup_kmoa_2023051000.log
+marketfactory_2023051000.dmp
+backup_marketfactory_2023051000.log
+openfalcon_2023051000.dmp
+backup_openfalcon_2023051000.log
+kingbase database logical backup end : 2023-05-10 00:30:40
+
+kingbase database logical backup begin : 2023-05-11 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023051100.dmp
+backup_kmoa_2023051100.log
+marketfactory_2023051100.dmp
+backup_marketfactory_2023051100.log
+openfalcon_2023051100.dmp
+backup_openfalcon_2023051100.log
+kingbase database logical backup end : 2023-05-11 00:30:40
+
+kingbase database logical backup begin : 2023-05-12 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023051200.dmp
+backup_kmoa_2023051200.log
+marketfactory_2023051200.dmp
+backup_marketfactory_2023051200.log
+openfalcon_2023051200.dmp
+backup_openfalcon_2023051200.log
+kingbase database logical backup end : 2023-05-12 00:30:40
+
+kingbase database logical backup begin : 2023-05-13 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023051300.dmp
+backup_kmoa_2023051300.log
+marketfactory_2023051300.dmp
+backup_marketfactory_2023051300.log
+openfalcon_2023051300.dmp
+backup_openfalcon_2023051300.log
+kingbase database logical backup end : 2023-05-13 00:30:41
+
+kingbase database logical backup begin : 2023-05-14 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023051400.dmp
+backup_kmoa_2023051400.log
+marketfactory_2023051400.dmp
+backup_marketfactory_2023051400.log
+openfalcon_2023051400.dmp
+backup_openfalcon_2023051400.log
+kingbase database logical backup end : 2023-05-14 00:30:40
+
+kingbase database logical backup begin : 2023-05-15 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023051500.dmp
+backup_kmoa_2023051500.log
+marketfactory_2023051500.dmp
+backup_marketfactory_2023051500.log
+openfalcon_2023051500.dmp
+backup_openfalcon_2023051500.log
+kingbase database logical backup end : 2023-05-15 00:30:40
+
+kingbase database logical backup begin : 2023-05-16 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023051600.dmp
+backup_kmoa_2023051600.log
+marketfactory_2023051600.dmp
+backup_marketfactory_2023051600.log
+openfalcon_2023051600.dmp
+backup_openfalcon_2023051600.log
+kingbase database logical backup end : 2023-05-16 00:30:41
+
+kingbase database logical backup begin : 2023-05-17 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023051700.dmp
+backup_kmoa_2023051700.log
+marketfactory_2023051700.dmp
+backup_marketfactory_2023051700.log
+openfalcon_2023051700.dmp
+backup_openfalcon_2023051700.log
+smartbi_2023051700.dmp
+backup_smartbi_2023051700.log
+kingbase database logical backup end : 2023-05-17 00:30:42
+
+kingbase database logical backup begin : 2023-05-18 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023051800.dmp
+backup_kmoa_2023051800.log
+marketfactory_2023051800.dmp
+backup_marketfactory_2023051800.log
+openfalcon_2023051800.dmp
+backup_openfalcon_2023051800.log
+smartbi_2023051800.dmp
+backup_smartbi_2023051800.log
+kingbase database logical backup end : 2023-05-18 00:30:42
+
+kingbase database logical backup begin : 2023-05-19 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023051900.dmp
+backup_kmoa_2023051900.log
+marketfactory_2023051900.dmp
+backup_marketfactory_2023051900.log
+openfalcon_2023051900.dmp
+backup_openfalcon_2023051900.log
+smartbi_2023051900.dmp
+backup_smartbi_2023051900.log
+kingbase database logical backup end : 2023-05-19 00:30:42
+
+kingbase database logical backup begin : 2023-05-20 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023052000.dmp
+backup_kmoa_2023052000.log
+marketfactory_2023052000.dmp
+backup_marketfactory_2023052000.log
+openfalcon_2023052000.dmp
+backup_openfalcon_2023052000.log
+smartbi_2023052000.dmp
+backup_smartbi_2023052000.log
+kingbase database logical backup end : 2023-05-20 00:30:50
+
+kingbase database logical backup begin : 2023-05-21 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023052100.dmp
+backup_kmoa_2023052100.log
+marketfactory_2023052100.dmp
+backup_marketfactory_2023052100.log
+openfalcon_2023052100.dmp
+backup_openfalcon_2023052100.log
+smartbi_2023052100.dmp
+backup_smartbi_2023052100.log
+kingbase database logical backup end : 2023-05-21 00:30:51
+
+kingbase database logical backup begin : 2023-05-22 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023052200.dmp
+backup_kmoa_2023052200.log
+marketfactory_2023052200.dmp
+backup_marketfactory_2023052200.log
+openfalcon_2023052200.dmp
+backup_openfalcon_2023052200.log
+smartbi_2023052200.dmp
+backup_smartbi_2023052200.log
+kingbase database logical backup end : 2023-05-22 00:30:50
+
+kingbase database logical backup begin : 2023-05-23 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023052300.dmp
+backup_kmoa_2023052300.log
+marketfactory_2023052300.dmp
+backup_marketfactory_2023052300.log
+openfalcon_2023052300.dmp
+backup_openfalcon_2023052300.log
+smartbi_2023052300.dmp
+backup_smartbi_2023052300.log
+kingbase database logical backup end : 2023-05-23 00:30:50
+
+kingbase database logical backup begin : 2023-05-24 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023052400.dmp
+backup_kmoa_2023052400.log
+marketfactory_2023052400.dmp
+backup_marketfactory_2023052400.log
+openfalcon_2023052400.dmp
+backup_openfalcon_2023052400.log
+smartbi_2023052400.dmp
+backup_smartbi_2023052400.log
+kingbase database logical backup end : 2023-05-24 00:30:51
+
+kingbase database logical backup begin : 2023-05-25 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023052500.dmp
+backup_kmoa_2023052500.log
+marketfactory_2023052500.dmp
+backup_marketfactory_2023052500.log
+openfalcon_2023052500.dmp
+backup_openfalcon_2023052500.log
+smartbi_2023052500.dmp
+backup_smartbi_2023052500.log
+kingbase database logical backup end : 2023-05-25 00:30:52
+
+kingbase database logical backup begin : 2023-05-26 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023052600.dmp
+backup_kmoa_2023052600.log
+marketfactory_2023052600.dmp
+backup_marketfactory_2023052600.log
+openfalcon_2023052600.dmp
+backup_openfalcon_2023052600.log
+smartbi_2023052600.dmp
+backup_smartbi_2023052600.log
+kingbase database logical backup end : 2023-05-26 00:30:51
+
+kingbase database logical backup begin : 2023-05-27 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023052700.dmp
+backup_kmoa_2023052700.log
+marketfactory_2023052700.dmp
+backup_marketfactory_2023052700.log
+openfalcon_2023052700.dmp
+backup_openfalcon_2023052700.log
+smartbi_2023052700.dmp
+backup_smartbi_2023052700.log
+kingbase database logical backup end : 2023-05-27 00:30:52
+
+kingbase database logical backup begin : 2023-05-28 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023052800.dmp
+backup_kmoa_2023052800.log
+marketfactory_2023052800.dmp
+backup_marketfactory_2023052800.log
+openfalcon_2023052800.dmp
+backup_openfalcon_2023052800.log
+smartbi_2023052800.dmp
+backup_smartbi_2023052800.log
+kingbase database logical backup end : 2023-05-28 00:30:53
+
+kingbase database logical backup begin : 2023-05-29 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023052900.dmp
+backup_kmoa_2023052900.log
+marketfactory_2023052900.dmp
+backup_marketfactory_2023052900.log
+openfalcon_2023052900.dmp
+backup_openfalcon_2023052900.log
+smartbi_2023052900.dmp
+backup_smartbi_2023052900.log
+kingbase database logical backup end : 2023-05-29 00:30:52
+
+kingbase database logical backup begin : 2023-05-30 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023053000.dmp
+backup_kmoa_2023053000.log
+marketfactory_2023053000.dmp
+backup_marketfactory_2023053000.log
+openfalcon_2023053000.dmp
+backup_openfalcon_2023053000.log
+smartbi_2023053000.dmp
+backup_smartbi_2023053000.log
+kingbase database logical backup end : 2023-05-30 00:30:53
+
+kingbase database logical backup begin : 2023-05-31 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023053100.dmp
+backup_kmoa_2023053100.log
+marketfactory_2023053100.dmp
+backup_marketfactory_2023053100.log
+openfalcon_2023053100.dmp
+backup_openfalcon_2023053100.log
+smartbi_2023053100.dmp
+backup_smartbi_2023053100.log
+kingbase database logical backup end : 2023-05-31 00:30:53
+
+kingbase database logical backup begin : 2023-06-01 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023060100.dmp
+backup_kmoa_2023060100.log
+marketfactory_2023060100.dmp
+backup_marketfactory_2023060100.log
+openfalcon_2023060100.dmp
+backup_openfalcon_2023060100.log
+smartbi_2023060100.dmp
+backup_smartbi_2023060100.log
+kingbase database logical backup end : 2023-06-01 00:30:53
+
+kingbase database logical backup begin : 2023-06-02 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023060200.dmp
+backup_kmoa_2023060200.log
+marketfactory_2023060200.dmp
+backup_marketfactory_2023060200.log
+openfalcon_2023060200.dmp
+backup_openfalcon_2023060200.log
+smartbi_2023060200.dmp
+backup_smartbi_2023060200.log
+kingbase database logical backup end : 2023-06-02 00:30:52
+
+kingbase database logical backup begin : 2023-06-03 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023060300.dmp
+backup_kmoa_2023060300.log
+marketfactory_2023060300.dmp
+backup_marketfactory_2023060300.log
+openfalcon_2023060300.dmp
+backup_openfalcon_2023060300.log
+smartbi_2023060300.dmp
+backup_smartbi_2023060300.log
+kingbase database logical backup end : 2023-06-03 00:30:52
+
+kingbase database logical backup begin : 2023-06-04 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023060400.dmp
+backup_kmoa_2023060400.log
+marketfactory_2023060400.dmp
+backup_marketfactory_2023060400.log
+openfalcon_2023060400.dmp
+backup_openfalcon_2023060400.log
+smartbi_2023060400.dmp
+backup_smartbi_2023060400.log
+kingbase database logical backup end : 2023-06-04 00:30:53
+
+kingbase database logical backup begin : 2023-06-05 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023060500.dmp
+backup_kmoa_2023060500.log
+marketfactory_2023060500.dmp
+backup_marketfactory_2023060500.log
+openfalcon_2023060500.dmp
+backup_openfalcon_2023060500.log
+smartbi_2023060500.dmp
+backup_smartbi_2023060500.log
+kingbase database logical backup end : 2023-06-05 00:30:53
+
+kingbase database logical backup begin : 2023-06-06 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023060600.dmp
+backup_kmoa_2023060600.log
+marketfactory_2023060600.dmp
+backup_marketfactory_2023060600.log
+openfalcon_2023060600.dmp
+backup_openfalcon_2023060600.log
+smartbi_2023060600.dmp
+backup_smartbi_2023060600.log
+kingbase database logical backup end : 2023-06-06 00:30:53
+
+kingbase database logical backup begin : 2023-06-07 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023060700.dmp
+backup_kmoa_2023060700.log
+marketfactory_2023060700.dmp
+backup_marketfactory_2023060700.log
+openfalcon_2023060700.dmp
+backup_openfalcon_2023060700.log
+smartbi_2023060700.dmp
+backup_smartbi_2023060700.log
+kingbase database logical backup end : 2023-06-07 00:30:54
+
+kingbase database logical backup begin : 2023-06-08 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023060800.dmp
+backup_kmoa_2023060800.log
+marketfactory_2023060800.dmp
+backup_marketfactory_2023060800.log
+openfalcon_2023060800.dmp
+backup_openfalcon_2023060800.log
+smartbi_2023060800.dmp
+backup_smartbi_2023060800.log
+kingbase database logical backup end : 2023-06-08 00:30:53
+
+kingbase database logical backup begin : 2023-06-09 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023060900.dmp
+backup_kmoa_2023060900.log
+marketfactory_2023060900.dmp
+backup_marketfactory_2023060900.log
+openfalcon_2023060900.dmp
+backup_openfalcon_2023060900.log
+smartbi_2023060900.dmp
+backup_smartbi_2023060900.log
+kingbase database logical backup end : 2023-06-09 00:30:53
+
+kingbase database logical backup begin : 2023-06-10 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023061000.dmp
+backup_kmoa_2023061000.log
+marketfactory_2023061000.dmp
+backup_marketfactory_2023061000.log
+openfalcon_2023061000.dmp
+backup_openfalcon_2023061000.log
+smartbi_2023061000.dmp
+backup_smartbi_2023061000.log
+kingbase database logical backup end : 2023-06-10 00:30:53
+
+kingbase database logical backup begin : 2023-06-11 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023061100.dmp
+backup_kmoa_2023061100.log
+marketfactory_2023061100.dmp
+backup_marketfactory_2023061100.log
+openfalcon_2023061100.dmp
+backup_openfalcon_2023061100.log
+smartbi_2023061100.dmp
+backup_smartbi_2023061100.log
+kingbase database logical backup end : 2023-06-11 00:30:54
+
+kingbase database logical backup begin : 2023-06-12 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023061200.dmp
+backup_kmoa_2023061200.log
+marketfactory_2023061200.dmp
+backup_marketfactory_2023061200.log
+openfalcon_2023061200.dmp
+backup_openfalcon_2023061200.log
+smartbi_2023061200.dmp
+backup_smartbi_2023061200.log
+kingbase database logical backup end : 2023-06-12 00:30:54
+
+kingbase database logical backup begin : 2023-06-13 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023061300.dmp
+backup_kmoa_2023061300.log
+marketfactory_2023061300.dmp
+backup_marketfactory_2023061300.log
+openfalcon_2023061300.dmp
+backup_openfalcon_2023061300.log
+smartbi_2023061300.dmp
+backup_smartbi_2023061300.log
+kingbase database logical backup end : 2023-06-13 00:31:01
+
+kingbase database logical backup begin : 2023-06-14 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023061400.dmp
+backup_kmoa_2023061400.log
+marketfactory_2023061400.dmp
+backup_marketfactory_2023061400.log
+openfalcon_2023061400.dmp
+backup_openfalcon_2023061400.log
+smartbi_2023061400.dmp
+backup_smartbi_2023061400.log
+kingbase database logical backup end : 2023-06-14 00:31:01
+
+kingbase database logical backup begin : 2023-06-15 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023061500.dmp
+backup_kmoa_2023061500.log
+marketfactory_2023061500.dmp
+backup_marketfactory_2023061500.log
+openfalcon_2023061500.dmp
+backup_openfalcon_2023061500.log
+smartbi_2023061500.dmp
+backup_smartbi_2023061500.log
+kingbase database logical backup end : 2023-06-15 00:31:02
+
+kingbase database logical backup begin : 2023-06-16 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023061600.dmp
+backup_kmoa_2023061600.log
+marketfactory_2023061600.dmp
+backup_marketfactory_2023061600.log
+openfalcon_2023061600.dmp
+backup_openfalcon_2023061600.log
+smartbi_2023061600.dmp
+backup_smartbi_2023061600.log
+kingbase database logical backup end : 2023-06-16 00:31:02
+
+kingbase database logical backup begin : 2023-06-17 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023061700.dmp
+backup_kmoa_2023061700.log
+marketfactory_2023061700.dmp
+backup_marketfactory_2023061700.log
+openfalcon_2023061700.dmp
+backup_openfalcon_2023061700.log
+smartbi_2023061700.dmp
+backup_smartbi_2023061700.log
+kingbase database logical backup end : 2023-06-17 00:31:02
+
+kingbase database logical backup begin : 2023-06-18 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023061800.dmp
+backup_kmoa_2023061800.log
+marketfactory_2023061800.dmp
+backup_marketfactory_2023061800.log
+openfalcon_2023061800.dmp
+backup_openfalcon_2023061800.log
+smartbi_2023061800.dmp
+backup_smartbi_2023061800.log
+kingbase database logical backup end : 2023-06-18 00:31:00
+
+kingbase database logical backup begin : 2023-06-19 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023061900.dmp
+backup_kmoa_2023061900.log
+marketfactory_2023061900.dmp
+backup_marketfactory_2023061900.log
+openfalcon_2023061900.dmp
+backup_openfalcon_2023061900.log
+smartbi_2023061900.dmp
+backup_smartbi_2023061900.log
+kingbase database logical backup end : 2023-06-19 00:31:02
+
+kingbase database logical backup begin : 2023-06-20 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023062000.dmp
+backup_kmoa_2023062000.log
+marketfactory_2023062000.dmp
+backup_marketfactory_2023062000.log
+openfalcon_2023062000.dmp
+backup_openfalcon_2023062000.log
+smartbi_2023062000.dmp
+backup_smartbi_2023062000.log
+kingbase database logical backup end : 2023-06-20 00:31:01
+
+kingbase database logical backup begin : 2023-06-21 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023062100.dmp
+backup_kmoa_2023062100.log
+marketfactory_2023062100.dmp
+backup_marketfactory_2023062100.log
+openfalcon_2023062100.dmp
+backup_openfalcon_2023062100.log
+smartbi_2023062100.dmp
+backup_smartbi_2023062100.log
+kingbase database logical backup end : 2023-06-21 00:31:01
+
+kingbase database logical backup begin : 2023-06-22 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023062200.dmp
+backup_kmoa_2023062200.log
+marketfactory_2023062200.dmp
+backup_marketfactory_2023062200.log
+openfalcon_2023062200.dmp
+backup_openfalcon_2023062200.log
+smartbi_2023062200.dmp
+backup_smartbi_2023062200.log
+kingbase database logical backup end : 2023-06-22 00:31:02
+
+kingbase database logical backup begin : 2023-06-23 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023062300.dmp
+backup_kmoa_2023062300.log
+marketfactory_2023062300.dmp
+backup_marketfactory_2023062300.log
+openfalcon_2023062300.dmp
+backup_openfalcon_2023062300.log
+smartbi_2023062300.dmp
+backup_smartbi_2023062300.log
+kingbase database logical backup end : 2023-06-23 00:31:01
+
+kingbase database logical backup begin : 2023-06-24 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023062400.dmp
+backup_kmoa_2023062400.log
+marketfactory_2023062400.dmp
+backup_marketfactory_2023062400.log
+openfalcon_2023062400.dmp
+backup_openfalcon_2023062400.log
+smartbi_2023062400.dmp
+backup_smartbi_2023062400.log
+kingbase database logical backup end : 2023-06-24 00:31:02
+
+kingbase database logical backup begin : 2023-06-25 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023062500.dmp
+backup_kmoa_2023062500.log
+marketfactory_2023062500.dmp
+backup_marketfactory_2023062500.log
+openfalcon_2023062500.dmp
+backup_openfalcon_2023062500.log
+smartbi_2023062500.dmp
+backup_smartbi_2023062500.log
+kingbase database logical backup end : 2023-06-25 00:31:02
+
+kingbase database logical backup begin : 2023-06-26 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023062600.dmp
+backup_kmoa_2023062600.log
+marketfactory_2023062600.dmp
+backup_marketfactory_2023062600.log
+openfalcon_2023062600.dmp
+backup_openfalcon_2023062600.log
+smartbi_2023062600.dmp
+backup_smartbi_2023062600.log
+kingbase database logical backup end : 2023-06-26 00:31:03
+
+kingbase database logical backup begin : 2023-06-27 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023062700.dmp
+backup_kmoa_2023062700.log
+marketfactory_2023062700.dmp
+backup_marketfactory_2023062700.log
+openfalcon_2023062700.dmp
+backup_openfalcon_2023062700.log
+smartbi_2023062700.dmp
+backup_smartbi_2023062700.log
+kingbase database logical backup end : 2023-06-27 00:31:02
+
+kingbase database logical backup begin : 2023-06-28 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023062800.dmp
+backup_kmoa_2023062800.log
+marketfactory_2023062800.dmp
+backup_marketfactory_2023062800.log
+openfalcon_2023062800.dmp
+backup_openfalcon_2023062800.log
+smartbi_2023062800.dmp
+backup_smartbi_2023062800.log
+kingbase database logical backup end : 2023-06-28 00:31:03
+
+kingbase database logical backup begin : 2023-06-29 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023062900.dmp
+backup_kmoa_2023062900.log
+marketfactory_2023062900.dmp
+backup_marketfactory_2023062900.log
+openfalcon_2023062900.dmp
+backup_openfalcon_2023062900.log
+smartbi_2023062900.dmp
+backup_smartbi_2023062900.log
+kingbase database logical backup end : 2023-06-29 00:31:03
+
+kingbase database logical backup begin : 2023-06-30 00:30:02
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023063000.dmp
+backup_kmoa_2023063000.log
+marketfactory_2023063000.dmp
+backup_marketfactory_2023063000.log
+openfalcon_2023063000.dmp
+backup_openfalcon_2023063000.log
+smartbi_2023063000.dmp
+backup_smartbi_2023063000.log
+kingbase database logical backup end : 2023-06-30 00:31:05
+
+kingbase database logical backup begin : 2023-07-01 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023070100.dmp
+backup_kmoa_2023070100.log
+marketfactory_2023070100.dmp
+backup_marketfactory_2023070100.log
+openfalcon_2023070100.dmp
+backup_openfalcon_2023070100.log
+smartbi_2023070100.dmp
+backup_smartbi_2023070100.log
+kingbase database logical backup end : 2023-07-01 00:31:06
+
+kingbase database logical backup begin : 2023-07-02 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023070200.dmp
+backup_kmoa_2023070200.log
+marketfactory_2023070200.dmp
+backup_marketfactory_2023070200.log
+openfalcon_2023070200.dmp
+backup_openfalcon_2023070200.log
+smartbi_2023070200.dmp
+backup_smartbi_2023070200.log
+kingbase database logical backup end : 2023-07-02 00:31:05
+
+kingbase database logical backup begin : 2023-07-03 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023070300.dmp
+backup_kmoa_2023070300.log
+marketfactory_2023070300.dmp
+backup_marketfactory_2023070300.log
+openfalcon_2023070300.dmp
+backup_openfalcon_2023070300.log
+smartbi_2023070300.dmp
+backup_smartbi_2023070300.log
+kingbase database logical backup end : 2023-07-03 00:31:05
+
+kingbase database logical backup begin : 2023-07-04 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023070400.dmp
+backup_kmoa_2023070400.log
+marketfactory_2023070400.dmp
+backup_marketfactory_2023070400.log
+openfalcon_2023070400.dmp
+backup_openfalcon_2023070400.log
+smartbi_2023070400.dmp
+backup_smartbi_2023070400.log
+kingbase database logical backup end : 2023-07-04 00:31:06
+
+kingbase database logical backup begin : 2023-07-05 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023070500.dmp
+backup_kmoa_2023070500.log
+marketfactory_2023070500.dmp
+backup_marketfactory_2023070500.log
+openfalcon_2023070500.dmp
+backup_openfalcon_2023070500.log
+smartbi_2023070500.dmp
+backup_smartbi_2023070500.log
+kingbase database logical backup end : 2023-07-05 00:31:05
+
+kingbase database logical backup begin : 2023-07-06 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023070600.dmp
+backup_kmoa_2023070600.log
+marketfactory_2023070600.dmp
+backup_marketfactory_2023070600.log
+openfalcon_2023070600.dmp
+backup_openfalcon_2023070600.log
+smartbi_2023070600.dmp
+backup_smartbi_2023070600.log
+kingbase database logical backup end : 2023-07-06 00:31:05
+
+kingbase database logical backup begin : 2023-07-07 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023070700.dmp
+backup_kmoa_2023070700.log
+marketfactory_2023070700.dmp
+backup_marketfactory_2023070700.log
+openfalcon_2023070700.dmp
+backup_openfalcon_2023070700.log
+smartbi_2023070700.dmp
+backup_smartbi_2023070700.log
+kingbase database logical backup end : 2023-07-07 00:31:05
+
+kingbase database logical backup begin : 2023-07-08 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023070800.dmp
+backup_kmoa_2023070800.log
+marketfactory_2023070800.dmp
+backup_marketfactory_2023070800.log
+openfalcon_2023070800.dmp
+backup_openfalcon_2023070800.log
+smartbi_2023070800.dmp
+backup_smartbi_2023070800.log
+kingbase database logical backup end : 2023-07-08 00:31:05
+
+kingbase database logical backup begin : 2023-07-09 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023070900.dmp
+backup_kmoa_2023070900.log
+marketfactory_2023070900.dmp
+backup_marketfactory_2023070900.log
+openfalcon_2023070900.dmp
+backup_openfalcon_2023070900.log
+smartbi_2023070900.dmp
+backup_smartbi_2023070900.log
+kingbase database logical backup end : 2023-07-09 00:31:05
+
+kingbase database logical backup begin : 2023-07-10 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023071000.dmp
+backup_kmoa_2023071000.log
+marketfactory_2023071000.dmp
+backup_marketfactory_2023071000.log
+openfalcon_2023071000.dmp
+backup_openfalcon_2023071000.log
+smartbi_2023071000.dmp
+backup_smartbi_2023071000.log
+kingbase database logical backup end : 2023-07-10 00:31:07
+
+kingbase database logical backup begin : 2023-07-11 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023071100.dmp
+backup_kmoa_2023071100.log
+marketfactory_2023071100.dmp
+backup_marketfactory_2023071100.log
+openfalcon_2023071100.dmp
+backup_openfalcon_2023071100.log
+smartbi_2023071100.dmp
+backup_smartbi_2023071100.log
+kingbase database logical backup end : 2023-07-11 00:31:05
+
+kingbase database logical backup begin : 2023-07-12 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023071200.dmp
+backup_kmoa_2023071200.log
+marketfactory_2023071200.dmp
+backup_marketfactory_2023071200.log
+openfalcon_2023071200.dmp
+backup_openfalcon_2023071200.log
+smartbi_2023071200.dmp
+backup_smartbi_2023071200.log
+kingbase database logical backup end : 2023-07-12 00:31:06
+
+kingbase database logical backup begin : 2023-07-13 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023071300.dmp
+backup_kmoa_2023071300.log
+marketfactory_2023071300.dmp
+backup_marketfactory_2023071300.log
+openfalcon_2023071300.dmp
+backup_openfalcon_2023071300.log
+smartbi_2023071300.dmp
+backup_smartbi_2023071300.log
+kingbase database logical backup end : 2023-07-13 00:31:07
+
+kingbase database logical backup begin : 2023-07-14 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023071400.dmp
+backup_kmoa_2023071400.log
+marketfactory_2023071400.dmp
+backup_marketfactory_2023071400.log
+openfalcon_2023071400.dmp
+backup_openfalcon_2023071400.log
+smartbi_2023071400.dmp
+backup_smartbi_2023071400.log
+kingbase database logical backup end : 2023-07-14 00:31:06
+
+kingbase database logical backup begin : 2023-07-15 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023071500.dmp
+backup_kmoa_2023071500.log
+marketfactory_2023071500.dmp
+backup_marketfactory_2023071500.log
+openfalcon_2023071500.dmp
+backup_openfalcon_2023071500.log
+smartbi_2023071500.dmp
+backup_smartbi_2023071500.log
+kingbase database logical backup end : 2023-07-15 00:31:06
+
+kingbase database logical backup begin : 2023-07-16 00:30:02
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023071600.dmp
+backup_kmoa_2023071600.log
+marketfactory_2023071600.dmp
+backup_marketfactory_2023071600.log
+openfalcon_2023071600.dmp
+backup_openfalcon_2023071600.log
+smartbi_2023071600.dmp
+backup_smartbi_2023071600.log
+kingbase database logical backup end : 2023-07-16 00:31:07
+
+kingbase database logical backup begin : 2023-07-17 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023071700.dmp
+backup_kmoa_2023071700.log
+marketfactory_2023071700.dmp
+backup_marketfactory_2023071700.log
+openfalcon_2023071700.dmp
+backup_openfalcon_2023071700.log
+smartbi_2023071700.dmp
+backup_smartbi_2023071700.log
+kingbase database logical backup end : 2023-07-17 00:31:06
+
+kingbase database logical backup begin : 2023-07-18 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023071800.dmp
+backup_kmoa_2023071800.log
+marketfactory_2023071800.dmp
+backup_marketfactory_2023071800.log
+openfalcon_2023071800.dmp
+backup_openfalcon_2023071800.log
+dac_2023071800.dmp
+backup_dac_2023071800.log
+smartbi_2023071800.dmp
+backup_smartbi_2023071800.log
+kingbase database logical backup end : 2023-07-18 00:31:07
+
+kingbase database logical backup begin : 2023-07-19 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023071900.dmp
+backup_kmoa_2023071900.log
+marketfactory_2023071900.dmp
+backup_marketfactory_2023071900.log
+openfalcon_2023071900.dmp
+backup_openfalcon_2023071900.log
+dac_2023071900.dmp
+backup_dac_2023071900.log
+smartbi_2023071900.dmp
+backup_smartbi_2023071900.log
+kingbase database logical backup end : 2023-07-19 00:31:07
+
+kingbase database logical backup begin : 2023-07-20 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023072000.dmp
+backup_kmoa_2023072000.log
+marketfactory_2023072000.dmp
+backup_marketfactory_2023072000.log
+openfalcon_2023072000.dmp
+backup_openfalcon_2023072000.log
+dac_2023072000.dmp
+backup_dac_2023072000.log
+smartbi_2023072000.dmp
+backup_smartbi_2023072000.log
+kingbase database logical backup end : 2023-07-20 00:31:08
+
+kingbase database logical backup begin : 2023-07-21 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023072100.dmp
+backup_kmoa_2023072100.log
+marketfactory_2023072100.dmp
+backup_marketfactory_2023072100.log
+openfalcon_2023072100.dmp
+backup_openfalcon_2023072100.log
+dac_2023072100.dmp
+backup_dac_2023072100.log
+smartbi_2023072100.dmp
+backup_smartbi_2023072100.log
+kingbase database logical backup end : 2023-07-21 00:31:09
+
+kingbase database logical backup begin : 2023-07-22 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023072200.dmp
+backup_kmoa_2023072200.log
+marketfactory_2023072200.dmp
+backup_marketfactory_2023072200.log
+openfalcon_2023072200.dmp
+backup_openfalcon_2023072200.log
+dac_2023072200.dmp
+backup_dac_2023072200.log
+smartbi_2023072200.dmp
+backup_smartbi_2023072200.log
+short_2023072200.dmp
+backup_short_2023072200.log
+kingbase database logical backup end : 2023-07-22 00:31:09
+
+kingbase database logical backup begin : 2023-07-23 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023072300.dmp
+backup_kmoa_2023072300.log
+marketfactory_2023072300.dmp
+backup_marketfactory_2023072300.log
+openfalcon_2023072300.dmp
+backup_openfalcon_2023072300.log
+dac_2023072300.dmp
+backup_dac_2023072300.log
+smartbi_2023072300.dmp
+backup_smartbi_2023072300.log
+short_2023072300.dmp
+backup_short_2023072300.log
+kingbase database logical backup end : 2023-07-23 00:31:09
+
+kingbase database logical backup begin : 2023-07-24 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023072400.dmp
+backup_kmoa_2023072400.log
+marketfactory_2023072400.dmp
+backup_marketfactory_2023072400.log
+openfalcon_2023072400.dmp
+backup_openfalcon_2023072400.log
+dac_2023072400.dmp
+backup_dac_2023072400.log
+smartbi_2023072400.dmp
+backup_smartbi_2023072400.log
+short_2023072400.dmp
+backup_short_2023072400.log
+kingbase database logical backup end : 2023-07-24 00:31:08
+
+kingbase database logical backup begin : 2023-07-25 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023072500.dmp
+backup_kmoa_2023072500.log
+marketfactory_2023072500.dmp
+backup_marketfactory_2023072500.log
+openfalcon_2023072500.dmp
+backup_openfalcon_2023072500.log
+dac_2023072500.dmp
+backup_dac_2023072500.log
+smartbi_2023072500.dmp
+backup_smartbi_2023072500.log
+short_2023072500.dmp
+backup_short_2023072500.log
+kingbase database logical backup end : 2023-07-25 00:31:10
+
+kingbase database logical backup begin : 2023-07-26 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023072600.dmp
+backup_kmoa_2023072600.log
+marketfactory_2023072600.dmp
+backup_marketfactory_2023072600.log
+openfalcon_2023072600.dmp
+backup_openfalcon_2023072600.log
+dac_2023072600.dmp
+backup_dac_2023072600.log
+smartbi_2023072600.dmp
+backup_smartbi_2023072600.log
+short_2023072600.dmp
+backup_short_2023072600.log
+kingbase database logical backup end : 2023-07-26 00:31:09
+
+kingbase database logical backup begin : 2023-07-27 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023072700.dmp
+backup_kmoa_2023072700.log
+marketfactory_2023072700.dmp
+backup_marketfactory_2023072700.log
+openfalcon_2023072700.dmp
+backup_openfalcon_2023072700.log
+dac_2023072700.dmp
+backup_dac_2023072700.log
+smartbi_2023072700.dmp
+backup_smartbi_2023072700.log
+short_2023072700.dmp
+backup_short_2023072700.log
+kingbase database logical backup end : 2023-07-27 00:36:07
+
+kingbase database logical backup begin : 2023-07-28 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023072800.dmp
+backup_kmoa_2023072800.log
+marketfactory_2023072800.dmp
+backup_marketfactory_2023072800.log
+openfalcon_2023072800.dmp
+backup_openfalcon_2023072800.log
+dac_2023072800.dmp
+backup_dac_2023072800.log
+smartbi_2023072800.dmp
+backup_smartbi_2023072800.log
+short_2023072800.dmp
+backup_short_2023072800.log
+kingbase database logical backup end : 2023-07-28 00:40:41
+
+kingbase database logical backup begin : 2023-07-29 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023072900.dmp
+backup_kmoa_2023072900.log
+marketfactory_2023072900.dmp
+backup_marketfactory_2023072900.log
+openfalcon_2023072900.dmp
+backup_openfalcon_2023072900.log
+dac_2023072900.dmp
+backup_dac_2023072900.log
+smartbi_2023072900.dmp
+backup_smartbi_2023072900.log
+short_2023072900.dmp
+backup_short_2023072900.log
+kingbase database logical backup end : 2023-07-29 00:40:46
+
+kingbase database logical backup begin : 2023-07-30 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023073000.dmp
+backup_kmoa_2023073000.log
+marketfactory_2023073000.dmp
+backup_marketfactory_2023073000.log
+openfalcon_2023073000.dmp
+backup_openfalcon_2023073000.log
+dac_2023073000.dmp
+backup_dac_2023073000.log
+smartbi_2023073000.dmp
+backup_smartbi_2023073000.log
+short_2023073000.dmp
+backup_short_2023073000.log
+kingbase database logical backup end : 2023-07-30 00:40:48
+
+kingbase database logical backup begin : 2023-07-31 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023073100.dmp
+backup_kmoa_2023073100.log
+marketfactory_2023073100.dmp
+backup_marketfactory_2023073100.log
+openfalcon_2023073100.dmp
+backup_openfalcon_2023073100.log
+dac_2023073100.dmp
+backup_dac_2023073100.log
+smartbi_2023073100.dmp
+backup_smartbi_2023073100.log
+short_2023073100.dmp
+backup_short_2023073100.log
+kingbase database logical backup end : 2023-07-31 00:40:42
+
+kingbase database logical backup begin : 2023-08-01 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023080100.dmp
+backup_kmoa_2023080100.log
+marketfactory_2023080100.dmp
+backup_marketfactory_2023080100.log
+openfalcon_2023080100.dmp
+backup_openfalcon_2023080100.log
+dac_2023080100.dmp
+backup_dac_2023080100.log
+smartbi_2023080100.dmp
+backup_smartbi_2023080100.log
+short_2023080100.dmp
+backup_short_2023080100.log
+kingbase database logical backup end : 2023-08-01 00:39:01
+
+kingbase database logical backup begin : 2023-08-02 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023080200.dmp
+backup_kmoa_2023080200.log
+marketfactory_2023080200.dmp
+backup_marketfactory_2023080200.log
+openfalcon_2023080200.dmp
+backup_openfalcon_2023080200.log
+dac_2023080200.dmp
+backup_dac_2023080200.log
+smartbi_2023080200.dmp
+backup_smartbi_2023080200.log
+short_2023080200.dmp
+backup_short_2023080200.log
+kingbase database logical backup end : 2023-08-02 00:38:57
+
+kingbase database logical backup begin : 2023-08-03 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023080300.dmp
+backup_kmoa_2023080300.log
+marketfactory_2023080300.dmp
+backup_marketfactory_2023080300.log
+openfalcon_2023080300.dmp
+backup_openfalcon_2023080300.log
+dac_2023080300.dmp
+backup_dac_2023080300.log
+smartbi_2023080300.dmp
+backup_smartbi_2023080300.log
+short_2023080300.dmp
+backup_short_2023080300.log
+kingbase database logical backup end : 2023-08-03 00:39:03
+
+kingbase database logical backup begin : 2023-08-04 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023080400.dmp
+backup_kmoa_2023080400.log
+marketfactory_2023080400.dmp
+backup_marketfactory_2023080400.log
+openfalcon_2023080400.dmp
+backup_openfalcon_2023080400.log
+dac_2023080400.dmp
+backup_dac_2023080400.log
+smartbi_2023080400.dmp
+backup_smartbi_2023080400.log
+short_2023080400.dmp
+backup_short_2023080400.log
+kingbase database logical backup end : 2023-08-04 00:38:59
+
+kingbase database logical backup begin : 2023-08-05 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023080500.dmp
+backup_kmoa_2023080500.log
+marketfactory_2023080500.dmp
+backup_marketfactory_2023080500.log
+openfalcon_2023080500.dmp
+backup_openfalcon_2023080500.log
+dac_2023080500.dmp
+backup_dac_2023080500.log
+smartbi_2023080500.dmp
+backup_smartbi_2023080500.log
+short_2023080500.dmp
+backup_short_2023080500.log
+kingbase database logical backup end : 2023-08-05 00:39:10
+
+kingbase database logical backup begin : 2023-08-06 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023080600.dmp
+backup_kmoa_2023080600.log
+marketfactory_2023080600.dmp
+backup_marketfactory_2023080600.log
+openfalcon_2023080600.dmp
+backup_openfalcon_2023080600.log
+dac_2023080600.dmp
+backup_dac_2023080600.log
+smartbi_2023080600.dmp
+backup_smartbi_2023080600.log
+short_2023080600.dmp
+backup_short_2023080600.log
+kingbase database logical backup end : 2023-08-06 00:39:03
+
+kingbase database logical backup begin : 2023-08-07 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023080700.dmp
+backup_kmoa_2023080700.log
+marketfactory_2023080700.dmp
+backup_marketfactory_2023080700.log
+openfalcon_2023080700.dmp
+backup_openfalcon_2023080700.log
+dac_2023080700.dmp
+backup_dac_2023080700.log
+smartbi_2023080700.dmp
+backup_smartbi_2023080700.log
+short_2023080700.dmp
+backup_short_2023080700.log
+kingbase database logical backup end : 2023-08-07 00:39:01
+
+kingbase database logical backup begin : 2023-08-08 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023080800.dmp
+backup_kmoa_2023080800.log
+marketfactory_2023080800.dmp
+backup_marketfactory_2023080800.log
+openfalcon_2023080800.dmp
+backup_openfalcon_2023080800.log
+dac_2023080800.dmp
+backup_dac_2023080800.log
+smartbi_2023080800.dmp
+backup_smartbi_2023080800.log
+short_2023080800.dmp
+backup_short_2023080800.log
+kingbase database logical backup end : 2023-08-08 00:38:53
+
+kingbase database logical backup begin : 2023-08-09 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023080900.dmp
+backup_kmoa_2023080900.log
+marketfactory_2023080900.dmp
+backup_marketfactory_2023080900.log
+openfalcon_2023080900.dmp
+backup_openfalcon_2023080900.log
+dac_2023080900.dmp
+backup_dac_2023080900.log
+smartbi_2023080900.dmp
+backup_smartbi_2023080900.log
+short_2023080900.dmp
+backup_short_2023080900.log
+kingbase database logical backup end : 2023-08-09 00:39:03
+
+kingbase database logical backup begin : 2023-08-10 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023081000.dmp
+backup_kmoa_2023081000.log
+marketfactory_2023081000.dmp
+backup_marketfactory_2023081000.log
+openfalcon_2023081000.dmp
+backup_openfalcon_2023081000.log
+dac_2023081000.dmp
+backup_dac_2023081000.log
+smartbi_2023081000.dmp
+backup_smartbi_2023081000.log
+short_2023081000.dmp
+backup_short_2023081000.log
+kingbase database logical backup end : 2023-08-10 00:39:04
+
+kingbase database logical backup begin : 2023-08-11 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023081100.dmp
+backup_kmoa_2023081100.log
+marketfactory_2023081100.dmp
+backup_marketfactory_2023081100.log
+openfalcon_2023081100.dmp
+backup_openfalcon_2023081100.log
+dac_2023081100.dmp
+backup_dac_2023081100.log
+smartbi_2023081100.dmp
+backup_smartbi_2023081100.log
+short_2023081100.dmp
+backup_short_2023081100.log
+kingbase database logical backup end : 2023-08-11 00:39:06
+
+kingbase database logical backup begin : 2023-08-12 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023081200.dmp
+backup_kmoa_2023081200.log
+marketfactory_2023081200.dmp
+backup_marketfactory_2023081200.log
+openfalcon_2023081200.dmp
+backup_openfalcon_2023081200.log
+dac_2023081200.dmp
+backup_dac_2023081200.log
+smartbi_2023081200.dmp
+backup_smartbi_2023081200.log
+short_2023081200.dmp
+backup_short_2023081200.log
+kingbase database logical backup end : 2023-08-12 00:38:57
+
+kingbase database logical backup begin : 2023-08-13 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023081300.dmp
+backup_kmoa_2023081300.log
+marketfactory_2023081300.dmp
+backup_marketfactory_2023081300.log
+openfalcon_2023081300.dmp
+backup_openfalcon_2023081300.log
+dac_2023081300.dmp
+backup_dac_2023081300.log
+smartbi_2023081300.dmp
+backup_smartbi_2023081300.log
+short_2023081300.dmp
+backup_short_2023081300.log
+kingbase database logical backup end : 2023-08-13 00:38:58
+
+kingbase database logical backup begin : 2023-08-14 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023081400.dmp
+backup_kmoa_2023081400.log
+marketfactory_2023081400.dmp
+backup_marketfactory_2023081400.log
+openfalcon_2023081400.dmp
+backup_openfalcon_2023081400.log
+dac_2023081400.dmp
+backup_dac_2023081400.log
+smartbi_2023081400.dmp
+backup_smartbi_2023081400.log
+short_2023081400.dmp
+backup_short_2023081400.log
+kingbase database logical backup end : 2023-08-14 00:39:04
+
+kingbase database logical backup begin : 2023-08-15 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023081500.dmp
+backup_kmoa_2023081500.log
+marketfactory_2023081500.dmp
+backup_marketfactory_2023081500.log
+openfalcon_2023081500.dmp
+backup_openfalcon_2023081500.log
+dac_2023081500.dmp
+backup_dac_2023081500.log
+smartbi_2023081500.dmp
+backup_smartbi_2023081500.log
+short_2023081500.dmp
+backup_short_2023081500.log
+kingbase database logical backup end : 2023-08-15 00:39:01
+
+kingbase database logical backup begin : 2023-08-16 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023081600.dmp
+backup_kmoa_2023081600.log
+marketfactory_2023081600.dmp
+backup_marketfactory_2023081600.log
+openfalcon_2023081600.dmp
+backup_openfalcon_2023081600.log
+dac_2023081600.dmp
+backup_dac_2023081600.log
+smartbi_2023081600.dmp
+backup_smartbi_2023081600.log
+short_2023081600.dmp
+backup_short_2023081600.log
+kingbase database logical backup end : 2023-08-16 00:39:02
+
+kingbase database logical backup begin : 2023-08-17 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023081700.dmp
+backup_kmoa_2023081700.log
+marketfactory_2023081700.dmp
+backup_marketfactory_2023081700.log
+openfalcon_2023081700.dmp
+backup_openfalcon_2023081700.log
+dac_2023081700.dmp
+backup_dac_2023081700.log
+smartbi_2023081700.dmp
+backup_smartbi_2023081700.log
+short_2023081700.dmp
+backup_short_2023081700.log
+kingbase database logical backup end : 2023-08-17 00:39:04
+
+kingbase database logical backup begin : 2023-08-18 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023081800.dmp
+backup_kmoa_2023081800.log
+marketfactory_2023081800.dmp
+backup_marketfactory_2023081800.log
+openfalcon_2023081800.dmp
+backup_openfalcon_2023081800.log
+dac_2023081800.dmp
+backup_dac_2023081800.log
+smartbi_2023081800.dmp
+backup_smartbi_2023081800.log
+short_2023081800.dmp
+backup_short_2023081800.log
+kingbase database logical backup end : 2023-08-18 00:38:56
+
+kingbase database logical backup begin : 2023-08-19 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023081900.dmp
+backup_kmoa_2023081900.log
+marketfactory_2023081900.dmp
+backup_marketfactory_2023081900.log
+openfalcon_2023081900.dmp
+backup_openfalcon_2023081900.log
+dac_2023081900.dmp
+backup_dac_2023081900.log
+smartbi_2023081900.dmp
+backup_smartbi_2023081900.log
+short_2023081900.dmp
+backup_short_2023081900.log
+kingbase database logical backup end : 2023-08-19 00:38:56
+
+kingbase database logical backup begin : 2023-08-20 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023082000.dmp
+backup_kmoa_2023082000.log
+marketfactory_2023082000.dmp
+backup_marketfactory_2023082000.log
+openfalcon_2023082000.dmp
+backup_openfalcon_2023082000.log
+dac_2023082000.dmp
+backup_dac_2023082000.log
+smartbi_2023082000.dmp
+backup_smartbi_2023082000.log
+short_2023082000.dmp
+backup_short_2023082000.log
+kingbase database logical backup end : 2023-08-20 00:38:55
+
+kingbase database logical backup begin : 2023-08-21 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023082100.dmp
+backup_kmoa_2023082100.log
+marketfactory_2023082100.dmp
+backup_marketfactory_2023082100.log
+openfalcon_2023082100.dmp
+backup_openfalcon_2023082100.log
+dac_2023082100.dmp
+backup_dac_2023082100.log
+smartbi_2023082100.dmp
+backup_smartbi_2023082100.log
+short_2023082100.dmp
+backup_short_2023082100.log
+kingbase database logical backup end : 2023-08-21 00:39:03
+
+kingbase database logical backup begin : 2023-08-22 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023082200.dmp
+backup_kmoa_2023082200.log
+marketfactory_2023082200.dmp
+backup_marketfactory_2023082200.log
+openfalcon_2023082200.dmp
+backup_openfalcon_2023082200.log
+dac_2023082200.dmp
+backup_dac_2023082200.log
+smartbi_2023082200.dmp
+backup_smartbi_2023082200.log
+short_2023082200.dmp
+backup_short_2023082200.log
+kingbase database logical backup end : 2023-08-22 00:38:55
+
+kingbase database logical backup begin : 2023-08-23 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023082300.dmp
+backup_kmoa_2023082300.log
+marketfactory_2023082300.dmp
+backup_marketfactory_2023082300.log
+openfalcon_2023082300.dmp
+backup_openfalcon_2023082300.log
+dac_2023082300.dmp
+backup_dac_2023082300.log
+smartbi_2023082300.dmp
+backup_smartbi_2023082300.log
+short_2023082300.dmp
+backup_short_2023082300.log
+kingbase database logical backup end : 2023-08-23 00:39:10
+
+kingbase database logical backup begin : 2023-08-24 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023082400.dmp
+backup_kmoa_2023082400.log
+marketfactory_2023082400.dmp
+backup_marketfactory_2023082400.log
+openfalcon_2023082400.dmp
+backup_openfalcon_2023082400.log
+smartbi_2023082400.dmp
+backup_smartbi_2023082400.log
+short_2023082400.dmp
+backup_short_2023082400.log
+dac_2023082400.dmp
+backup_dac_2023082400.log
+kingbase database logical backup end : 2023-08-24 00:39:10
+
+kingbase database logical backup begin : 2023-08-25 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023082500.dmp
+backup_kmoa_2023082500.log
+marketfactory_2023082500.dmp
+backup_marketfactory_2023082500.log
+openfalcon_2023082500.dmp
+backup_openfalcon_2023082500.log
+smartbi_2023082500.dmp
+backup_smartbi_2023082500.log
+short_2023082500.dmp
+backup_short_2023082500.log
+dac_2023082500.dmp
+backup_dac_2023082500.log
+kingbase database logical backup end : 2023-08-25 00:39:09
+
+kingbase database logical backup begin : 2023-08-26 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023082600.dmp
+backup_kmoa_2023082600.log
+marketfactory_2023082600.dmp
+backup_marketfactory_2023082600.log
+openfalcon_2023082600.dmp
+backup_openfalcon_2023082600.log
+dac_2023082600.dmp
+backup_dac_2023082600.log
+smartbi_2023082600.dmp
+backup_smartbi_2023082600.log
+short_2023082600.dmp
+backup_short_2023082600.log
+kingbase database logical backup end : 2023-08-26 00:39:11
+
+kingbase database logical backup begin : 2023-08-27 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023082700.dmp
+backup_kmoa_2023082700.log
+marketfactory_2023082700.dmp
+backup_marketfactory_2023082700.log
+openfalcon_2023082700.dmp
+backup_openfalcon_2023082700.log
+dac_2023082700.dmp
+backup_dac_2023082700.log
+smartbi_2023082700.dmp
+backup_smartbi_2023082700.log
+short_2023082700.dmp
+backup_short_2023082700.log
+kingbase database logical backup end : 2023-08-27 00:39:08
+
+kingbase database logical backup begin : 2023-08-28 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023082800.dmp
+backup_kmoa_2023082800.log
+marketfactory_2023082800.dmp
+backup_marketfactory_2023082800.log
+openfalcon_2023082800.dmp
+backup_openfalcon_2023082800.log
+dac_2023082800.dmp
+backup_dac_2023082800.log
+smartbi_2023082800.dmp
+backup_smartbi_2023082800.log
+short_2023082800.dmp
+backup_short_2023082800.log
+kingbase database logical backup end : 2023-08-28 00:39:10
+
+kingbase database logical backup begin : 2023-08-29 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023082900.dmp
+backup_kmoa_2023082900.log
+marketfactory_2023082900.dmp
+backup_marketfactory_2023082900.log
+openfalcon_2023082900.dmp
+backup_openfalcon_2023082900.log
+dac_2023082900.dmp
+backup_dac_2023082900.log
+smartbi_2023082900.dmp
+backup_smartbi_2023082900.log
+short_2023082900.dmp
+backup_short_2023082900.log
+kingbase database logical backup end : 2023-08-29 00:37:36
+
+kingbase database logical backup begin : 2023-08-30 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023083000.dmp
+backup_kmoa_2023083000.log
+marketfactory_2023083000.dmp
+backup_marketfactory_2023083000.log
+openfalcon_2023083000.dmp
+backup_openfalcon_2023083000.log
+dac_2023083000.dmp
+backup_dac_2023083000.log
+smartbi_2023083000.dmp
+backup_smartbi_2023083000.log
+short_2023083000.dmp
+backup_short_2023083000.log
+kingbase database logical backup end : 2023-08-30 00:37:33
+
+kingbase database logical backup begin : 2023-08-31 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023083100.dmp
+backup_kmoa_2023083100.log
+marketfactory_2023083100.dmp
+backup_marketfactory_2023083100.log
+openfalcon_2023083100.dmp
+backup_openfalcon_2023083100.log
+dac_2023083100.dmp
+backup_dac_2023083100.log
+smartbi_2023083100.dmp
+backup_smartbi_2023083100.log
+short_2023083100.dmp
+backup_short_2023083100.log
+kingbase database logical backup end : 2023-08-31 00:37:37
+
+kingbase database logical backup begin : 2023-09-01 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023090100.dmp
+backup_kmoa_2023090100.log
+marketfactory_2023090100.dmp
+backup_marketfactory_2023090100.log
+openfalcon_2023090100.dmp
+backup_openfalcon_2023090100.log
+dac_2023090100.dmp
+backup_dac_2023090100.log
+smartbi_2023090100.dmp
+backup_smartbi_2023090100.log
+short_2023090100.dmp
+backup_short_2023090100.log
+kingbase database logical backup end : 2023-09-01 00:37:43
+
+kingbase database logical backup begin : 2023-09-02 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023090200.dmp
+backup_kmoa_2023090200.log
+marketfactory_2023090200.dmp
+backup_marketfactory_2023090200.log
+openfalcon_2023090200.dmp
+backup_openfalcon_2023090200.log
+dac_2023090200.dmp
+backup_dac_2023090200.log
+smartbi_2023090200.dmp
+backup_smartbi_2023090200.log
+short_2023090200.dmp
+backup_short_2023090200.log
+kingbase database logical backup end : 2023-09-02 00:37:10
+
+kingbase database logical backup begin : 2023-09-03 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023090300.dmp
+backup_kmoa_2023090300.log
+marketfactory_2023090300.dmp
+backup_marketfactory_2023090300.log
+openfalcon_2023090300.dmp
+backup_openfalcon_2023090300.log
+dac_2023090300.dmp
+backup_dac_2023090300.log
+smartbi_2023090300.dmp
+backup_smartbi_2023090300.log
+short_2023090300.dmp
+backup_short_2023090300.log
+kingbase database logical backup end : 2023-09-03 00:37:45
+
+kingbase database logical backup begin : 2023-09-04 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023090400.dmp
+backup_kmoa_2023090400.log
+marketfactory_2023090400.dmp
+backup_marketfactory_2023090400.log
+openfalcon_2023090400.dmp
+backup_openfalcon_2023090400.log
+dac_2023090400.dmp
+backup_dac_2023090400.log
+smartbi_2023090400.dmp
+backup_smartbi_2023090400.log
+short_2023090400.dmp
+backup_short_2023090400.log
+kingbase database logical backup end : 2023-09-04 00:37:44
+
+kingbase database logical backup begin : 2023-09-05 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023090500.dmp
+backup_kmoa_2023090500.log
+marketfactory_2023090500.dmp
+backup_marketfactory_2023090500.log
+openfalcon_2023090500.dmp
+backup_openfalcon_2023090500.log
+dac_2023090500.dmp
+backup_dac_2023090500.log
+smartbi_2023090500.dmp
+backup_smartbi_2023090500.log
+short_2023090500.dmp
+backup_short_2023090500.log
+kingbase database logical backup end : 2023-09-05 00:37:39
+
+kingbase database logical backup begin : 2023-09-06 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023090600.dmp
+backup_kmoa_2023090600.log
+marketfactory_2023090600.dmp
+backup_marketfactory_2023090600.log
+openfalcon_2023090600.dmp
+backup_openfalcon_2023090600.log
+dac_2023090600.dmp
+backup_dac_2023090600.log
+smartbi_2023090600.dmp
+backup_smartbi_2023090600.log
+short_2023090600.dmp
+backup_short_2023090600.log
+kingbase database logical backup end : 2023-09-06 00:37:44
+
+kingbase database logical backup begin : 2023-09-07 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023090700.dmp
+backup_kmoa_2023090700.log
+marketfactory_2023090700.dmp
+backup_marketfactory_2023090700.log
+openfalcon_2023090700.dmp
+backup_openfalcon_2023090700.log
+dac_2023090700.dmp
+backup_dac_2023090700.log
+smartbi_2023090700.dmp
+backup_smartbi_2023090700.log
+short_2023090700.dmp
+backup_short_2023090700.log
+kingbase database logical backup end : 2023-09-07 00:37:47
+
+kingbase database logical backup begin : 2023-09-08 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023090800.dmp
+backup_kmoa_2023090800.log
+marketfactory_2023090800.dmp
+backup_marketfactory_2023090800.log
+openfalcon_2023090800.dmp
+backup_openfalcon_2023090800.log
+dac_2023090800.dmp
+backup_dac_2023090800.log
+smartbi_2023090800.dmp
+backup_smartbi_2023090800.log
+short_2023090800.dmp
+backup_short_2023090800.log
+kingbase database logical backup end : 2023-09-08 00:37:49
+
+kingbase database logical backup begin : 2023-09-09 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023090900.dmp
+backup_kmoa_2023090900.log
+marketfactory_2023090900.dmp
+backup_marketfactory_2023090900.log
+openfalcon_2023090900.dmp
+backup_openfalcon_2023090900.log
+dac_2023090900.dmp
+backup_dac_2023090900.log
+smartbi_2023090900.dmp
+backup_smartbi_2023090900.log
+short_2023090900.dmp
+backup_short_2023090900.log
+kingbase database logical backup end : 2023-09-09 00:37:48
+
+kingbase database logical backup begin : 2023-09-10 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023091000.dmp
+backup_kmoa_2023091000.log
+marketfactory_2023091000.dmp
+backup_marketfactory_2023091000.log
+openfalcon_2023091000.dmp
+backup_openfalcon_2023091000.log
+dac_2023091000.dmp
+backup_dac_2023091000.log
+smartbi_2023091000.dmp
+backup_smartbi_2023091000.log
+short_2023091000.dmp
+backup_short_2023091000.log
+kingbase database logical backup end : 2023-09-10 00:37:49
+
+kingbase database logical backup begin : 2023-09-11 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023091100.dmp
+backup_kmoa_2023091100.log
+marketfactory_2023091100.dmp
+backup_marketfactory_2023091100.log
+openfalcon_2023091100.dmp
+backup_openfalcon_2023091100.log
+dac_2023091100.dmp
+backup_dac_2023091100.log
+smartbi_2023091100.dmp
+backup_smartbi_2023091100.log
+short_2023091100.dmp
+backup_short_2023091100.log
+kingbase database logical backup end : 2023-09-11 00:37:45
+
+kingbase database logical backup begin : 2023-09-12 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023091200.dmp
+backup_kmoa_2023091200.log
+marketfactory_2023091200.dmp
+backup_marketfactory_2023091200.log
+openfalcon_2023091200.dmp
+backup_openfalcon_2023091200.log
+dac_2023091200.dmp
+backup_dac_2023091200.log
+smartbi_2023091200.dmp
+backup_smartbi_2023091200.log
+short_2023091200.dmp
+backup_short_2023091200.log
+kingbase database logical backup end : 2023-09-12 00:37:45
+
+kingbase database logical backup begin : 2023-09-13 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023091300.dmp
+backup_kmoa_2023091300.log
+marketfactory_2023091300.dmp
+backup_marketfactory_2023091300.log
+openfalcon_2023091300.dmp
+backup_openfalcon_2023091300.log
+dac_2023091300.dmp
+backup_dac_2023091300.log
+smartbi_2023091300.dmp
+backup_smartbi_2023091300.log
+short_2023091300.dmp
+backup_short_2023091300.log
+kingbase database logical backup end : 2023-09-13 00:37:49
+
+kingbase database logical backup begin : 2023-09-14 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023091400.dmp
+backup_kmoa_2023091400.log
+marketfactory_2023091400.dmp
+backup_marketfactory_2023091400.log
+openfalcon_2023091400.dmp
+backup_openfalcon_2023091400.log
+dac_2023091400.dmp
+backup_dac_2023091400.log
+smartbi_2023091400.dmp
+backup_smartbi_2023091400.log
+short_2023091400.dmp
+backup_short_2023091400.log
+kingbase database logical backup end : 2023-09-14 00:37:45
+
+kingbase database logical backup begin : 2023-09-15 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023091500.dmp
+backup_kmoa_2023091500.log
+marketfactory_2023091500.dmp
+backup_marketfactory_2023091500.log
+openfalcon_2023091500.dmp
+backup_openfalcon_2023091500.log
+dac_2023091500.dmp
+backup_dac_2023091500.log
+smartbi_2023091500.dmp
+backup_smartbi_2023091500.log
+short_2023091500.dmp
+backup_short_2023091500.log
+kingbase database logical backup end : 2023-09-15 00:37:51
+
+kingbase database logical backup begin : 2023-09-16 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023091600.dmp
+backup_kmoa_2023091600.log
+marketfactory_2023091600.dmp
+backup_marketfactory_2023091600.log
+openfalcon_2023091600.dmp
+backup_openfalcon_2023091600.log
+dac_2023091600.dmp
+backup_dac_2023091600.log
+smartbi_2023091600.dmp
+backup_smartbi_2023091600.log
+short_2023091600.dmp
+backup_short_2023091600.log
+kingbase database logical backup end : 2023-09-16 00:37:46
+
+kingbase database logical backup begin : 2023-09-17 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023091700.dmp
+backup_kmoa_2023091700.log
+marketfactory_2023091700.dmp
+backup_marketfactory_2023091700.log
+openfalcon_2023091700.dmp
+backup_openfalcon_2023091700.log
+dac_2023091700.dmp
+backup_dac_2023091700.log
+smartbi_2023091700.dmp
+backup_smartbi_2023091700.log
+short_2023091700.dmp
+backup_short_2023091700.log
+kingbase database logical backup end : 2023-09-17 00:37:48
+
+kingbase database logical backup begin : 2023-09-18 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023091800.dmp
+backup_kmoa_2023091800.log
+marketfactory_2023091800.dmp
+backup_marketfactory_2023091800.log
+openfalcon_2023091800.dmp
+backup_openfalcon_2023091800.log
+dac_2023091800.dmp
+backup_dac_2023091800.log
+smartbi_2023091800.dmp
+backup_smartbi_2023091800.log
+short_2023091800.dmp
+backup_short_2023091800.log
+kingbase database logical backup end : 2023-09-18 00:37:53
+
+kingbase database logical backup begin : 2023-09-19 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023091900.dmp
+backup_kmoa_2023091900.log
+marketfactory_2023091900.dmp
+backup_marketfactory_2023091900.log
+openfalcon_2023091900.dmp
+backup_openfalcon_2023091900.log
+dac_2023091900.dmp
+backup_dac_2023091900.log
+smartbi_2023091900.dmp
+backup_smartbi_2023091900.log
+short_2023091900.dmp
+backup_short_2023091900.log
+kingbase database logical backup end : 2023-09-19 00:37:46
+
+kingbase database logical backup begin : 2023-09-20 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+kmoa_2023092000.dmp
+backup_kmoa_2023092000.log
+marketfactory_2023092000.dmp
+backup_marketfactory_2023092000.log
+openfalcon_2023092000.dmp
+backup_openfalcon_2023092000.log
+dac_2023092000.dmp
+backup_dac_2023092000.log
+smartbi_2023092000.dmp
+backup_smartbi_2023092000.log
+short_2023092000.dmp
+backup_short_2023092000.log
+kingbase database logical backup end : 2023-09-20 00:37:53
+
+kingbase database logical backup begin : 2023-09-21 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023092100.dmp
+backup_pension_2023092100.log
+kmoa_2023092100.dmp
+backup_kmoa_2023092100.log
+marketfactory_2023092100.dmp
+backup_marketfactory_2023092100.log
+openfalcon_2023092100.dmp
+backup_openfalcon_2023092100.log
+dac_2023092100.dmp
+backup_dac_2023092100.log
+smartbi_2023092100.dmp
+backup_smartbi_2023092100.log
+short_2023092100.dmp
+backup_short_2023092100.log
+kingbase database logical backup end : 2023-09-21 00:38:22
+
+kingbase database logical backup begin : 2023-09-22 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023092200.dmp
+backup_pension_2023092200.log
+kmoa_2023092200.dmp
+backup_kmoa_2023092200.log
+marketfactory_2023092200.dmp
+backup_marketfactory_2023092200.log
+openfalcon_2023092200.dmp
+backup_openfalcon_2023092200.log
+dac_2023092200.dmp
+backup_dac_2023092200.log
+smartbi_2023092200.dmp
+backup_smartbi_2023092200.log
+short_2023092200.dmp
+backup_short_2023092200.log
+kingbase database logical backup end : 2023-09-22 00:38:22
+
+kingbase database logical backup begin : 2023-09-23 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023092300.dmp
+backup_pension_2023092300.log
+kmoa_2023092300.dmp
+backup_kmoa_2023092300.log
+marketfactory_2023092300.dmp
+backup_marketfactory_2023092300.log
+openfalcon_2023092300.dmp
+backup_openfalcon_2023092300.log
+dac_2023092300.dmp
+backup_dac_2023092300.log
+smartbi_2023092300.dmp
+backup_smartbi_2023092300.log
+short_2023092300.dmp
+backup_short_2023092300.log
+kingbase database logical backup end : 2023-09-23 00:38:22
+
+kingbase database logical backup begin : 2023-09-24 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023092400.dmp
+backup_pension_2023092400.log
+kmoa_2023092400.dmp
+backup_kmoa_2023092400.log
+marketfactory_2023092400.dmp
+backup_marketfactory_2023092400.log
+openfalcon_2023092400.dmp
+backup_openfalcon_2023092400.log
+dac_2023092400.dmp
+backup_dac_2023092400.log
+smartbi_2023092400.dmp
+backup_smartbi_2023092400.log
+short_2023092400.dmp
+backup_short_2023092400.log
+kingbase database logical backup end : 2023-09-24 00:38:19
+
+kingbase database logical backup begin : 2023-09-25 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023092500.dmp
+backup_pension_2023092500.log
+kmoa_2023092500.dmp
+backup_kmoa_2023092500.log
+marketfactory_2023092500.dmp
+backup_marketfactory_2023092500.log
+openfalcon_2023092500.dmp
+backup_openfalcon_2023092500.log
+dac_2023092500.dmp
+backup_dac_2023092500.log
+smartbi_2023092500.dmp
+backup_smartbi_2023092500.log
+short_2023092500.dmp
+backup_short_2023092500.log
+kingbase database logical backup end : 2023-09-25 00:38:15
+
+kingbase database logical backup begin : 2023-09-26 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023092600.dmp
+backup_pension_2023092600.log
+kmoa_2023092600.dmp
+backup_kmoa_2023092600.log
+marketfactory_2023092600.dmp
+backup_marketfactory_2023092600.log
+openfalcon_2023092600.dmp
+backup_openfalcon_2023092600.log
+dac_2023092600.dmp
+backup_dac_2023092600.log
+smartbi_2023092600.dmp
+backup_smartbi_2023092600.log
+short_2023092600.dmp
+backup_short_2023092600.log
+kingbase database logical backup end : 2023-09-26 00:38:28
+
+kingbase database logical backup begin : 2023-09-27 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023092700.dmp
+backup_pension_2023092700.log
+kmoa_2023092700.dmp
+backup_kmoa_2023092700.log
+marketfactory_2023092700.dmp
+backup_marketfactory_2023092700.log
+openfalcon_2023092700.dmp
+backup_openfalcon_2023092700.log
+dac_2023092700.dmp
+backup_dac_2023092700.log
+smartbi_2023092700.dmp
+backup_smartbi_2023092700.log
+short_2023092700.dmp
+backup_short_2023092700.log
+kingbase database logical backup end : 2023-09-27 00:38:25
+
+kingbase database logical backup begin : 2023-09-28 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023092800.dmp
+backup_pension_2023092800.log
+kmoa_2023092800.dmp
+backup_kmoa_2023092800.log
+marketfactory_2023092800.dmp
+backup_marketfactory_2023092800.log
+openfalcon_2023092800.dmp
+backup_openfalcon_2023092800.log
+dac_2023092800.dmp
+backup_dac_2023092800.log
+smartbi_2023092800.dmp
+backup_smartbi_2023092800.log
+short_2023092800.dmp
+backup_short_2023092800.log
+kingbase database logical backup end : 2023-09-28 00:38:26
+
+kingbase database logical backup begin : 2023-09-29 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023092900.dmp
+backup_pension_2023092900.log
+kmoa_2023092900.dmp
+backup_kmoa_2023092900.log
+marketfactory_2023092900.dmp
+backup_marketfactory_2023092900.log
+openfalcon_2023092900.dmp
+backup_openfalcon_2023092900.log
+dac_2023092900.dmp
+backup_dac_2023092900.log
+smartbi_2023092900.dmp
+backup_smartbi_2023092900.log
+short_2023092900.dmp
+backup_short_2023092900.log
+kingbase database logical backup end : 2023-09-29 00:38:29
+
+kingbase database logical backup begin : 2023-09-30 00:30:02
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023093000.dmp
+backup_pension_2023093000.log
+kmoa_2023093000.dmp
+backup_kmoa_2023093000.log
+marketfactory_2023093000.dmp
+backup_marketfactory_2023093000.log
+openfalcon_2023093000.dmp
+backup_openfalcon_2023093000.log
+dac_2023093000.dmp
+backup_dac_2023093000.log
+smartbi_2023093000.dmp
+backup_smartbi_2023093000.log
+short_2023093000.dmp
+backup_short_2023093000.log
+kingbase database logical backup end : 2023-09-30 00:38:22
+
+kingbase database logical backup begin : 2023-10-01 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023100100.dmp
+backup_pension_2023100100.log
+kmoa_2023100100.dmp
+backup_kmoa_2023100100.log
+marketfactory_2023100100.dmp
+backup_marketfactory_2023100100.log
+openfalcon_2023100100.dmp
+backup_openfalcon_2023100100.log
+dac_2023100100.dmp
+backup_dac_2023100100.log
+smartbi_2023100100.dmp
+backup_smartbi_2023100100.log
+short_2023100100.dmp
+backup_short_2023100100.log
+kingbase database logical backup end : 2023-10-01 00:38:24
+
+kingbase database logical backup begin : 2023-10-02 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023100200.dmp
+backup_pension_2023100200.log
+kmoa_2023100200.dmp
+backup_kmoa_2023100200.log
+marketfactory_2023100200.dmp
+backup_marketfactory_2023100200.log
+openfalcon_2023100200.dmp
+backup_openfalcon_2023100200.log
+dac_2023100200.dmp
+backup_dac_2023100200.log
+smartbi_2023100200.dmp
+backup_smartbi_2023100200.log
+short_2023100200.dmp
+backup_short_2023100200.log
+kingbase database logical backup end : 2023-10-02 00:38:27
+
+kingbase database logical backup begin : 2023-10-03 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023100300.dmp
+backup_pension_2023100300.log
+kmoa_2023100300.dmp
+backup_kmoa_2023100300.log
+marketfactory_2023100300.dmp
+backup_marketfactory_2023100300.log
+openfalcon_2023100300.dmp
+backup_openfalcon_2023100300.log
+dac_2023100300.dmp
+backup_dac_2023100300.log
+smartbi_2023100300.dmp
+backup_smartbi_2023100300.log
+short_2023100300.dmp
+backup_short_2023100300.log
+kingbase database logical backup end : 2023-10-03 00:38:23
+
+kingbase database logical backup begin : 2023-10-04 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023100400.dmp
+backup_pension_2023100400.log
+kmoa_2023100400.dmp
+backup_kmoa_2023100400.log
+marketfactory_2023100400.dmp
+backup_marketfactory_2023100400.log
+openfalcon_2023100400.dmp
+backup_openfalcon_2023100400.log
+dac_2023100400.dmp
+backup_dac_2023100400.log
+smartbi_2023100400.dmp
+backup_smartbi_2023100400.log
+short_2023100400.dmp
+backup_short_2023100400.log
+kingbase database logical backup end : 2023-10-04 00:38:21
+
+kingbase database logical backup begin : 2023-10-05 00:30:02
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023100500.dmp
+backup_pension_2023100500.log
+kmoa_2023100500.dmp
+backup_kmoa_2023100500.log
+marketfactory_2023100500.dmp
+backup_marketfactory_2023100500.log
+openfalcon_2023100500.dmp
+backup_openfalcon_2023100500.log
+dac_2023100500.dmp
+backup_dac_2023100500.log
+smartbi_2023100500.dmp
+backup_smartbi_2023100500.log
+short_2023100500.dmp
+backup_short_2023100500.log
+kingbase database logical backup end : 2023-10-05 00:38:24
+
+kingbase database logical backup begin : 2023-10-06 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023100600.dmp
+backup_pension_2023100600.log
+kmoa_2023100600.dmp
+backup_kmoa_2023100600.log
+marketfactory_2023100600.dmp
+backup_marketfactory_2023100600.log
+openfalcon_2023100600.dmp
+backup_openfalcon_2023100600.log
+dac_2023100600.dmp
+backup_dac_2023100600.log
+smartbi_2023100600.dmp
+backup_smartbi_2023100600.log
+short_2023100600.dmp
+backup_short_2023100600.log
+kingbase database logical backup end : 2023-10-06 00:38:23
+
+kingbase database logical backup begin : 2023-10-07 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023100700.dmp
+backup_pension_2023100700.log
+kmoa_2023100700.dmp
+backup_kmoa_2023100700.log
+marketfactory_2023100700.dmp
+backup_marketfactory_2023100700.log
+openfalcon_2023100700.dmp
+backup_openfalcon_2023100700.log
+dac_2023100700.dmp
+backup_dac_2023100700.log
+smartbi_2023100700.dmp
+backup_smartbi_2023100700.log
+short_2023100700.dmp
+backup_short_2023100700.log
+kingbase database logical backup end : 2023-10-07 00:38:28
+
+kingbase database logical backup begin : 2023-10-08 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023100800.dmp
+backup_pension_2023100800.log
+kmoa_2023100800.dmp
+backup_kmoa_2023100800.log
+marketfactory_2023100800.dmp
+backup_marketfactory_2023100800.log
+openfalcon_2023100800.dmp
+backup_openfalcon_2023100800.log
+dac_2023100800.dmp
+backup_dac_2023100800.log
+smartbi_2023100800.dmp
+backup_smartbi_2023100800.log
+short_2023100800.dmp
+backup_short_2023100800.log
+kingbase database logical backup end : 2023-10-08 00:38:22
+
+kingbase database logical backup begin : 2023-10-09 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023100900.dmp
+backup_pension_2023100900.log
+kmoa_2023100900.dmp
+backup_kmoa_2023100900.log
+marketfactory_2023100900.dmp
+backup_marketfactory_2023100900.log
+openfalcon_2023100900.dmp
+backup_openfalcon_2023100900.log
+dac_2023100900.dmp
+backup_dac_2023100900.log
+smartbi_2023100900.dmp
+backup_smartbi_2023100900.log
+short_2023100900.dmp
+backup_short_2023100900.log
+kingbase database logical backup end : 2023-10-09 00:38:24
+
+kingbase database logical backup begin : 2023-10-10 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023101000.dmp
+backup_pension_2023101000.log
+kmoa_2023101000.dmp
+backup_kmoa_2023101000.log
+marketfactory_2023101000.dmp
+backup_marketfactory_2023101000.log
+openfalcon_2023101000.dmp
+backup_openfalcon_2023101000.log
+dac_2023101000.dmp
+backup_dac_2023101000.log
+smartbi_2023101000.dmp
+backup_smartbi_2023101000.log
+short_2023101000.dmp
+backup_short_2023101000.log
+kingbase database logical backup end : 2023-10-10 00:38:28
+
+kingbase database logical backup begin : 2023-10-11 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023101100.dmp
+backup_pension_2023101100.log
+kmoa_2023101100.dmp
+backup_kmoa_2023101100.log
+marketfactory_2023101100.dmp
+backup_marketfactory_2023101100.log
+openfalcon_2023101100.dmp
+backup_openfalcon_2023101100.log
+dac_2023101100.dmp
+backup_dac_2023101100.log
+smartbi_2023101100.dmp
+backup_smartbi_2023101100.log
+short_2023101100.dmp
+backup_short_2023101100.log
+kingbase database logical backup end : 2023-10-11 00:38:28
+
+kingbase database logical backup begin : 2023-10-12 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023101200.dmp
+backup_pension_2023101200.log
+kmoa_2023101200.dmp
+backup_kmoa_2023101200.log
+marketfactory_2023101200.dmp
+backup_marketfactory_2023101200.log
+openfalcon_2023101200.dmp
+backup_openfalcon_2023101200.log
+dac_2023101200.dmp
+backup_dac_2023101200.log
+smartbi_2023101200.dmp
+backup_smartbi_2023101200.log
+short_2023101200.dmp
+backup_short_2023101200.log
+kingbase database logical backup end : 2023-10-12 00:38:24
+
+kingbase database logical backup begin : 2023-10-13 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023101300.dmp
+backup_pension_2023101300.log
+kmoa_2023101300.dmp
+backup_kmoa_2023101300.log
+marketfactory_2023101300.dmp
+backup_marketfactory_2023101300.log
+openfalcon_2023101300.dmp
+backup_openfalcon_2023101300.log
+dac_2023101300.dmp
+backup_dac_2023101300.log
+smartbi_2023101300.dmp
+backup_smartbi_2023101300.log
+short_2023101300.dmp
+backup_short_2023101300.log
+kingbase database logical backup end : 2023-10-13 00:38:22
+
+kingbase database logical backup begin : 2023-10-14 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023101400.dmp
+backup_pension_2023101400.log
+kmoa_2023101400.dmp
+backup_kmoa_2023101400.log
+marketfactory_2023101400.dmp
+backup_marketfactory_2023101400.log
+openfalcon_2023101400.dmp
+backup_openfalcon_2023101400.log
+dac_2023101400.dmp
+backup_dac_2023101400.log
+smartbi_2023101400.dmp
+backup_smartbi_2023101400.log
+short_2023101400.dmp
+backup_short_2023101400.log
+kingbase database logical backup end : 2023-10-14 00:38:28
+
+kingbase database logical backup begin : 2023-10-15 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023101500.dmp
+backup_pension_2023101500.log
+kmoa_2023101500.dmp
+backup_kmoa_2023101500.log
+marketfactory_2023101500.dmp
+backup_marketfactory_2023101500.log
+openfalcon_2023101500.dmp
+backup_openfalcon_2023101500.log
+dac_2023101500.dmp
+backup_dac_2023101500.log
+smartbi_2023101500.dmp
+backup_smartbi_2023101500.log
+short_2023101500.dmp
+backup_short_2023101500.log
+kingbase database logical backup end : 2023-10-15 00:38:28
+
+kingbase database logical backup begin : 2023-10-16 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023101600.dmp
+backup_pension_2023101600.log
+kmoa_2023101600.dmp
+backup_kmoa_2023101600.log
+marketfactory_2023101600.dmp
+backup_marketfactory_2023101600.log
+openfalcon_2023101600.dmp
+backup_openfalcon_2023101600.log
+dac_2023101600.dmp
+backup_dac_2023101600.log
+smartbi_2023101600.dmp
+backup_smartbi_2023101600.log
+short_2023101600.dmp
+backup_short_2023101600.log
+kingbase database logical backup end : 2023-10-16 00:38:28
+
+kingbase database logical backup begin : 2023-10-17 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023101700.dmp
+backup_pension_2023101700.log
+kmoa_2023101700.dmp
+backup_kmoa_2023101700.log
+marketfactory_2023101700.dmp
+backup_marketfactory_2023101700.log
+openfalcon_2023101700.dmp
+backup_openfalcon_2023101700.log
+dac_2023101700.dmp
+backup_dac_2023101700.log
+smartbi_2023101700.dmp
+backup_smartbi_2023101700.log
+short_2023101700.dmp
+backup_short_2023101700.log
+kingbase database logical backup end : 2023-10-17 00:38:24
+
+kingbase database logical backup begin : 2023-10-18 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023101800.dmp
+backup_pension_2023101800.log
+kmoa_2023101800.dmp
+backup_kmoa_2023101800.log
+marketfactory_2023101800.dmp
+backup_marketfactory_2023101800.log
+openfalcon_2023101800.dmp
+backup_openfalcon_2023101800.log
+dac_2023101800.dmp
+backup_dac_2023101800.log
+smartbi_2023101800.dmp
+backup_smartbi_2023101800.log
+short_2023101800.dmp
+backup_short_2023101800.log
+kingbase database logical backup end : 2023-10-18 00:38:30
+
+kingbase database logical backup begin : 2023-10-19 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023101900.dmp
+backup_dolphin_2023101900.log
+pension_2023101900.dmp
+backup_pension_2023101900.log
+kmoa_2023101900.dmp
+backup_kmoa_2023101900.log
+marketfactory_2023101900.dmp
+backup_marketfactory_2023101900.log
+openfalcon_2023101900.dmp
+backup_openfalcon_2023101900.log
+dac_2023101900.dmp
+backup_dac_2023101900.log
+smartbi_2023101900.dmp
+backup_smartbi_2023101900.log
+short_2023101900.dmp
+backup_short_2023101900.log
+kingbase database logical backup end : 2023-10-19 00:38:27
+
+kingbase database logical backup begin : 2023-10-20 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023102000.dmp
+backup_dolphin_2023102000.log
+pension_2023102000.dmp
+backup_pension_2023102000.log
+kmoa_2023102000.dmp
+backup_kmoa_2023102000.log
+marketfactory_2023102000.dmp
+backup_marketfactory_2023102000.log
+openfalcon_2023102000.dmp
+backup_openfalcon_2023102000.log
+rscore_2023102000.dmp
+backup_rscore_2023102000.log
+dac_2023102000.dmp
+backup_dac_2023102000.log
+smartbi_2023102000.dmp
+backup_smartbi_2023102000.log
+short_2023102000.dmp
+backup_short_2023102000.log
+kingbase database logical backup end : 2023-10-20 00:38:59
+
+kingbase database logical backup begin : 2023-10-21 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023102100.dmp
+backup_dolphin_2023102100.log
+pension_2023102100.dmp
+backup_pension_2023102100.log
+kmoa_2023102100.dmp
+backup_kmoa_2023102100.log
+marketfactory_2023102100.dmp
+backup_marketfactory_2023102100.log
+openfalcon_2023102100.dmp
+backup_openfalcon_2023102100.log
+rscore_2023102100.dmp
+backup_rscore_2023102100.log
+dac_2023102100.dmp
+backup_dac_2023102100.log
+smartbi_2023102100.dmp
+backup_smartbi_2023102100.log
+short_2023102100.dmp
+backup_short_2023102100.log
+kingbase database logical backup end : 2023-10-21 00:38:58
+
+kingbase database logical backup begin : 2023-10-22 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023102200.dmp
+backup_dolphin_2023102200.log
+pension_2023102200.dmp
+backup_pension_2023102200.log
+kmoa_2023102200.dmp
+backup_kmoa_2023102200.log
+marketfactory_2023102200.dmp
+backup_marketfactory_2023102200.log
+openfalcon_2023102200.dmp
+backup_openfalcon_2023102200.log
+rscore_2023102200.dmp
+backup_rscore_2023102200.log
+dac_2023102200.dmp
+backup_dac_2023102200.log
+smartbi_2023102200.dmp
+backup_smartbi_2023102200.log
+short_2023102200.dmp
+backup_short_2023102200.log
+kingbase database logical backup end : 2023-10-22 00:38:53
+
+kingbase database logical backup begin : 2023-10-23 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023102300.dmp
+backup_dolphin_2023102300.log
+pension_2023102300.dmp
+backup_pension_2023102300.log
+kmoa_2023102300.dmp
+backup_kmoa_2023102300.log
+marketfactory_2023102300.dmp
+backup_marketfactory_2023102300.log
+openfalcon_2023102300.dmp
+backup_openfalcon_2023102300.log
+rscore_2023102300.dmp
+backup_rscore_2023102300.log
+dac_2023102300.dmp
+backup_dac_2023102300.log
+smartbi_2023102300.dmp
+backup_smartbi_2023102300.log
+short_2023102300.dmp
+backup_short_2023102300.log
+kingbase database logical backup end : 2023-10-23 00:38:56
+
+kingbase database logical backup begin : 2023-10-24 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023102400.dmp
+backup_dolphin_2023102400.log
+pension_2023102400.dmp
+backup_pension_2023102400.log
+kmoa_2023102400.dmp
+backup_kmoa_2023102400.log
+marketfactory_2023102400.dmp
+backup_marketfactory_2023102400.log
+openfalcon_2023102400.dmp
+backup_openfalcon_2023102400.log
+rscore_2023102400.dmp
+backup_rscore_2023102400.log
+dac_2023102400.dmp
+backup_dac_2023102400.log
+smartbi_2023102400.dmp
+backup_smartbi_2023102400.log
+short_2023102400.dmp
+backup_short_2023102400.log
+kingbase database logical backup end : 2023-10-24 00:39:01
+
+kingbase database logical backup begin : 2023-10-25 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023102500.dmp
+backup_dolphin_2023102500.log
+pension_2023102500.dmp
+backup_pension_2023102500.log
+kmoa_2023102500.dmp
+backup_kmoa_2023102500.log
+marketfactory_2023102500.dmp
+backup_marketfactory_2023102500.log
+openfalcon_2023102500.dmp
+backup_openfalcon_2023102500.log
+rscore_2023102500.dmp
+backup_rscore_2023102500.log
+dac_2023102500.dmp
+backup_dac_2023102500.log
+smartbi_2023102500.dmp
+backup_smartbi_2023102500.log
+short_2023102500.dmp
+backup_short_2023102500.log
+kingbase database logical backup end : 2023-10-25 00:38:59
+
+kingbase database logical backup begin : 2023-10-26 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023102600.dmp
+backup_dolphin_2023102600.log
+pension_2023102600.dmp
+backup_pension_2023102600.log
+kmoa_2023102600.dmp
+backup_kmoa_2023102600.log
+marketfactory_2023102600.dmp
+backup_marketfactory_2023102600.log
+openfalcon_2023102600.dmp
+backup_openfalcon_2023102600.log
+rscore_2023102600.dmp
+backup_rscore_2023102600.log
+dac_2023102600.dmp
+backup_dac_2023102600.log
+smartbi_2023102600.dmp
+backup_smartbi_2023102600.log
+short_2023102600.dmp
+backup_short_2023102600.log
+kingbase database logical backup end : 2023-10-26 00:39:01
+
+kingbase database logical backup begin : 2023-10-27 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023102700.dmp
+backup_dolphin_2023102700.log
+pension_2023102700.dmp
+backup_pension_2023102700.log
+kmoa_2023102700.dmp
+backup_kmoa_2023102700.log
+marketfactory_2023102700.dmp
+backup_marketfactory_2023102700.log
+openfalcon_2023102700.dmp
+backup_openfalcon_2023102700.log
+rscore_2023102700.dmp
+backup_rscore_2023102700.log
+dac_2023102700.dmp
+backup_dac_2023102700.log
+smartbi_2023102700.dmp
+backup_smartbi_2023102700.log
+short_2023102700.dmp
+backup_short_2023102700.log
+kingbase database logical backup end : 2023-10-27 00:39:04
+
+kingbase database logical backup begin : 2023-10-28 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023102800.dmp
+backup_dolphin_2023102800.log
+pension_2023102800.dmp
+backup_pension_2023102800.log
+kmoa_2023102800.dmp
+backup_kmoa_2023102800.log
+marketfactory_2023102800.dmp
+backup_marketfactory_2023102800.log
+openfalcon_2023102800.dmp
+backup_openfalcon_2023102800.log
+rscore_2023102800.dmp
+backup_rscore_2023102800.log
+dac_2023102800.dmp
+backup_dac_2023102800.log
+smartbi_2023102800.dmp
+backup_smartbi_2023102800.log
+short_2023102800.dmp
+backup_short_2023102800.log
+kingbase database logical backup end : 2023-10-28 00:38:59
+
+kingbase database logical backup begin : 2023-10-29 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023102900.dmp
+backup_dolphin_2023102900.log
+pension_2023102900.dmp
+backup_pension_2023102900.log
+kmoa_2023102900.dmp
+backup_kmoa_2023102900.log
+marketfactory_2023102900.dmp
+backup_marketfactory_2023102900.log
+openfalcon_2023102900.dmp
+backup_openfalcon_2023102900.log
+rscore_2023102900.dmp
+backup_rscore_2023102900.log
+dac_2023102900.dmp
+backup_dac_2023102900.log
+smartbi_2023102900.dmp
+backup_smartbi_2023102900.log
+short_2023102900.dmp
+backup_short_2023102900.log
+kingbase database logical backup end : 2023-10-29 00:39:03
+
+kingbase database logical backup begin : 2023-10-30 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023103000.dmp
+backup_dolphin_2023103000.log
+pension_2023103000.dmp
+backup_pension_2023103000.log
+kmoa_2023103000.dmp
+backup_kmoa_2023103000.log
+marketfactory_2023103000.dmp
+backup_marketfactory_2023103000.log
+openfalcon_2023103000.dmp
+backup_openfalcon_2023103000.log
+rscore_2023103000.dmp
+backup_rscore_2023103000.log
+dac_2023103000.dmp
+backup_dac_2023103000.log
+smartbi_2023103000.dmp
+backup_smartbi_2023103000.log
+short_2023103000.dmp
+backup_short_2023103000.log
+kingbase database logical backup end : 2023-10-30 00:38:57
+
+kingbase database logical backup begin : 2023-10-31 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023103100.dmp
+backup_dolphin_2023103100.log
+pension_2023103100.dmp
+backup_pension_2023103100.log
+kmoa_2023103100.dmp
+backup_kmoa_2023103100.log
+marketfactory_2023103100.dmp
+backup_marketfactory_2023103100.log
+openfalcon_2023103100.dmp
+backup_openfalcon_2023103100.log
+rscore_2023103100.dmp
+backup_rscore_2023103100.log
+dac_2023103100.dmp
+backup_dac_2023103100.log
+smartbi_2023103100.dmp
+backup_smartbi_2023103100.log
+short_2023103100.dmp
+backup_short_2023103100.log
+kingbase database logical backup end : 2023-10-31 00:39:00
+
+kingbase database logical backup begin : 2023-11-01 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023110100.dmp
+backup_dolphin_2023110100.log
+pension_2023110100.dmp
+backup_pension_2023110100.log
+kmoa_2023110100.dmp
+backup_kmoa_2023110100.log
+marketfactory_2023110100.dmp
+backup_marketfactory_2023110100.log
+openfalcon_2023110100.dmp
+backup_openfalcon_2023110100.log
+rscore_2023110100.dmp
+backup_rscore_2023110100.log
+dac_2023110100.dmp
+backup_dac_2023110100.log
+smartbi_2023110100.dmp
+backup_smartbi_2023110100.log
+short_2023110100.dmp
+backup_short_2023110100.log
+kingbase database logical backup end : 2023-11-01 00:39:11
+
+kingbase database logical backup begin : 2023-11-02 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023110200.dmp
+backup_dolphin_2023110200.log
+pension_2023110200.dmp
+backup_pension_2023110200.log
+kmoa_2023110200.dmp
+backup_kmoa_2023110200.log
+marketfactory_2023110200.dmp
+backup_marketfactory_2023110200.log
+openfalcon_2023110200.dmp
+backup_openfalcon_2023110200.log
+rscore_2023110200.dmp
+backup_rscore_2023110200.log
+dac_2023110200.dmp
+backup_dac_2023110200.log
+smartbi_2023110200.dmp
+backup_smartbi_2023110200.log
+short_2023110200.dmp
+backup_short_2023110200.log
+kingbase database logical backup end : 2023-11-02 00:39:04
+
+kingbase database logical backup begin : 2023-11-03 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023110300.dmp
+backup_dolphin_2023110300.log
+pension_2023110300.dmp
+backup_pension_2023110300.log
+kmoa_2023110300.dmp
+backup_kmoa_2023110300.log
+marketfactory_2023110300.dmp
+backup_marketfactory_2023110300.log
+openfalcon_2023110300.dmp
+backup_openfalcon_2023110300.log
+rscore_2023110300.dmp
+backup_rscore_2023110300.log
+dac_2023110300.dmp
+backup_dac_2023110300.log
+smartbi_2023110300.dmp
+backup_smartbi_2023110300.log
+short_2023110300.dmp
+backup_short_2023110300.log
+kingbase database logical backup end : 2023-11-03 00:39:00
+
+kingbase database logical backup begin : 2023-11-04 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023110400.dmp
+backup_dolphin_2023110400.log
+pension_2023110400.dmp
+backup_pension_2023110400.log
+kmoa_2023110400.dmp
+backup_kmoa_2023110400.log
+marketfactory_2023110400.dmp
+backup_marketfactory_2023110400.log
+openfalcon_2023110400.dmp
+backup_openfalcon_2023110400.log
+rscore_2023110400.dmp
+backup_rscore_2023110400.log
+dac_2023110400.dmp
+backup_dac_2023110400.log
+smartbi_2023110400.dmp
+backup_smartbi_2023110400.log
+short_2023110400.dmp
+backup_short_2023110400.log
+kingbase database logical backup end : 2023-11-04 00:39:05
+
+kingbase database logical backup begin : 2023-11-05 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023110500.dmp
+backup_dolphin_2023110500.log
+pension_2023110500.dmp
+backup_pension_2023110500.log
+kmoa_2023110500.dmp
+backup_kmoa_2023110500.log
+marketfactory_2023110500.dmp
+backup_marketfactory_2023110500.log
+openfalcon_2023110500.dmp
+backup_openfalcon_2023110500.log
+rscore_2023110500.dmp
+backup_rscore_2023110500.log
+dac_2023110500.dmp
+backup_dac_2023110500.log
+smartbi_2023110500.dmp
+backup_smartbi_2023110500.log
+short_2023110500.dmp
+backup_short_2023110500.log
+kingbase database logical backup end : 2023-11-05 00:39:07
+
+kingbase database logical backup begin : 2023-11-06 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023110600.dmp
+backup_dolphin_2023110600.log
+pension_2023110600.dmp
+backup_pension_2023110600.log
+kmoa_2023110600.dmp
+backup_kmoa_2023110600.log
+marketfactory_2023110600.dmp
+backup_marketfactory_2023110600.log
+openfalcon_2023110600.dmp
+backup_openfalcon_2023110600.log
+rscore_2023110600.dmp
+backup_rscore_2023110600.log
+dac_2023110600.dmp
+backup_dac_2023110600.log
+smartbi_2023110600.dmp
+backup_smartbi_2023110600.log
+short_2023110600.dmp
+backup_short_2023110600.log
+kingbase database logical backup end : 2023-11-06 00:39:15
+
+kingbase database logical backup begin : 2023-11-07 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023110700.dmp
+backup_dolphin_2023110700.log
+pension_2023110700.dmp
+backup_pension_2023110700.log
+kmoa_2023110700.dmp
+backup_kmoa_2023110700.log
+marketfactory_2023110700.dmp
+backup_marketfactory_2023110700.log
+openfalcon_2023110700.dmp
+backup_openfalcon_2023110700.log
+rscore_2023110700.dmp
+backup_rscore_2023110700.log
+dac_2023110700.dmp
+backup_dac_2023110700.log
+smartbi_2023110700.dmp
+backup_smartbi_2023110700.log
+short_2023110700.dmp
+backup_short_2023110700.log
+kingbase database logical backup end : 2023-11-07 00:39:02
+
+kingbase database logical backup begin : 2023-11-08 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023110800.dmp
+backup_dolphin_2023110800.log
+pension_2023110800.dmp
+backup_pension_2023110800.log
+kmoa_2023110800.dmp
+backup_kmoa_2023110800.log
+marketfactory_2023110800.dmp
+backup_marketfactory_2023110800.log
+openfalcon_2023110800.dmp
+backup_openfalcon_2023110800.log
+rscore_2023110800.dmp
+backup_rscore_2023110800.log
+dac_2023110800.dmp
+backup_dac_2023110800.log
+smartbi_2023110800.dmp
+backup_smartbi_2023110800.log
+short_2023110800.dmp
+backup_short_2023110800.log
+kingbase database logical backup end : 2023-11-08 00:39:07
+
+kingbase database logical backup begin : 2023-11-09 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023110900.dmp
+backup_dolphin_2023110900.log
+pension_2023110900.dmp
+backup_pension_2023110900.log
+kmoa_2023110900.dmp
+backup_kmoa_2023110900.log
+marketfactory_2023110900.dmp
+backup_marketfactory_2023110900.log
+openfalcon_2023110900.dmp
+backup_openfalcon_2023110900.log
+rscore_2023110900.dmp
+backup_rscore_2023110900.log
+dac_2023110900.dmp
+backup_dac_2023110900.log
+smartbi_2023110900.dmp
+backup_smartbi_2023110900.log
+short_2023110900.dmp
+backup_short_2023110900.log
+kingbase database logical backup end : 2023-11-09 00:39:12
+
+kingbase database logical backup begin : 2023-11-10 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023111000.dmp
+backup_dolphin_2023111000.log
+pension_2023111000.dmp
+backup_pension_2023111000.log
+kmoa_2023111000.dmp
+backup_kmoa_2023111000.log
+marketfactory_2023111000.dmp
+backup_marketfactory_2023111000.log
+openfalcon_2023111000.dmp
+backup_openfalcon_2023111000.log
+rscore_2023111000.dmp
+backup_rscore_2023111000.log
+dac_2023111000.dmp
+backup_dac_2023111000.log
+smartbi_2023111000.dmp
+backup_smartbi_2023111000.log
+short_2023111000.dmp
+backup_short_2023111000.log
+kingbase database logical backup end : 2023-11-10 00:39:07
+
+kingbase database logical backup begin : 2023-11-11 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023111100.dmp
+backup_dolphin_2023111100.log
+pension_2023111100.dmp
+backup_pension_2023111100.log
+kmoa_2023111100.dmp
+backup_kmoa_2023111100.log
+marketfactory_2023111100.dmp
+backup_marketfactory_2023111100.log
+openfalcon_2023111100.dmp
+backup_openfalcon_2023111100.log
+rscore_2023111100.dmp
+backup_rscore_2023111100.log
+dac_2023111100.dmp
+backup_dac_2023111100.log
+smartbi_2023111100.dmp
+backup_smartbi_2023111100.log
+short_2023111100.dmp
+backup_short_2023111100.log
+kingbase database logical backup end : 2023-11-11 00:39:11
+
+kingbase database logical backup begin : 2023-11-12 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023111200.dmp
+backup_dolphin_2023111200.log
+pension_2023111200.dmp
+backup_pension_2023111200.log
+kmoa_2023111200.dmp
+backup_kmoa_2023111200.log
+marketfactory_2023111200.dmp
+backup_marketfactory_2023111200.log
+openfalcon_2023111200.dmp
+backup_openfalcon_2023111200.log
+rscore_2023111200.dmp
+backup_rscore_2023111200.log
+dac_2023111200.dmp
+backup_dac_2023111200.log
+smartbi_2023111200.dmp
+backup_smartbi_2023111200.log
+short_2023111200.dmp
+backup_short_2023111200.log
+kingbase database logical backup end : 2023-11-12 00:39:08
+
+kingbase database logical backup begin : 2023-11-13 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023111300.dmp
+backup_dolphin_2023111300.log
+pension_2023111300.dmp
+backup_pension_2023111300.log
+kmoa_2023111300.dmp
+backup_kmoa_2023111300.log
+marketfactory_2023111300.dmp
+backup_marketfactory_2023111300.log
+openfalcon_2023111300.dmp
+backup_openfalcon_2023111300.log
+rscore_2023111300.dmp
+backup_rscore_2023111300.log
+dac_2023111300.dmp
+backup_dac_2023111300.log
+smartbi_2023111300.dmp
+backup_smartbi_2023111300.log
+short_2023111300.dmp
+backup_short_2023111300.log
+kingbase database logical backup end : 2023-11-13 00:39:11
+
+kingbase database logical backup begin : 2023-11-14 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023111400.dmp
+backup_dolphin_2023111400.log
+pension_2023111400.dmp
+backup_pension_2023111400.log
+kmoa_2023111400.dmp
+backup_kmoa_2023111400.log
+marketfactory_2023111400.dmp
+backup_marketfactory_2023111400.log
+openfalcon_2023111400.dmp
+backup_openfalcon_2023111400.log
+rscore_2023111400.dmp
+backup_rscore_2023111400.log
+dac_2023111400.dmp
+backup_dac_2023111400.log
+smartbi_2023111400.dmp
+backup_smartbi_2023111400.log
+short_2023111400.dmp
+backup_short_2023111400.log
+kingbase database logical backup end : 2023-11-14 00:39:11
+
+kingbase database logical backup begin : 2023-11-15 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023111500.dmp
+backup_dolphin_2023111500.log
+pension_2023111500.dmp
+backup_pension_2023111500.log
+kmoa_2023111500.dmp
+backup_kmoa_2023111500.log
+marketfactory_2023111500.dmp
+backup_marketfactory_2023111500.log
+openfalcon_2023111500.dmp
+backup_openfalcon_2023111500.log
+rscore_2023111500.dmp
+backup_rscore_2023111500.log
+dac_2023111500.dmp
+backup_dac_2023111500.log
+smartbi_2023111500.dmp
+backup_smartbi_2023111500.log
+short_2023111500.dmp
+backup_short_2023111500.log
+kingbase database logical backup end : 2023-11-15 00:39:17
+
+kingbase database logical backup begin : 2023-11-16 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023111600.dmp
+backup_dolphin_2023111600.log
+pension_2023111600.dmp
+backup_pension_2023111600.log
+kmoa_2023111600.dmp
+backup_kmoa_2023111600.log
+marketfactory_2023111600.dmp
+backup_marketfactory_2023111600.log
+openfalcon_2023111600.dmp
+backup_openfalcon_2023111600.log
+rscore_2023111600.dmp
+backup_rscore_2023111600.log
+dac_2023111600.dmp
+backup_dac_2023111600.log
+smartbi_2023111600.dmp
+backup_smartbi_2023111600.log
+short_2023111600.dmp
+backup_short_2023111600.log
+kingbase database logical backup end : 2023-11-16 00:39:15
+
+kingbase database logical backup begin : 2023-11-17 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023111700.dmp
+backup_dolphin_2023111700.log
+pension_2023111700.dmp
+backup_pension_2023111700.log
+kmoa_2023111700.dmp
+backup_kmoa_2023111700.log
+marketfactory_2023111700.dmp
+backup_marketfactory_2023111700.log
+openfalcon_2023111700.dmp
+backup_openfalcon_2023111700.log
+rscore_2023111700.dmp
+backup_rscore_2023111700.log
+dac_2023111700.dmp
+backup_dac_2023111700.log
+smartbi_2023111700.dmp
+backup_smartbi_2023111700.log
+short_2023111700.dmp
+backup_short_2023111700.log
+kingbase database logical backup end : 2023-11-17 00:39:18
+
+kingbase database logical backup begin : 2023-11-18 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023111800.dmp
+backup_dolphin_2023111800.log
+pension_2023111800.dmp
+backup_pension_2023111800.log
+kmoa_2023111800.dmp
+backup_kmoa_2023111800.log
+marketfactory_2023111800.dmp
+backup_marketfactory_2023111800.log
+openfalcon_2023111800.dmp
+backup_openfalcon_2023111800.log
+rscore_2023111800.dmp
+backup_rscore_2023111800.log
+dac_2023111800.dmp
+backup_dac_2023111800.log
+smartbi_2023111800.dmp
+backup_smartbi_2023111800.log
+short_2023111800.dmp
+backup_short_2023111800.log
+kingbase database logical backup end : 2023-11-18 00:39:09
+
+kingbase database logical backup begin : 2023-11-19 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023111900.dmp
+backup_dolphin_2023111900.log
+pension_2023111900.dmp
+backup_pension_2023111900.log
+kmoa_2023111900.dmp
+backup_kmoa_2023111900.log
+marketfactory_2023111900.dmp
+backup_marketfactory_2023111900.log
+openfalcon_2023111900.dmp
+backup_openfalcon_2023111900.log
+rscore_2023111900.dmp
+backup_rscore_2023111900.log
+dac_2023111900.dmp
+backup_dac_2023111900.log
+smartbi_2023111900.dmp
+backup_smartbi_2023111900.log
+short_2023111900.dmp
+backup_short_2023111900.log
+kingbase database logical backup end : 2023-11-19 00:39:16
+
+kingbase database logical backup begin : 2023-11-20 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023112000.dmp
+backup_dolphin_2023112000.log
+pension_2023112000.dmp
+backup_pension_2023112000.log
+kmoa_2023112000.dmp
+backup_kmoa_2023112000.log
+marketfactory_2023112000.dmp
+backup_marketfactory_2023112000.log
+openfalcon_2023112000.dmp
+backup_openfalcon_2023112000.log
+rscore_2023112000.dmp
+backup_rscore_2023112000.log
+dac_2023112000.dmp
+backup_dac_2023112000.log
+smartbi_2023112000.dmp
+backup_smartbi_2023112000.log
+short_2023112000.dmp
+backup_short_2023112000.log
+kingbase database logical backup end : 2023-11-20 00:39:11
+
+kingbase database logical backup begin : 2023-11-21 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023112100.dmp
+backup_dolphin_2023112100.log
+pension_2023112100.dmp
+backup_pension_2023112100.log
+kmoa_2023112100.dmp
+backup_kmoa_2023112100.log
+marketfactory_2023112100.dmp
+backup_marketfactory_2023112100.log
+openfalcon_2023112100.dmp
+backup_openfalcon_2023112100.log
+rscore_2023112100.dmp
+backup_rscore_2023112100.log
+dac_2023112100.dmp
+backup_dac_2023112100.log
+smartbi_2023112100.dmp
+backup_smartbi_2023112100.log
+short_2023112100.dmp
+backup_short_2023112100.log
+kingbase database logical backup end : 2023-11-21 00:39:15
+
+kingbase database logical backup begin : 2023-11-22 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023112200.dmp
+backup_dolphin_2023112200.log
+pension_2023112200.dmp
+backup_pension_2023112200.log
+kmoa_2023112200.dmp
+backup_kmoa_2023112200.log
+marketfactory_2023112200.dmp
+backup_marketfactory_2023112200.log
+openfalcon_2023112200.dmp
+backup_openfalcon_2023112200.log
+rscore_2023112200.dmp
+backup_rscore_2023112200.log
+dac_2023112200.dmp
+backup_dac_2023112200.log
+smartbi_2023112200.dmp
+backup_smartbi_2023112200.log
+short_2023112200.dmp
+backup_short_2023112200.log
+kingbase database logical backup end : 2023-11-22 00:39:14
+
+kingbase database logical backup begin : 2023-11-23 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023112300.dmp
+backup_dolphin_2023112300.log
+pension_2023112300.dmp
+backup_pension_2023112300.log
+kmoa_2023112300.dmp
+backup_kmoa_2023112300.log
+marketfactory_2023112300.dmp
+backup_marketfactory_2023112300.log
+openfalcon_2023112300.dmp
+backup_openfalcon_2023112300.log
+rscore_2023112300.dmp
+backup_rscore_2023112300.log
+dac_2023112300.dmp
+backup_dac_2023112300.log
+smartbi_2023112300.dmp
+backup_smartbi_2023112300.log
+short_2023112300.dmp
+backup_short_2023112300.log
+kingbase database logical backup end : 2023-11-23 00:39:15
+
+kingbase database logical backup begin : 2023-11-24 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023112400.dmp
+backup_dolphin_2023112400.log
+pension_2023112400.dmp
+backup_pension_2023112400.log
+kmoa_2023112400.dmp
+backup_kmoa_2023112400.log
+marketfactory_2023112400.dmp
+backup_marketfactory_2023112400.log
+openfalcon_2023112400.dmp
+backup_openfalcon_2023112400.log
+rscore_2023112400.dmp
+backup_rscore_2023112400.log
+dac_2023112400.dmp
+backup_dac_2023112400.log
+smartbi_2023112400.dmp
+backup_smartbi_2023112400.log
+short_2023112400.dmp
+backup_short_2023112400.log
+kingbase database logical backup end : 2023-11-24 00:39:14
+
+kingbase database logical backup begin : 2023-11-25 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023112500.dmp
+backup_dolphin_2023112500.log
+pension_2023112500.dmp
+backup_pension_2023112500.log
+kmoa_2023112500.dmp
+backup_kmoa_2023112500.log
+marketfactory_2023112500.dmp
+backup_marketfactory_2023112500.log
+openfalcon_2023112500.dmp
+backup_openfalcon_2023112500.log
+rscore_2023112500.dmp
+backup_rscore_2023112500.log
+dac_2023112500.dmp
+backup_dac_2023112500.log
+smartbi_2023112500.dmp
+backup_smartbi_2023112500.log
+short_2023112500.dmp
+backup_short_2023112500.log
+kingbase database logical backup end : 2023-11-25 00:39:16
+
+kingbase database logical backup begin : 2023-11-26 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023112600.dmp
+backup_dolphin_2023112600.log
+pension_2023112600.dmp
+backup_pension_2023112600.log
+kmoa_2023112600.dmp
+backup_kmoa_2023112600.log
+marketfactory_2023112600.dmp
+backup_marketfactory_2023112600.log
+openfalcon_2023112600.dmp
+backup_openfalcon_2023112600.log
+rscore_2023112600.dmp
+backup_rscore_2023112600.log
+dac_2023112600.dmp
+backup_dac_2023112600.log
+smartbi_2023112600.dmp
+backup_smartbi_2023112600.log
+short_2023112600.dmp
+backup_short_2023112600.log
+kingbase database logical backup end : 2023-11-26 00:39:16
+
+kingbase database logical backup begin : 2023-11-27 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023112700.dmp
+backup_dolphin_2023112700.log
+pension_2023112700.dmp
+backup_pension_2023112700.log
+kmoa_2023112700.dmp
+backup_kmoa_2023112700.log
+marketfactory_2023112700.dmp
+backup_marketfactory_2023112700.log
+openfalcon_2023112700.dmp
+backup_openfalcon_2023112700.log
+rscore_2023112700.dmp
+backup_rscore_2023112700.log
+dac_2023112700.dmp
+backup_dac_2023112700.log
+smartbi_2023112700.dmp
+backup_smartbi_2023112700.log
+short_2023112700.dmp
+backup_short_2023112700.log
+kingbase database logical backup end : 2023-11-27 00:39:17
+
+kingbase database logical backup begin : 2023-11-28 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023112800.dmp
+backup_dolphin_2023112800.log
+pension_2023112800.dmp
+backup_pension_2023112800.log
+kmoa_2023112800.dmp
+backup_kmoa_2023112800.log
+marketfactory_2023112800.dmp
+backup_marketfactory_2023112800.log
+openfalcon_2023112800.dmp
+backup_openfalcon_2023112800.log
+rscore_2023112800.dmp
+backup_rscore_2023112800.log
+dac_2023112800.dmp
+backup_dac_2023112800.log
+smartbi_2023112800.dmp
+backup_smartbi_2023112800.log
+short_2023112800.dmp
+backup_short_2023112800.log
+kingbase database logical backup end : 2023-11-28 00:39:17
+
+kingbase database logical backup begin : 2023-11-29 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+dolphin_2023112900.dmp
+backup_dolphin_2023112900.log
+pension_2023112900.dmp
+backup_pension_2023112900.log
+kmoa_2023112900.dmp
+backup_kmoa_2023112900.log
+marketfactory_2023112900.dmp
+backup_marketfactory_2023112900.log
+openfalcon_2023112900.dmp
+backup_openfalcon_2023112900.log
+rscore_2023112900.dmp
+backup_rscore_2023112900.log
+dac_2023112900.dmp
+backup_dac_2023112900.log
+smartbi_2023112900.dmp
+backup_smartbi_2023112900.log
+short_2023112900.dmp
+backup_short_2023112900.log
+kingbase database logical backup end : 2023-11-29 00:39:17
+
+kingbase database logical backup begin : 2023-11-30 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023113000.dmp
+backup_pension_2023113000.log
+kmoa_2023113000.dmp
+backup_kmoa_2023113000.log
+marketfactory_2023113000.dmp
+backup_marketfactory_2023113000.log
+openfalcon_2023113000.dmp
+backup_openfalcon_2023113000.log
+dolphin_2023113000.dmp
+backup_dolphin_2023113000.log
+rscore_2023113000.dmp
+backup_rscore_2023113000.log
+dac_2023113000.dmp
+backup_dac_2023113000.log
+smartbi_2023113000.dmp
+backup_smartbi_2023113000.log
+short_2023113000.dmp
+backup_short_2023113000.log
+kingbase database logical backup end : 2023-11-30 00:39:21
+
+kingbase database logical backup begin : 2023-12-01 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023120100.dmp
+backup_pension_2023120100.log
+kmoa_2023120100.dmp
+backup_kmoa_2023120100.log
+marketfactory_2023120100.dmp
+backup_marketfactory_2023120100.log
+openfalcon_2023120100.dmp
+backup_openfalcon_2023120100.log
+dolphin_2023120100.dmp
+backup_dolphin_2023120100.log
+rscore_2023120100.dmp
+backup_rscore_2023120100.log
+dac_2023120100.dmp
+backup_dac_2023120100.log
+smartbi_2023120100.dmp
+backup_smartbi_2023120100.log
+short_2023120100.dmp
+backup_short_2023120100.log
+kingbase database logical backup end : 2023-12-01 00:39:19
+
+kingbase database logical backup begin : 2023-12-02 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023120200.dmp
+backup_pension_2023120200.log
+kmoa_2023120200.dmp
+backup_kmoa_2023120200.log
+marketfactory_2023120200.dmp
+backup_marketfactory_2023120200.log
+openfalcon_2023120200.dmp
+backup_openfalcon_2023120200.log
+dolphin_2023120200.dmp
+backup_dolphin_2023120200.log
+rscore_2023120200.dmp
+backup_rscore_2023120200.log
+dac_2023120200.dmp
+backup_dac_2023120200.log
+smartbi_2023120200.dmp
+backup_smartbi_2023120200.log
+short_2023120200.dmp
+backup_short_2023120200.log
+kingbase database logical backup end : 2023-12-02 00:39:22
+
+kingbase database logical backup begin : 2023-12-03 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023120300.dmp
+backup_pension_2023120300.log
+kmoa_2023120300.dmp
+backup_kmoa_2023120300.log
+marketfactory_2023120300.dmp
+backup_marketfactory_2023120300.log
+openfalcon_2023120300.dmp
+backup_openfalcon_2023120300.log
+dolphin_2023120300.dmp
+backup_dolphin_2023120300.log
+rscore_2023120300.dmp
+backup_rscore_2023120300.log
+dac_2023120300.dmp
+backup_dac_2023120300.log
+smartbi_2023120300.dmp
+backup_smartbi_2023120300.log
+short_2023120300.dmp
+backup_short_2023120300.log
+kingbase database logical backup end : 2023-12-03 00:39:24
+
+kingbase database logical backup begin : 2023-12-04 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023120400.dmp
+backup_pension_2023120400.log
+kmoa_2023120400.dmp
+backup_kmoa_2023120400.log
+marketfactory_2023120400.dmp
+backup_marketfactory_2023120400.log
+openfalcon_2023120400.dmp
+backup_openfalcon_2023120400.log
+dolphin_2023120400.dmp
+backup_dolphin_2023120400.log
+rscore_2023120400.dmp
+backup_rscore_2023120400.log
+dac_2023120400.dmp
+backup_dac_2023120400.log
+smartbi_2023120400.dmp
+backup_smartbi_2023120400.log
+short_2023120400.dmp
+backup_short_2023120400.log
+kingbase database logical backup end : 2023-12-04 00:39:29
+
+kingbase database logical backup begin : 2023-12-05 00:30:01
+conf file is: /home/kingbase/scripts/R6logical/backup8.conf
+pension_2023120500.dmp
+backup_pension_2023120500.log
+kmoa_2023120500.dmp
+backup_kmoa_2023120500.log
+marketfactory_2023120500.dmp
+backup_marketfactory_2023120500.log
+openfalcon_2023120500.dmp
+backup_openfalcon_2023120500.log
+dolphin_2023120500.dmp
+backup_dolphin_2023120500.log
+rscore_2023120500.dmp
+backup_rscore_2023120500.log
+dac_2023120500.dmp
+backup_dac_2023120500.log
+smartbi_2023120500.dmp
+backup_smartbi_2023120500.log
+short_2023120500.dmp
+backup_short_2023120500.log
+dolphin_kdp_2023120500.dmp
+backup_dolphin_kdp_2023120500.log
+kingbase database logical backup end : 2023-12-05 00:39:26
+

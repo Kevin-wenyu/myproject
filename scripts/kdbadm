@@ -1,0 +1,62 @@
+#!/bin/bash
+if [ $# -ne 1 -a $# -ne 2 ];then
+	echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> example list <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+        echo "| Example1: ./kdbadm activesession                 #query in every database |"
+        echo "| Example2: ./kdbadm activesession.sql             #query in every database |"
+        echo "| Example3: ./kdbadm activesession dbname          #query in given database |"
+        echo "| Example4: ./kdbadm activesession.sql dbname      #query in given database |"
+        echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> example list <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+        exit 1
+fi
+
+sqlfile=$1
+
+kdb_list=`ksql template1 system -c "SELECT datname FROM pg_database where datname not in ('template1','template0','security','test','esrep','kingbase');" |head -n -2|tail -n +3`
+
+
+if [ -f "$sqlfile" ];then
+        cat sql_for_globaldatabase.list |grep "$sqlfile" >/dev/null 2>&1
+        if [ $? -eq 0 ];then
+                ksql test system -f $sqlfile
+        else
+                cat sql_for_everydatabase.list |grep "$sqlfile"  >/dev/null 2>&1
+                if [ $? -eq 0 ];then
+                        if [ ! -n "$2" ];then
+                                for dbname in `echo $kdb_list`
+                                do
+                                        echo ">>>>>>>>>>>>>>>>>> Current Database is $dbname ... <<<<<<<<<<<<<<<<<<"
+                                        ksql $dbname system -f $sqlfile
+                                done
+                        else
+                                ksql $2 system -f $sqlfile
+                        fi
+                else
+                        echo "sqlfile not exists in sql_for_globaldatabase.list or sql_for_everydatabase.list"
+                fi
+        fi
+
+elif [ -f "$sqlfile.sql" ];then
+        cat sql_for_globaldatabase.list |grep "$sqlfile.sql" >/dev/null 2>&1
+        if [ $? -eq 0 ];then
+                ksql test system -f $sqlfile.sql
+        else
+                cat sql_for_everydatabase.list |grep "$sqlfile.sql" >/dev/null 2>&1
+                if [ $? -eq 0 ];then
+                        if [ ! -n "$2" ];then
+                                for dbname in `echo $kdb_list`
+                                do
+                                        echo ">>>>>>>>>>>>>>>>>> Current Database is $dbname ... <<<<<<<<<<<<<<<<<<"
+                                        ksql $dbname system -f $sqlfile.sql
+                                done
+                        else
+                                ksql $2 system -f $sqlfile.sql
+                        fi
+                else
+                        echo "sqlfile not exists in sql_for_globaldatabase.list or sql_for_everydatabase.list"
+                fi
+        fi
+
+else
+        echo "sqlfile does not exist, please check."
+        exit 1
+fi

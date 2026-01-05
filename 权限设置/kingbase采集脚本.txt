@@ -1,0 +1,78 @@
+kingbase采集脚本
+#!/bin/bash
+kingbase_user={{user}}
+port_str={{port}}
+kingbase_port=${port_str%%,*}
+
+username="{{username}}"
+password="{{password}}"
+ip_addr="{{ip_addr}}"
+# license过期时间
+#license_validdays=$(su - $kingbase_user -c "ksql -U SYSTEM -p $kingbase_port test -qt -c 'select GET_LICENSE_VALIDDAYS()' |grep -v ^$ |sed 's/ //g'")
+license_validdays=$(su - $kingbase_user -c "ksql 'port=${kingbase_port} dbname=test user=${username} password=${password}'  -c 'select GET_LICENSE_VALIDDAYS()' -qt|grep -v ^$ |sed 's/ //g'")
+
+# 最大连接数
+#max_connections=$(su - $kingbase_user -c "ksql -U SYSTEM -p $kingbase_port test -qt -c 'show max_connections' |grep -v ^$ |sed 's/ //g'")
+max_connections=$(su - $kingbase_user -c "ksql 'port=${kingbase_port} dbname=test user=${username} password=${password}'  -c 'show max_connections' -qt|grep -v ^$ |sed 's/ //g'")
+
+# 服务端编码
+#server_encoding=$(su - $kingbase_user -c "ksql -U SYSTEM -p $kingbase_port test -qt -c 'show server_encoding' |grep -v ^$ |sed 's/ //g'")
+server_encoding=$(su - $kingbase_user -c "ksql 'port=${kingbase_port} dbname=test user=${username} password=${password}'  -c 'show server_encoding' -qt|grep -v ^$ |sed 's/ //g'")
+
+# 大小写敏感
+#enable_ci=$(su - $kingbase_user -c "ksql -U SYSTEM -p $kingbase_port test -qt -q -c 'show enable_ci' |grep -v ^$ |sed 's/ //g'")
+enable_ci=$(su - $kingbase_user -c "ksql 'port=${kingbase_port} dbname=test user=${username} password=${password}'  -c 'show case_sensitive' -qt|grep -v ^$ |sed 's/ //g'")
+
+# 所有数据库
+#all_database=( $(su - $kingbase_user -c "ksql -U SYSTEM -p $kingbase_port test -qt -c 'select datname from sys_database'") )
+all_database=$(su - $kingbase_user -c "ksql 'port=${kingbase_port} dbname=test user=${username} password=${password}'  -c 'select datname from sys_database' -qt|grep -v ^$ |sed 's/ //g'")
+
+# 所有用户
+#all_user=( $(su - $kingbase_user -c "ksql -U SYSTEM -p $kingbase_port test -qt -c 'select usename from sys_user'") )
+all_user=$(su - $kingbase_user -c "ksql 'port=${kingbase_port} dbname=test user=${username} password=${password}'  -c 'select usename from sys_user' -qt|grep -v ^$ |sed 's/ //g'")
+
+
+# 共享缓冲区
+#shared_buffers=$(su - $kingbase_user -c "ksql -U SYSTEM -p $kingbase_port test -qt -c 'show shared_buffers' |grep -v ^$ |sed 's/ //g'")
+shared_buffers=$(su - $kingbase_user -c "ksql 'port=${kingbase_port} dbname=test user=${username} password=${password}'  -c 'show shared_buffers' -qt|grep -v ^$ |sed 's/ //g'")
+
+# 数据库模式
+#database_mode=$(su - $kingbase_user -c "ksql -U SYSTEM -p $kingbase_port test -qt -c 'show database_mode' |grep -v ^$ |sed 's/ //g'")
+database_mode=$(su - $kingbase_user -c "ksql 'port=${kingbase_port} dbname=test user=${username} password=${password}'  -c 'show database_mode' -qt|grep -v ^$ |sed 's/ //g'")
+
+# 配置文件
+#config_file=$(su - $kingbase_user -c "ksql -U SYSTEM -p $kingbase_port test -qt -c 'show config_file' |grep -v ^$ |sed 's/ //g'")
+config_file=$(su - $kingbase_user -c "ksql 'port=${kingbase_port} dbname=test user=${username} password=${password}'  -c 'show config_file' -qt|grep -v ^$ |sed 's/ //g'")
+
+# hba文件
+#hba_file=$(su - $kingbase_user -c "ksql -U SYSTEM -p $kingbase_port test -qt -c 'show hba_file' |grep -v ^$ |sed 's/ //g'")
+hba_file=$(su - $kingbase_user -c "ksql 'port=${kingbase_port} dbname=test user=${username} password=${password}'  -c 'show hba_file' -qt|grep -v ^$ |sed 's/ //g'")
+
+# ident文件
+#ident_file=$(su - $kingbase_user -c "ksql -U SYSTEM -p $kingbase_port test -qt -c 'show ident_file' |grep -v ^$ |sed 's/ //g'")
+ident_file=$(su - $kingbase_user -c "ksql 'port=${kingbase_port} dbname=test user=${username} password=${password}'  -c 'show ident_file' -qt|grep -v ^$ |sed 's/ //g'")
+
+
+echo _____{'"'license_validdays'"': '"'$license_validdays'"','"'max_connections'"': '"'$max_connections'"','"'server_encoding'"': '"'$server_encoding'"','"'enable_ci'"': '"'$enable_ci'"','"'all_database'"': '"'${all_database[*]}'"','"'all_user'"': '"'${all_user[*]}'"','"'shared_buffers'"': '"'$shared_buffers'"','"'database_mode'"': '"'$database_mode'"','"'config_file'"': '"'$config_file'"','"'hba_file'"': '"'$hba_file'"','"'ident_file'"': '"'$ident_file'"'}_____
+
+
+
+#!/bin/bash
+username={{username}}
+password={{password}}
+ip={{ip_addr}}
+port={{port}}
+
+sql4="show databases"
+timeout 10 mysql -u$username -h$ip -p$password -P$port -s -e "${sql4}" 2>/dev/null
+
+
+
+information_schema=`echo "${databases}" | grep '\<information_schema\>' | awk -F ' ' '{print $1}'`
+
+if [[ ${information_schema} = "information_schema" ]];then
+	echo "success"
+else
+	echo "failed"
+	exit 1
+fi

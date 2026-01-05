@@ -1,0 +1,1 @@
+SELECT calls,userid::regrole, dbid,total_exec_time/calls avg_exec_time_one_time, query FROM sys_stat_statements where query !='COMMIT TRANSACTION' and calls >10 and userid not in(select oid from pg_roles where rolname='esrep' or rolname='system') ORDER BY calls DESC LIMIT 10;

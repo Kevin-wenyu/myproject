@@ -1,0 +1,1 @@
+select schemaname,tablename,indexname,pg_size_pretty(pg_relation_size((quote_ident(schemaname)||'.'||quote_ident(indexname))::regclass)) from pg_indexes order by pg_relation_size((quote_ident(schemaname)||'.'||quote_ident(indexname))::regclass) desc limit 10;

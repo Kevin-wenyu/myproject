@@ -1,0 +1,1 @@
+select pg_size_pretty(pg_relation_size(relid)),* from pg_stat_all_tables where schemaname not in ('pg_toast','pg_catalog','information_schema','sysmac','sys') order by seq_scan+idx_scan desc, pg_relation_size(relid) desc limit 10;

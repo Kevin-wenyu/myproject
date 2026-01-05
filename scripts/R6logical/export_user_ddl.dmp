@@ -1,0 +1,171 @@
+--
+-- Kingbase database cluster dump
+--
+
+SET default_transaction_read_only = off;
+
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+
+--
+-- Roles
+--
+
+CREATE ROLE cds1;
+ALTER ROLE cds1 WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:Y6Ui8YPNmw8dRuiN+PEm5A==$bJLbb+Q3uGEdVxRSgytXmcjQ/wZdIMchRuoxSJkZcac=:nwXg0xHGHBoU3E6eQCbw8HzpQIMgQT6u8i51H6N/tdY=';
+CREATE ROLE cta1;
+ALTER ROLE cta1 WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:I7h6QA5qj32/NsuDPZMxNA==$3VBwnZqRbSWJ36bw3hLJHSWLFNEDkwl1Xk2FVWH1NFY=:jIFaezjmHfoJNdbEUWT1GPCnJE0zBI9onebZlhsbkd0=';
+CREATE ROLE dbackup;
+ALTER ROLE dbackup WITH SUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:dpqsfBNMhFOJm858RU0QDw==$uArWe+VSa9Sp0uzrrbHmuoyM8BZQ/7Fe4vmVVgdsasw=:Gox48eCAziFTXQyarFt4z65nEuDm4a3CVl4bNzX4IUY=';
+CREATE ROLE esrep;
+ALTER ROLE esrep WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN REPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:BNephbP0QoOSa8eLlp8J5A==$swKH6DSjAfpxxOP09yzqFwkhLBHkwGtdHsMd44HieAs=:M6Hn3zhoihavB9aVUuPiQtTW+aLRI8jqfFrO1tHNFHY=';
+CREATE ROLE oneta1;
+ALTER ROLE oneta1 WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:v/YObJ0qMzgOs//aWi8nEg==$ADBFEO8BXTMfa1wohXnqfaGJdVEtIafgSCbMhY9tPtA=:fO65/dwmaL1JP4RQZQRAnW1gsDYmmWZDov7klTxzCSQ=';
+CREATE ROLE system;
+ALTER ROLE system WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION BYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:5Dv4hOQ5gTkxD32/f4hK+Q==$hFCgNyxQ7jXhXnIdY9+gmB0sXE+ZgwpF7dGdMmJ4j90=:/mu2OgkjTKAjdrgvFMxN2QKD2XY/l5r+b8iWOsI+NN0=';
+CREATE ROLE ta6acc1;
+ALTER ROLE ta6acc1 WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:KC9wNc3OorYuA9VdYk5Vpg==$YrXOjM7xi0FS5dGDofEtp9YNjJr84mXWwBdQrV1iHfk=:RccRUgoNCa3+8ElsS+O0nwPGgrWyVr9dqV3gpTO6B1E=';
+CREATE ROLE ta6acc2;
+ALTER ROLE ta6acc2 WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:dZdv0uEqFIMY7HtLj8qfQQ==$BKCdy0lVelOkzwtzhyNlvSNB38s/iQ+ySQoR7X3dhK4=:try73xjzo1NE9dY2qWOw3oW1wgJvF4iEFIJx+jD0kfE=';
+CREATE ROLE ta6etftrans1;
+ALTER ROLE ta6etftrans1 WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:FUstHv7wYRhUWVZkynJ+Ew==$V/mlUPbeFzFV5X4aVkkMQNemfT0SsHs2ZTidBEJIrjw=:iT0hu9WbK0aW72y7Fa4tzN87az3t2KS76bEMsqoDwu8=';
+CREATE ROLE ta6loftrans1;
+ALTER ROLE ta6loftrans1 WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:4aNjEwFLu6xlY3UU2s0HGA==$9hGJAsffQhvtGxkXa0zYZMoXXqkdYr/rCadnHYyFfGo=:oR/POKsjc4wXp80jkkp9PEwsFMfHZgPrqXCMKVKByqw=';
+CREATE ROLE ta6pub;
+ALTER ROLE ta6pub WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:WYgc9+3xRefaa40oqFeL/Q==$LFTzideEZR48xTr8PMn/5RKhYJQDJOrkdvA//CENpOQ=:FHE7p+fdHw3aklt3wVuqKDPwU9QuZaPT/xqil+ilVNI=';
+CREATE ROLE ta6trans1;
+ALTER ROLE ta6trans1 WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:fQjWFCm2V0INbIbK0kAPrw==$fhz2zKlE9xELQZRUf/BFxHRAFNAn7v5ekNhpEK0mT04=:/Kn2UPmPzfd64yhSdA+9++BjkJgo7OiGHVT55B5IBVw=';
+CREATE ROLE ta6trans2;
+ALTER ROLE ta6trans2 WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:uVASeJmJgls3YJ1WfIwl4g==$he3F4ogSewVMaxpasc7sDEeO2KqpbFuuofeuZiUJNXE=:JD8hKN6rGWALaMyqKctF9jmbPpc1J8mM5KggvZyPtbI=';
+--
+-- User Configurations
+--
+
+--
+-- User Config "cds1"
+--
+
+ALTER ROLE cds1 SET default_tablespace TO 'kdb_cold';
+--
+-- User Configurations
+--
+
+--
+-- User Config "cta1"
+--
+
+ALTER ROLE cta1 SET default_tablespace TO 'kdb_cold';
+--
+-- User Configurations
+--
+
+--
+-- User Config "oneta1"
+--
+
+ALTER ROLE oneta1 SET default_tablespace TO 'kdb_cold';
+--
+-- User Configurations
+--
+
+--
+-- User Config "ta6acc1"
+--
+
+ALTER ROLE ta6acc1 SET default_tablespace TO 'kdb_hot';
+--
+-- User Configurations
+--
+
+--
+-- User Config "ta6acc2"
+--
+
+ALTER ROLE ta6acc2 SET default_tablespace TO 'kdb_hot';
+--
+-- User Configurations
+--
+
+--
+-- User Config "ta6etftrans1"
+--
+
+ALTER ROLE ta6etftrans1 SET default_tablespace TO 'kdb_hot';
+--
+-- User Configurations
+--
+
+--
+-- User Config "ta6loftrans1"
+--
+
+ALTER ROLE ta6loftrans1 SET default_tablespace TO 'kdb_hot';
+--
+-- User Configurations
+--
+
+--
+-- User Config "ta6pub"
+--
+
+ALTER ROLE ta6pub SET default_tablespace TO 'kdb_hot';
+--
+-- User Configurations
+--
+
+--
+-- User Config "ta6trans1"
+--
+
+ALTER ROLE ta6trans1 SET default_tablespace TO 'kdb_hot';
+--
+-- User Configurations
+--
+
+--
+-- User Config "ta6trans2"
+--
+
+ALTER ROLE ta6trans2 SET default_tablespace TO 'kdb_hot';
+
+
+--
+-- Role memberships
+--
+
+GRANT kcluster TO esrep GRANTED BY system;
+GRANT pg_monitor TO kcluster GRANTED BY system;
+
+
+--
+-- Tablespaces
+--
+
+CREATE TABLESPACE kdb_hot OWNER system LOCATION '/kdata/kdb_hot';
+GRANT ALL ON TABLESPACE kdb_hot TO cta1;
+GRANT ALL ON TABLESPACE kdb_hot TO cds1;
+GRANT ALL ON TABLESPACE kdb_hot TO ta6acc1;
+GRANT ALL ON TABLESPACE kdb_hot TO ta6acc2;
+GRANT ALL ON TABLESPACE kdb_hot TO ta6trans1;
+GRANT ALL ON TABLESPACE kdb_hot TO ta6trans2;
+GRANT ALL ON TABLESPACE kdb_hot TO ta6pub;
+GRANT ALL ON TABLESPACE kdb_hot TO ta6loftrans1;
+GRANT ALL ON TABLESPACE kdb_hot TO ta6etftrans1;
+GRANT ALL ON TABLESPACE kdb_hot TO oneta1;
+CREATE TABLESPACE kdb_cold OWNER system LOCATION '/kdata/kdb_cold';
+GRANT ALL ON TABLESPACE kdb_cold TO cta1;
+GRANT ALL ON TABLESPACE kdb_cold TO cds1;
+GRANT ALL ON TABLESPACE kdb_cold TO ta6acc1;
+GRANT ALL ON TABLESPACE kdb_cold TO ta6acc2;
+GRANT ALL ON TABLESPACE kdb_cold TO ta6trans1;
+GRANT ALL ON TABLESPACE kdb_cold TO ta6trans2;
+GRANT ALL ON TABLESPACE kdb_cold TO ta6pub;
+GRANT ALL ON TABLESPACE kdb_cold TO ta6loftrans1;
+GRANT ALL ON TABLESPACE kdb_cold TO ta6etftrans1;
+GRANT ALL ON TABLESPACE kdb_cold TO oneta1;
+
+
+--
+-- Kingbase database cluster dump complete
+--
+

@@ -1,0 +1,1 @@
+SELECT userid::regrole, dbid,temp_blks_written,query FROM sys_stat_statements where query !='COMMIT TRANSACTION' and calls >10 and userid not in(select oid from pg_roles where rolname='esrep' or rolname='system') ORDER BY temp_blks_written DESC LIMIT 10;
