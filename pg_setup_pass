@@ -1,0 +1,61 @@
+#!/bin/bash
+#
+# Helper script to set up PostgreSQL password authentication
+#
+
+echo "=== PostgreSQL Password Setup Helper ==="
+echo ""
+
+# Check if .pgpass exists
+PGPASS_FILE="$HOME/.pgpass"
+
+if [ -f "$PGPASS_FILE" ]; then
+  echo "Found existing .pgpass file: $PGPASS_FILE"
+  read -p "Do you want to overwrite it? (y/N): " overwrite
+  if [ "$overwrite" != "y" ] && [ "$overwrite" != "Y" ]; then
+    echo "Keeping existing file."
+    echo ""
+    echo "Current .pgpass file contents (first 3 lines):"
+    head -n 3 "$PGPASS_FILE"
+    exit 0
+  fi
+fi
+
+# Get connection details
+read -p "Hostname (default: localhost): " host
+host=${host:-localhost}
+
+read -p "Port (default: 5432): " port
+port=${port:-5432}
+
+read -p "Database (or * for all): " database
+database=${database:-*}
+
+read -p "Username (default: postgres): " username
+username=${username:-postgres}
+
+read -s -p "Password: " password
+echo ""
+read -s -p "Confirm password: " password2
+echo ""
+
+if [ "$password" != "$password2" ]; then
+  echo "Error: Passwords do not match"
+  exit 1
+fi
+
+# Create .pgpass file
+echo "$host:$port:$database:$username:$password" > "$PGPASS_FILE"
+
+# Set correct permissions
+chmod 600 "$PGPASS_FILE"
+
+echo ""
+echo "✓ .pgpass file created: $PGPASS_FILE"
+echo "✓ Permissions set to 600"
+echo ""
+echo "File contents (line count: $(wc -l < "$PGPASS_FILE"))"
+echo "Note: Password is stored in plain text"
+echo ""
+echo "Test connection:"
+echo "  psql -h $host -p $port -U $username -d ${database//\*/your_database_name}"
