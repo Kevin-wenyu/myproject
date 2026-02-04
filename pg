@@ -3,9 +3,17 @@
 # PostgreSQL Database Diagnostic Tool (pg)
 # Similar to Oracle's ora tool but for PostgreSQL
 #
+# Tool Version: 2.1.0 (2026-01-27)
+#
+
+TOOL_VERSION="2.1.1"
+TOOL_BUILD_DATE="2026-02-03"
 
 PG_VERSION=""
 PG_MAJOR_VERSION=""
+PGS_TOTAL_COL=""
+PGS_MEAN_COL=""
+PGS_MAX_COL=""
 PG_TMP="/tmp"
 EXEC_NAME=$(basename "$0")
 DBHOST="${PGHOST:-localhost}"
@@ -59,7 +67,30 @@ setup_password()
 
 setup_password
 
-# Colors for output
+# Color output support with terminal detection
+use_color=true
+if [ ! -t 1 ] || [ "$TERM" = "dumb" ]; then
+  use_color=false
+fi
+
+colorize()
+{
+  local color=$1
+  local text="$2"
+  if [ "$use_color" = true ]; then
+    case "$color" in
+      red)    printf "\033[0;31m%s\033[0m\n" "$text" ;;
+      green)  printf "\033[0;32m%s\033[0m\n" "$text" ;;
+      yellow) printf "\033[1;33m%s\033[0m\n" "$text" ;;
+      blue)   printf "\033[0;34m%s\033[0m\n" "$text" ;;
+      *)      echo "$text" ;;
+    esac
+  else
+    echo "$text"
+  fi
+}
+
+# Colors for output (legacy)
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -73,7 +104,7 @@ get_version()
   version_output=$(psql -h "$DBHOST" -p "$DBPORT" -U "$DBUSER" -d "$DBNAME" -t -A -c "SELECT version();" 2>/dev/null)
 
   if [ $? -eq 0 ]; then
-    PG_VERSION=$(echo "$version_output" | grep -oP 'PostgreSQL \K[0-9.]+' | head -1)
+    PG_VERSION=$(echo "$version_output" | sed -n 's/^PostgreSQL \([0-9.]*\).*/\1/p' | head -1)
     PG_MAJOR_VERSION=$(echo "$PG_VERSION" | cut -d. -f1)
   else
     echo "Error: Could not connect to PostgreSQL"
@@ -113,8 +144,10 @@ format_duration()
 
 usage()
 {
+  local header=$(colorize blue "PostgreSQL Database Diagnostic Tool")
   cat << EOF
-${BLUE}PostgreSQL Database Diagnostic Tool${NC}
+$header
+Version: $TOOL_VERSION | Build: $TOOL_BUILD_DATE
 
 Usage: $EXEC_NAME [options] <command> [arguments]
 
@@ -406,6 +439,134 @@ COMMAND="$1"
 shift
 
 # ============================================
+# PARAMETER PARSING HELPER FUNCTIONS
+# ============================================
+
+# Parse schema/database/table parameters for flexible queries
+# Usage: parse_params "$@"
+# Sets global vars: PARAM_DB, PARAM_SCHEMA, PARAM_TABLE, PARAM_PATTERN
+parse_params()
+{
+  PARAM_DB=""
+  PARAM_SCHEMA=""
+  PARAM_TABLE=""
+  PARAM_PATTERN=""
+  local last_arg=""
+
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -d|--database)
+        if [ $# -lt 2 ]; then
+          echo "Error: -d requires a database name" >&2
+          return 1
+        fi
+        PARAM_DB="$2"
+        shift 2
+        ;;
+      -s|--schema)
+        if [ $# -lt 2 ]; then
+          echo "Error: -s requires a schema name" >&2
+          return 1
+        fi
+        PARAM_SCHEMA="$2"
+        shift 2
+        ;;
+      -t|--table)
+        if [ $# -lt 2 ]; then
+          echo "Error: -t requires a table name" >&2
+          return 1
+        fi
+        PARAM_TABLE="$2"
+        shift 2
+        ;;
+      *)
+        last_arg="$1"
+        shift
+        ;;
+    esac
+  done
+
+  # Last positional arg becomes pattern (if provided)
+  if [ -n "$last_arg" ]; then
+    PARAM_PATTERN="$last_arg"
+  fi
+}
+
+# Build WHERE clause fragment for schema filtering
+# Usage: build_schema_where_clause "tablename" 
+# Returns: WHERE clause fragment (empty if no schema specified)
+build_schema_where_clause()
+{
+  local table_alias="${1:-.}"
+  if [ -n "$PARAM_SCHEMA" ]; then
+    # Sanitize schema name to prevent SQL injection
+    local sanitized_schema=$(echo "$PARAM_SCHEMA" | sed 's/[^a-zA-Z0-9_]/_/g')
+    echo "AND ${table_alias}schemaname = '$sanitized_schema'"
+  fi
+}
+
+# Build WHERE clause fragment for table/pattern filtering
+build_table_where_clause()
+{
+  local table_alias="${1:-.}"
+  if [ -n "$PARAM_TABLE" ]; then
+    # Sanitize table name to prevent SQL injection
+    local sanitized_table=$(echo "$PARAM_TABLE" | sed 's/[^a-zA-Z0-9_]/_/g')
+    echo "AND ${table_alias}tablename = '$sanitized_table'"
+  elif [ -n "$PARAM_PATTERN" ]; then
+    # Sanitize pattern to prevent SQL injection
+    local sanitized_pattern=$(echo "$PARAM_PATTERN" | sed "s/'/''/g" | sed 's/[^a-zA-Z0-9_ %]/_/g')
+    echo "AND ${table_alias}tablename LIKE '%${sanitized_pattern}%'"
+  fi
+}
+
+# Get PSQL_CMD for specific database (if -d specified, create new connection)
+get_psql_for_db()
+{
+  if [ -n "$PARAM_DB" ]; then
+    if [ -n "$PGPASSWORD" ] || [ -n "$PGPASSFILE" ] || [ -n "$USE_PASSWORD_FILE" ]; then
+      echo "psql -h $DBHOST -p $DBPORT -U $DBUSER -d \"$PARAM_DB\" -w"
+    else
+      echo "psql -h $DBHOST -p $DBPORT -U $DBUSER -d \"$PARAM_DB\""
+    fi
+  else
+    echo "$PSQL_CMD"
+  fi
+}
+
+# pg_stat_statements column detection (version compatibility)
+init_pg_stat_statements_columns()
+{
+  if [ -n "$PGS_TOTAL_COL" ] && [ -n "$PGS_MEAN_COL" ] && [ -n "$PGS_MAX_COL" ]; then
+    return 0
+  fi
+
+  local rel_exists
+  rel_exists=$(echo "SELECT 1 FROM pg_class WHERE relname = 'pg_stat_statements' AND relkind IN ('v','r');" | $PSQL_CMD -t -A 2>/dev/null)
+  if [ -z "$rel_exists" ]; then
+    return 1
+  fi
+
+  local has_new
+  has_new=$(echo "SELECT 1 FROM pg_attribute WHERE attrelid = 'pg_stat_statements'::regclass AND attname = 'total_exec_time';" | $PSQL_CMD -t -A 2>/dev/null)
+  if [ -n "$has_new" ]; then
+    PGS_TOTAL_COL="total_exec_time"
+    PGS_MEAN_COL="mean_exec_time"
+    PGS_MAX_COL="max_exec_time"
+  else
+    PGS_TOTAL_COL="total_time"
+    PGS_MEAN_COL="mean_time"
+    PGS_MAX_COL="max_time"
+  fi
+}
+
+pgs_ms_to_sec_expr()
+{
+  local col="$1"
+  echo "(${col} / 1000.0)"
+}
+
+# ============================================
 # SESSION & QUERY MONITORING
 # ============================================
 
@@ -502,6 +663,11 @@ cmd_kill()
     echo "Usage: $EXEC_NAME kill <pid>"
     exit 1
   fi
+  # Validate PID is numeric to prevent SQL injection
+  if ! echo "$pid" | grep -q '^[0-9]\+$'; then
+    echo "Error: PID must be a number"
+    exit 1
+  fi
   echo "SELECT pg_terminate_backend($pid);" | $PSQL_CMD
 }
 
@@ -510,6 +676,11 @@ cmd_cancel()
   local pid=$1
   if [ -z "$pid" ]; then
     echo "Usage: $EXEC_NAME cancel <pid>"
+    exit 1
+  fi
+  # Validate PID is numeric to prevent SQL injection
+  if ! echo "$pid" | grep -q '^[0-9]\+$'; then
+    echo "Error: PID must be a number"
     exit 1
   fi
   echo "SELECT pg_cancel_backend($pid);" | $PSQL_CMD
@@ -524,6 +695,11 @@ cmd_fulltext()
   local pid=$1
   if [ -z "$pid" ]; then
     echo "Usage: $EXEC_NAME fulltext <pid>"
+    exit 1
+  fi
+  # Validate PID is numeric to prevent SQL injection
+  if ! echo "$pid" | grep -q '^[0-9]\+$'; then
+    echo "Error: PID must be a number"
     exit 1
   fi
   cat << EOF | $PSQL_CMD
@@ -556,62 +732,25 @@ cmd_explain_analyze()
 cmd_query_stats()
 {
   local limit=${1:-$TOP_N}
-  cat << EOF | $PSQL_CMD
-SELECT calls,
-       total_exec_time / 1000 / 1000 AS total_time_sec,
-       mean_exec_time / 1000 / 1000 AS mean_time_sec,
-       max_exec_time / 1000 / 1000 AS max_time_sec,
-       LEFT(query, 100) AS query_preview
-FROM pg_stat_statements
-WHERE 1=1
-ORDER BY total_exec_time DESC
-LIMIT $limit;
-EOF
+  execute_with_extension_check "pg_stat_statements" "$(get_stat_statements_query "total_exec_time" "$limit" "" "")" "pg_stat_statements extension is not installed."
 }
 
 cmd_top_calls()
 {
   local limit=${1:-$TOP_N}
-  cat << EOF | $PSQL_CMD
-SELECT calls,
-       total_exec_time / 1000 / 1000 AS total_time_sec,
-       rows,
-       LEFT(query, 100) AS query_preview
-FROM pg_stat_statements
-WHERE 1=1
-ORDER BY calls DESC
-LIMIT $limit;
-EOF
+  execute_with_extension_check "pg_stat_statements" "$(get_stat_statements_query "calls" "$limit" "" "")" "pg_stat_statements extension is not installed."
 }
 
 cmd_top_time()
 {
   local limit=${1:-$TOP_N}
-  cat << EOF | $PSQL_CMD
-SELECT total_exec_time / 1000 / 1000 AS total_time_sec,
-       calls,
-       mean_exec_time / 1000 / 1000 AS mean_time_sec,
-       LEFT(query, 100) AS query_preview
-FROM pg_stat_statements
-WHERE 1=1
-ORDER BY total_exec_time DESC
-LIMIT $limit;
-EOF
+  execute_with_extension_check "pg_stat_statements" "$(get_stat_statements_query "total_exec_time" "$limit" "" "")" "pg_stat_statements extension is not installed."
 }
 
 cmd_top_rows()
 {
   local limit=${1:-$TOP_N}
-  cat << EOF | $PSQL_CMD
-SELECT rows,
-       calls,
-       total_exec_time / 1000 / 1000 AS total_time_sec,
-       LEFT(query, 100) AS query_preview
-FROM pg_stat_statements
-WHERE 1=1
-ORDER BY rows DESC
-LIMIT $limit;
-EOF
+  execute_with_extension_check "pg_stat_statements" "$(get_stat_statements_query "rows" "$limit" "" "")" "pg_stat_statements extension is not installed."
 }
 
 cmd_buffer_stats()
@@ -680,65 +819,19 @@ EOF
 cmd_pg_stat_tables()
 {
   local limit=${1:-$TOP_N}
-  cat << EOF | $PSQL_CMD
-SELECT schemaname,
-       relname,
-       seq_scan,
-       seq_tup_read,
-       idx_scan,
-       idx_tup_fetch,
-       n_tup_ins,
-       n_tup_upd,
-       n_tup_del,
-       n_tup_hot_upd,
-       n_live_tup,
-       n_dead_tup,
-       last_vacuum,
-       last_autovacuum,
-       last_analyze,
-       last_autoanalyze,
-       vacuum_count,
-       autovacuum_count,
-       analyze_count,
-       autoanalyze_count
-FROM pg_stat_user_tables
-ORDER BY seq_scan DESC
-LIMIT $limit;
-EOF
+  get_stat_table "user_tables" "" "$limit" "" | $PSQL_CMD
 }
 
 cmd_pg_stat_indexes()
 {
   local limit=${1:-$TOP_N}
-  cat << EOF | $PSQL_CMD
-SELECT schemaname,
-       relname,
-       indexrelname,
-       idx_scan,
-       idx_tup_read,
-       idx_tup_fetch,
-       idx_tup_fetch / NULLIF(idx_scan, 0) AS tups_per_scan
-FROM pg_stat_user_indexes
-WHERE idx_scan > 0
-ORDER BY idx_scan DESC
-LIMIT $limit;
-EOF
+  get_stat_table "user_indexes" "" "$limit" "" | $PSQL_CMD
 }
 
 cmd_pg_stat_functions()
 {
   local limit=${1:-$TOP_N}
-  cat << EOF | $PSQL_CMD
-SELECT schemaname,
-       funcname,
-       calls,
-       total_time / 1000 / 1000 AS total_time_sec,
-       mean_time / 1000 / 1000 AS mean_time_sec,
-       self_time / 1000 / 1000 AS self_time_sec
-FROM pg_stat_user_functions
-ORDER BY calls DESC
-LIMIT $limit;
-EOF
+  get_stat_table "user_functions" "" "$limit" "" | $PSQL_CMD
 }
 
 cmd_pg_stat_replication()
@@ -768,6 +861,14 @@ EOF
 
 cmd_pg_buffercache()
 {
+  # Check if pg_buffercache extension exists
+  local extension_check=$(echo "SELECT 1 FROM pg_extension WHERE extname = 'pg_buffercache';" | $PSQL_CMD -t -A 2>/dev/null)
+  if [ -z "$extension_check" ]; then
+    echo "Error: pg_buffercache extension is not installed."
+    echo "Run: CREATE EXTENSION pg_buffercache;"
+    return 1
+  fi
+  
   cat << 'EOF' | $PSQL_CMD
 SELECT c.relname,
        count(*) AS buffers,
@@ -818,82 +919,119 @@ EOF
 
 cmd_table_size()
 {
-  local pattern=${1:-%}
-  cat << EOF | $PSQL_CMD
-SELECT schemaname,
-       tablename,
-       pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS total_size,
-       pg_size_pretty(pg_relation_size(schemaname||'.'||tablename)) AS table_size,
-       pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename) - pg_relation_size(schemaname||'.'||tablename)) AS indexes_size
-FROM pg_tables
-WHERE tablename LIKE '$pattern'
-ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
-EOF
+  if ! parse_params "$@"; then
+    return 1
+  fi
+  local cmd=$(get_psql_for_db)
+  local schema_filter=$(build_schema_where_clause "t.")
+  local table_filter=$(build_table_where_clause "t.")
+  
+  # Build combined filter
+  local combined_filter=""
+  if [ -n "$schema_filter" ]; then
+    combined_filter="$schema_filter"
+  fi
+  if [ -n "$table_filter" ]; then
+    combined_filter="$combined_filter $table_filter"
+  fi
+  
+  get_size_query "table" "" "$combined_filter" "" | $cmd
 }
 
 cmd_index_size()
 {
-  local pattern=${1:-%}
-  cat << EOF | $PSQL_CMD
-SELECT schemaname,
-       tablename,
-       indexname,
-       pg_size_pretty(pg_relation_size(indexrelid)) AS index_size
-FROM pg_stat_user_indexes
-WHERE indexname LIKE '$pattern'
-ORDER BY pg_relation_size(indexrelid) DESC;
+  if ! parse_params "$@"; then
+    return 1
+  fi
+  local cmd=$(get_psql_for_db)
+  local schema_filter=$(build_schema_where_clause "i.")
+  local table_filter=$(build_table_where_clause "i.")
+  
+  cat << EOF | $cmd
+SELECT i.schemaname,
+       i.tablename,
+       i.indexname,
+       pg_size_pretty(pg_relation_size(i.indexrelid)) AS index_size
+FROM pg_stat_user_indexes i
+WHERE i.schemaname NOT IN ('pg_catalog', 'information_schema')
+$schema_filter
+$table_filter
+ORDER BY pg_relation_size(i.indexrelid) DESC;
 EOF
 }
 
 cmd_bloat_tables()
 {
-  local limit=${1:-$TOP_N}
-  cat << EOF | $PSQL_CMD
-SELECT schemaname,
-       tablename,
-       pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS total_size,
-       n_dead_tup,
-       n_live_tup,
-       round(n_dead_tup::numeric / NULLIF(n_live_tup, 0) * 100, 2) AS dead_ratio
-FROM pg_stat_user_tables
-WHERE n_dead_tup > 0
-ORDER BY n_dead_tup DESC
+  if ! parse_params "$@"; then
+    return 1
+  fi
+  local cmd=$(get_psql_for_db)
+  local limit=${PARAM_PATTERN:-$TOP_N}
+  local schema_filter=$(build_schema_where_clause "t.")
+  
+  cat << EOF | $cmd
+SELECT t.schemaname,
+       t.tablename,
+       pg_size_pretty(pg_total_relation_size(t.schemaname||'.'||t.tablename)) AS total_size,
+       t.n_dead_tup,
+       t.n_live_tup,
+       round(t.n_dead_tup::numeric / NULLIF(t.n_live_tup, 0) * 100, 2) AS dead_ratio
+FROM pg_stat_user_tables t
+WHERE t.n_dead_tup > 0
+  AND t.schemaname NOT IN ('pg_catalog', 'information_schema')
+$schema_filter
+ORDER BY t.n_dead_tup DESC
 LIMIT $limit;
 EOF
 }
 
 cmd_bloat_indexes()
 {
-  local limit=${1:-$TOP_N}
-  cat << EOF | $PSQL_CMD
-SELECT schemaname,
-       tablename,
-       indexname,
-       idx_scan,
-       idx_tup_read,
-       pg_size_pretty(pg_relation_size(indexrelid)) AS index_size
-FROM pg_stat_user_indexes
-WHERE idx_scan = 0
-ORDER BY pg_relation_size(indexrelid) DESC
+  if ! parse_params "$@"; then
+    return 1
+  fi
+  local cmd=$(get_psql_for_db)
+  local limit=${PARAM_PATTERN:-$TOP_N}
+  local schema_filter=$(build_schema_where_clause "i.")
+  
+  cat << EOF | $cmd
+SELECT i.schemaname,
+       i.tablename,
+       i.indexname,
+       i.idx_scan,
+       i.idx_tup_read,
+       pg_size_pretty(pg_relation_size(i.indexrelid)) AS index_size
+FROM pg_stat_user_indexes i
+WHERE i.schemaname NOT IN ('pg_catalog', 'information_schema')
+$schema_filter
+ORDER BY pg_relation_size(i.indexrelid) DESC
 LIMIT $limit;
 EOF
 }
 
 cmd_seq_scans()
 {
-  local limit=${1:-$TOP_N}
-  cat << EOF | $PSQL_CMD
-SELECT schemaname,
-       tablename,
-       seq_scan,
-       seq_tup_read,
-       idx_scan,
-       idx_tup_fetch,
-       n_live_tup,
-       n_dead_tup
-FROM pg_stat_user_tables
-WHERE seq_scan > 0
-ORDER BY seq_scan DESC
+  if ! parse_params "$@"; then
+    return 1
+  fi
+  local cmd=$(get_psql_for_db)
+  local limit=${PARAM_PATTERN:-$TOP_N}
+  local schema_filter=$(build_schema_where_clause "t.")
+  
+  cat << EOF | $cmd
+SELECT t.schemaname,
+       t.tablename,
+       t.seq_scan,
+       t.seq_tup_read,
+       t.idx_scan,
+       t.idx_tup_fetch,
+       t.n_live_tup,
+       t.n_dead_tup
+FROM pg_stat_user_tables t
+WHERE t.seq_scan > 0
+  AND t.schemaname NOT IN ('pg_catalog', 'information_schema')
+$schema_filter
+ORDER BY t.seq_scan DESC
 LIMIT $limit;
 EOF
 }
@@ -901,17 +1039,17 @@ EOF
 cmd_missing_indexes()
 {
   cat << 'EOF' | $PSQL_CMD
-SELECT schemaname,
-       tablename,
-       attname,
-       n_distinct,
-       n_distinct * (n_live_tup + n_dead_tup) AS est_usage
-FROM pg_stats
-JOIN pg_stat_user_tables ON pg_stats.schemaname = pg_stat_user_tables.schemaname
-                            AND pg_stats.tablename = pg_stat_user_tables.tablename
-WHERE n_distinct > 0
-  AND n_distinct < 0.5 * (n_live_tup + n_dead_tup)
-  AND schemaname NOT IN ('information_schema', 'pg_catalog')
+SELECT s.schemaname,
+       t.tablename,
+       s.attname,
+       s.n_distinct,
+       s.n_distinct * (t.n_live_tup + t.n_dead_tup) AS est_usage
+FROM pg_stats s
+JOIN pg_stat_user_tables t ON s.schemaname = t.schemaname
+                              AND s.tablename = t.tablename
+WHERE s.n_distinct > 0
+  AND s.n_distinct < 0.5 * (t.n_live_tup + t.n_dead_tup)
+  AND s.schemaname NOT IN ('information_schema', 'pg_catalog')
 ORDER BY est_usage DESC
 LIMIT 20;
 EOF
@@ -920,15 +1058,20 @@ EOF
 cmd_unused_indexes()
 {
   cat << 'EOF' | $PSQL_CMD
-SELECT schemaname,
-       tablename,
-       indexname,
-       idx_scan,
-       pg_size_pretty(pg_relation_size(indexrelid)) AS index_size
-FROM pg_stat_user_indexes
-WHERE idx_scan = 0
-  AND indisunique = false
-ORDER BY pg_relation_size(indexrelid) DESC;
+SELECT s.schemaname,
+       t.relname AS tablename,
+       s.indexrelname,
+       s.idx_scan,
+       pg_size_pretty(pg_relation_size(s.indexrelid)) AS index_size,
+       i.indisunique AS is_unique,
+       i.indisprimary AS is_primary
+FROM pg_stat_user_indexes s
+JOIN pg_class t ON s.relid = t.oid
+JOIN pg_index i ON s.indexrelid = i.indexrelid
+WHERE s.idx_scan = 0
+  AND i.indisunique = false
+  AND i.indisprimary = false
+ORDER BY pg_relation_size(s.indexrelid) DESC;
 EOF
 }
 
@@ -978,18 +1121,26 @@ EOF
 
 cmd_dead_tuples()
 {
-  local limit=${1:-$TOP_N}
-  cat << EOF | $PSQL_CMD
-SELECT schemaname,
-       tablename,
-       n_live_tup,
-       n_dead_tup,
-       round(n_dead_tup::numeric / NULLIF(n_live_tup + n_dead_tup, 0) * 100, 2) AS dead_pct,
-       last_vacuum,
-       last_autovacuum
-FROM pg_stat_user_tables
-WHERE n_dead_tup > 1000
-ORDER BY n_dead_tup DESC
+  if ! parse_params "$@"; then
+    return 1
+  fi
+  local cmd=$(get_psql_for_db)
+  local limit=${PARAM_PATTERN:-$TOP_N}
+  local schema_filter=$(build_schema_where_clause "t.")
+  
+  cat << EOF | $cmd
+SELECT t.schemaname,
+       t.tablename,
+       t.n_live_tup,
+       t.n_dead_tup,
+       round(t.n_dead_tup::numeric / NULLIF(t.n_live_tup + t.n_dead_tup, 0) * 100, 2) AS dead_pct,
+       t.last_vacuum,
+       t.last_autovacuum
+FROM pg_stat_user_tables t
+WHERE t.n_dead_tup > 1000
+  AND t.schemaname NOT IN ('pg_catalog', 'information_schema')
+$schema_filter
+ORDER BY t.n_dead_tup DESC
 LIMIT $limit;
 EOF
 }
@@ -1198,7 +1349,18 @@ EOF
 
 cmd_pg_stat_bgwriter()
 {
-  cat << 'EOF' | $PSQL_CMD
+  if [ "${PG_MAJOR_VERSION:-0}" -ge 17 ]; then
+    cat << 'EOF' | $PSQL_CMD
+SELECT buffers_clean,
+       maxwritten_clean,
+       buffers_backend,
+       buffers_backend_fsync,
+       buffers_alloc,
+       stats_reset
+FROM pg_stat_bgwriter;
+EOF
+  else
+    cat << 'EOF' | $PSQL_CMD
 SELECT checkpoints_timed,
        checkpoints_req,
        checkpoint_write_time,
@@ -1208,9 +1370,11 @@ SELECT checkpoints_timed,
        maxwritten_clean,
        buffers_backend,
        buffers_backend_fsync,
-       buffers_alloc
+       buffers_alloc,
+       stats_reset
 FROM pg_stat_bgwriter;
 EOF
+  fi
 }
 
 cmd_pg_stat_checkpointer()
@@ -1252,6 +1416,8 @@ EOF
 cmd_config()
 {
   local pattern="${1:-%}"
+  # Sanitize pattern to prevent SQL injection
+  local sanitized_pattern=$(echo "$pattern" | sed "s/'/''/g")
   cat << EOF | $PSQL_CMD
 SELECT name,
        setting,
@@ -1261,45 +1427,57 @@ SELECT name,
        sourcefile,
        sourceline
 FROM pg_settings
-WHERE name LIKE '$pattern'
+WHERE name LIKE '%' || '$sanitized_pattern' || '%'
 ORDER BY name;
 EOF
 }
 
 cmd_all_settings()
 {
-  cat << 'EOF' | $PSQL_CMD
+  if ! parse_params "$@"; then
+    return 1
+  fi
+  local cmd=$(get_psql_for_db)
+  local pattern="${PARAM_PATTERN:-%}"
+  # Sanitize pattern to prevent SQL injection
+  local sanitized_pattern=$(echo "$pattern" | sed "s/'/''/g")
+  
+  cat << EOF | $cmd
 SELECT name,
        setting,
        unit,
        category,
        vartype,
        context,
-       source,
-       sourcefile,
-       sourceline
+       source
 FROM pg_settings
+WHERE name LIKE '%${sanitized_pattern}%'
 ORDER BY category, name;
 EOF
 }
 
 cmd_pg_settings_filter()
 {
-  local pattern=$1
-  if [ -z "$pattern" ]; then
-    echo "Usage: $EXEC_NAME pg_settings_filter <pattern>"
-    exit 1
+  if ! parse_params "$@"; then
+    return 1
   fi
-  cat << EOF | $PSQL_CMD
+  local cmd=$(get_psql_for_db)
+  local pattern="${PARAM_PATTERN:-%}"
+  # Sanitize pattern to prevent SQL injection
+  local sanitized_pattern=$(echo "$pattern" | sed "s/'/''/g")
+  
+  cat << EOF | $cmd
 SELECT name,
        setting,
        unit,
+       category,
+       vartype,
        context,
        source
 FROM pg_settings
-WHERE name ILIKE '%$pattern%'
-   OR short_desc ILIKE '%$pattern%'
-ORDER BY name;
+WHERE name ILIKE '%${sanitized_pattern}%'
+   OR short_desc ILIKE '%${sanitized_pattern}%'
+ORDER BY category, name;
 EOF
 }
 
@@ -1315,15 +1493,15 @@ cmd_reload_config()
 cmd_progress_info()
 {
   cat << 'EOF' | $PSQL_CMD
-SELECT 'CLUSTER' AS progress_type, count(*) FROM pg_stat_progress_cluster
+SELECT 'CLUSTER' AS progress_type, count(*)::text AS count FROM pg_stat_progress_cluster
 UNION ALL
-SELECT 'INDEX' AS progress_type, count(*) FROM pg_stat_progress_create_index
+SELECT 'INDEX' AS progress_type, count(*)::text FROM pg_stat_progress_create_index
 UNION ALL
-SELECT 'BASEBACKUP' AS progress_type, count(*) FROM pg_stat_progress_basebackup
+SELECT 'BASEBACKUP' AS progress_type, count(*)::text FROM pg_stat_progress_basebackup
 UNION ALL
-SELECT 'COPY' AS progress_type, count(*) FROM pg_stat_progress_copy
+SELECT 'COPY' AS progress_type, count(*)::text FROM pg_stat_progress_copy
 UNION ALL
-SELECT 'VACUUM' AS progress_type, count(*) FROM pg_stat_progress_vacuum;
+SELECT 'VACUUM' AS progress_type, count(*)::text FROM pg_stat_progress_vacuum;
 EOF
 }
 
@@ -1373,29 +1551,19 @@ EOF
 
 cmd_database_size()
 {
-  cat << 'EOF' | $PSQL_CMD
-SELECT datname,
-       pg_size_pretty(pg_database_size(datname)) AS size,
-       pg_database_size(datname) AS size_bytes
-FROM pg_database
-ORDER BY pg_database_size(datname) DESC;
-EOF
+  get_size_query "database" "" "" "" | $PSQL_CMD
 }
 
 cmd_tablespace_size()
 {
-  cat << 'EOF' | $PSQL_CMD
-SELECT spcname,
-       pg_size_pretty(pg_tablespace_size(spcname)) AS size,
-       pg_tablespace_size(spcname) AS size_bytes
-FROM pg_tablespace
-ORDER BY pg_tablespace_size(spcname) DESC;
-EOF
+  get_size_query "tablespace" "" "" "" | $PSQL_CMD
 }
 
 cmd_relation_size()
 {
   local pattern=${1:-%}
+  # Sanitize pattern to prevent SQL injection
+  local sanitized_pattern=$(echo "$pattern" | sed "s/'/''/g")
   cat << EOF | $PSQL_CMD
 SELECT n.nspname AS schema,
        c.relname AS relation,
@@ -1413,7 +1581,7 @@ SELECT n.nspname AS schema,
        pg_size_pretty(pg_relation_size(c.oid)) AS relation_size
 FROM pg_class c
 JOIN pg_namespace n ON c.relnamespace = n.oid
-WHERE c.relname LIKE '$pattern'
+WHERE c.relname LIKE '%' || '$sanitized_pattern' || '%'
   AND c.relkind IN ('r', 'i')
 ORDER BY pg_total_relation_size(c.oid) DESC;
 EOF
@@ -1425,6 +1593,10 @@ EOF
 
 cmd_version()
 {
+  colorize green "Tool Version: $TOOL_VERSION"
+  colorize blue "Build Date: $TOOL_BUILD_DATE"
+  echo ""
+  echo "PostgreSQL Server:"
   cat << 'EOF' | $PSQL_CMD
 SELECT version();
 EOF
@@ -1482,7 +1654,7 @@ cmd_repeat()
     # Set COMMAND and ARG to the repeat command's arguments
     COMMAND="$1"
     shift
-    ARG=""
+    ARG="$*"
 
     # Re-execute the main case statement
     case "$COMMAND" in
@@ -1782,31 +1954,35 @@ EOF
 cmd_index_usage()
 {
   cat << 'EOF' | $PSQL_CMD
-SELECT schemaname,
-       tablename,
-       indexrelname,
-       idx_scan,
-       idx_tup_read,
-       idx_tup_fetch,
+SELECT s.schemaname,
+       t.relname AS tablename,
+       s.indexrelname,
+       s.idx_scan,
+       s.idx_tup_read,
+       s.idx_tup_fetch,
        CASE
-         WHEN idx_scan = 0 THEN 'NEVER USED'
-         WHEN idx_scan < 10 THEN 'RARELY USED'
+         WHEN s.idx_scan = 0 THEN 'NEVER USED'
+         WHEN s.idx_scan < 10 THEN 'RARELY USED'
          ELSE 'USED'
        END AS usage_status
-FROM pg_stat_user_indexes
-ORDER BY idx_scan;
+FROM pg_stat_user_indexes s
+JOIN pg_class t ON s.relid = t.oid
+ORDER BY s.idx_scan;
 EOF
 }
 
 cmd_query_plan_stats()
 {
   local limit=${1:-$TOP_N}
-  cat << EOF | $PSQL_CMD
+  init_pg_stat_statements_columns
+  local total_col="${PGS_TOTAL_COL:-total_exec_time}"
+  local mean_col="${PGS_MEAN_COL:-mean_exec_time}"
+  execute_with_extension_check "pg_stat_statements" "$(cat << EOF
 SELECT queryid,
        LEFT(query, 100) AS query_preview,
        calls,
-       total_exec_time / 1000 / 1000 AS total_time_sec,
-       mean_exec_time / 1000 / 1000 AS mean_time_sec,
+       $(pgs_ms_to_sec_expr "$total_col") AS total_time_sec,
+       $(pgs_ms_to_sec_expr "$mean_col") AS mean_time_sec,
        rows,
        shared_blks_hit,
        shared_blks_read,
@@ -1816,9 +1992,10 @@ SELECT queryid,
        temp_blks_written
 FROM pg_stat_statements
 WHERE 1=1
-ORDER BY total_exec_time DESC
+ORDER BY ${total_col} DESC
 LIMIT $limit;
 EOF
+)" "pg_stat_statements extension is not installed."
 }
 
 cmd_io_stats()
@@ -1855,7 +2032,21 @@ EOF
 
 cmd_checkpoint_stats()
 {
-  cat << 'EOF' | $PSQL_CMD
+  if [ "${PG_MAJOR_VERSION:-0}" -ge 17 ]; then
+    cat << 'EOF' | $PSQL_CMD
+SELECT num_timed,
+       num_requested,
+       restartpoints_timed,
+       restartpoints_req,
+       restartpoints_done,
+       write_time,
+       sync_time,
+       buffers_written,
+       stats_reset
+FROM pg_stat_checkpointer;
+EOF
+  else
+    cat << 'EOF' | $PSQL_CMD
 SELECT checkpoints_timed,
        checkpoints_req,
        checkpoint_write_time,
@@ -1865,9 +2056,11 @@ SELECT checkpoints_timed,
        maxwritten_clean,
        buffers_backend,
        buffers_backend_fsync,
-       buffers_alloc
+       buffers_alloc,
+       stats_reset
 FROM pg_stat_bgwriter;
 EOF
+  fi
 }
 
 cmd_replication_lag()
@@ -1892,14 +2085,14 @@ cmd_function_usage()
   cat << EOF | $PSQL_CMD
 SELECT n.nspname AS schema,
        p.proname AS function_name,
-       pg_stat_user_functions.calls,
-       pg_stat_user_functions.total_time / 1000 / 1000 AS total_time_sec,
-       pg_stat_user_functions.mean_time / 1000 / 1000 AS mean_time_sec,
-       pg_stat_user_functions.self_time / 1000 / 1000 AS self_time_sec
-FROM pg_stat_user_functions
-JOIN pg_proc p ON pg_stat_user_functions.funcid = p.oid
+       f.calls,
+       f.total_time / 1000.0 AS total_time_sec,
+       (f.total_time / NULLIF(f.calls, 0)) / 1000.0 AS mean_time_sec,
+       f.self_time / 1000.0 AS self_time_sec
+FROM pg_stat_user_functions f
+JOIN pg_proc p ON f.funcid = p.oid
 JOIN pg_namespace n ON p.pronamespace = n.oid
-ORDER BY total_time DESC
+ORDER BY f.total_time DESC
 LIMIT $limit;
 EOF
 }
@@ -1912,8 +2105,8 @@ SELECT n.nspname AS schema,
        c.relname AS table_name,
        pg_size_pretty(pg_total_relation_size(c.oid)) AS total_size,
        pg_size_pretty(pg_relation_size(c.oid)) AS table_size,
-       pg_size_pretty(pg_indexes_size(c.oid)) AS indexes_size,
-       pg_size_pretty(pg_total_relation_size(c.oid) - pg_relation_size(c.oid) - pg_indexes_size(c.oid)) AS toast_size
+       pg_size_pretty(COALESCE(pg_indexes_size(c.oid), 0)) AS indexes_size,
+       pg_size_pretty(pg_total_relation_size(c.oid) - pg_relation_size(c.oid) - COALESCE(pg_indexes_size(c.oid), 0)) AS toast_size
 FROM pg_class c
 JOIN pg_namespace n ON c.relnamespace = n.oid
 WHERE c.relkind = 'r'
@@ -2057,8 +2250,14 @@ EOF
 
 cmd_table_statistics()
 {
-  local pattern=${1:-%}
-  cat << EOF | $PSQL_CMD
+  if ! parse_params "$@"; then
+    return 1
+  fi
+  local cmd=$(get_psql_for_db)
+  local schema_filter=$(build_schema_where_clause "t.")
+  local table_filter=$(build_table_where_clause "t.")
+  
+  cat << EOF | $cmd
 SELECT t.schemaname,
        t.tablename,
        pg_size_pretty(pg_total_relation_size(t.schemaname||'.'||t.tablename)) AS size,
@@ -2072,15 +2271,26 @@ SELECT t.schemaname,
        s.autovacuum_count
 FROM pg_tables t
 LEFT JOIN pg_stat_user_tables s ON t.schemaname = s.schemaname AND t.tablename = s.relname
-WHERE t.tablename LIKE '$pattern'
+WHERE t.schemaname NOT IN ('pg_catalog', 'information_schema')
+$schema_filter
+$table_filter
 ORDER BY pg_total_relation_size(t.schemaname||'.'||t.tablename) DESC;
 EOF
 }
 
 cmd_index_statistics()
 {
-  local pattern=${1:-%}
-  cat << EOF | $PSQL_CMD
+  if ! parse_params "$@"; then
+    return 1
+  fi
+  local cmd=$(get_psql_for_db)
+  local schema_filter=$(build_schema_where_clause "i.")
+  local table_filter=$(build_table_where_clause "i.")
+  local pattern="${PARAM_PATTERN:-%}"
+  # Sanitize pattern to prevent SQL injection
+  local sanitized_pattern=$(echo "$pattern" | sed "s/'/''/g")
+  
+  cat << EOF | $cmd
 SELECT i.schemaname,
        i.tablename,
        i.indexname,
@@ -2093,7 +2303,9 @@ SELECT i.schemaname,
 FROM pg_stat_user_indexes i
 LEFT JOIN pg_stat_user_indexes s ON i.indexrelid = s.indexrelid
 JOIN pg_index idx ON i.indexrelid = idx.indexrelid
-WHERE i.indexname LIKE '$pattern'
+WHERE i.indexname LIKE '%' || '$sanitized_pattern' || '%'
+$schema_filter
+$table_filter
 ORDER BY pg_relation_size(i.indexrelid) DESC;
 EOF
 }
@@ -2125,16 +2337,23 @@ EOF
 cmd_system_summary()
 {
   cat << 'EOF' | $PSQL_CMD
-SELECT '=== PostgreSQL Version ===' AS info UNION ALL
-SELECT version() UNION ALL
-SELECT '' UNION ALL
-SELECT '=== Connection Summary ===' UNION ALL
-SELECT 'Active: ' || count(*) FILTER (WHERE state = 'active') ||
-       ', Idle: ' || count(*) FILTER (WHERE state = 'idle') ||
-       ', Idle in Tx: ' || count(*) FILTER (WHERE state = 'idle in transaction')
-FROM pg_stat_activity UNION ALL
-SELECT '' UNION ALL
-SELECT '=== Database Sizes ===' UNION ALL
+SELECT '=== PostgreSQL Version ===' AS info
+UNION ALL
+SELECT version()
+UNION ALL
+SELECT ''
+UNION ALL
+SELECT '=== Connection Summary ==='
+UNION ALL
+SELECT 'Active: ' || count(*) FILTER (WHERE state = 'active')::text ||
+       ', Idle: ' || count(*) FILTER (WHERE state = 'idle')::text ||
+       ', Idle in Tx: ' || count(*) FILTER (WHERE state = 'idle in transaction')::text
+FROM pg_stat_activity
+UNION ALL
+SELECT ''
+UNION ALL
+SELECT '=== Database Sizes ==='
+UNION ALL
 SELECT datname || ': ' || pg_size_pretty(pg_database_size(datname))
 FROM pg_database
 ORDER BY pg_database_size(datname) DESC;
@@ -2144,18 +2363,13 @@ EOF
 cmd_top_queries_by_io()
 {
   local limit=${1:-$TOP_N}
-  cat << EOF | $PSQL_CMD
-DO \$\$
-BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'pg_stat_statements') THEN
-    RAISE NOTICE 'pg_stat_statements extension is not installed. Run: CREATE EXTENSION pg_stat_statements;';
-  END IF;
-END \$\$;
-
+  init_pg_stat_statements_columns
+  local total_col="${PGS_TOTAL_COL:-total_exec_time}"
+  execute_with_extension_check "pg_stat_statements" "$(cat << EOF
 SELECT queryid,
        LEFT(query, 100) AS query_preview,
        calls,
-       total_exec_time / 1000 / 1000 AS total_time_sec,
+       $(pgs_ms_to_sec_expr "$total_col") AS total_time_sec,
        shared_blks_read,
        local_blks_read,
        temp_blks_read,
@@ -2166,6 +2380,7 @@ WHERE shared_blks_read > 0 OR local_blks_read > 0 OR temp_blks_read > 0
 ORDER BY (shared_blks_read + local_blks_read + temp_blks_read) DESC
 LIMIT $limit;
 EOF
+)" "pg_stat_statements extension is not installed."
 }
 
 # ============================================
@@ -2213,7 +2428,7 @@ SELECT
     c.relname AS table,
     r.rolname AS role,
     c.relkind AS type,
-    ARRAY_AGG(privilege_type) AS privileges
+    ARRAY_AGG(privilege_type ORDER BY privilege_type) AS privileges
 FROM pg_class c
 JOIN pg_namespace n ON c.relnamespace = n.oid
 JOIN pg_roles r ON r.oid = c.relowner
@@ -2263,6 +2478,8 @@ EOF
 cmd_tables()
 {
   local pattern="${1:-%}"
+  # Sanitize pattern to prevent SQL injection
+  local sanitized_pattern=$(echo "$pattern" | sed "s/'/''/g")
   cat << EOF | $PSQL_CMD
 SELECT
     schemaname,
@@ -2273,7 +2490,7 @@ SELECT
     hasrules,
     hastriggers
 FROM pg_tables
-WHERE tablename LIKE '$pattern'
+WHERE tablename LIKE '%' || '$sanitized_pattern' || '%'
   AND schemaname NOT IN ('pg_catalog', 'information_schema')
 ORDER BY schemaname, tablename;
 EOF
@@ -2286,6 +2503,8 @@ cmd_columns()
     echo "Usage: $EXEC_NAME columns <table_name>"
     exit 1
   fi
+  # Sanitize table name to prevent SQL injection
+  local sanitized_table=$(echo "$table_name" | sed 's/[^a-zA-Z0-9_]/_/g')
   cat << EOF | $PSQL_CMD
 SELECT
     column_name,
@@ -2295,7 +2514,7 @@ SELECT
     column_default,
     ordinal_position
 FROM information_schema.columns
-WHERE table_name = '$table_name'
+WHERE table_name = '$sanitized_table'
   AND table_schema NOT IN ('pg_catalog', 'information_schema')
 ORDER BY ordinal_position;
 EOF
@@ -2348,6 +2567,8 @@ EOF
 cmd_triggers()
 {
   local pattern="${1:-%}"
+  # Sanitize pattern to prevent SQL injection
+  local sanitized_pattern=$(echo "$pattern" | sed "s/'/''/g")
   cat << EOF | $PSQL_CMD
 SELECT
     event_object_schema AS schema,
@@ -2359,7 +2580,7 @@ SELECT
     action_orientation,
     condition_timing
 FROM information_schema.triggers
-WHERE trigger_name LIKE '$pattern'
+WHERE trigger_name LIKE '%' || '$sanitized_pattern' || '%'
   AND event_object_schema NOT IN ('pg_catalog', 'information_schema')
 ORDER BY schema, table, trigger_name;
 EOF
@@ -2368,6 +2589,8 @@ EOF
 cmd_functions()
 {
   local pattern="${1:-%}"
+  # Sanitize pattern to prevent SQL injection
+  local sanitized_pattern=$(echo "$pattern" | sed "s/'/''/g")
   cat << EOF | $PSQL_CMD
 SELECT
     n.nspname AS schema,
@@ -2378,7 +2601,7 @@ SELECT
     p.prokind AS type
 FROM pg_proc p
 JOIN pg_namespace n ON p.pronamespace = n.oid
-WHERE p.proname LIKE '$pattern'
+WHERE p.proname LIKE '%' || '$sanitized_pattern' || '%'
   AND n.nspname NOT IN ('pg_catalog', 'information_schema')
 ORDER BY n.nspname, p.proname;
 EOF
@@ -2387,6 +2610,8 @@ EOF
 cmd_procedures()
 {
   local pattern="${1:-%}"
+  # Sanitize pattern to prevent SQL injection
+  local sanitized_pattern=$(echo "$pattern" | sed "s/'/''/g")
   cat << EOF | $PSQL_CMD
 SELECT
     n.nspname AS schema,
@@ -2395,7 +2620,7 @@ SELECT
     pg_get_functiondef(p.oid) AS definition
 FROM pg_proc p
 JOIN pg_namespace n ON p.pronamespace = n.oid
-WHERE p.proname LIKE '$pattern'
+WHERE p.proname LIKE '%' || '$sanitized_pattern' || '%'
   AND n.nspname NOT IN ('pg_catalog', 'information_schema')
   AND p.prokind = 'p'
 ORDER BY n.nspname, p.proname;
@@ -2405,6 +2630,8 @@ EOF
 cmd_views()
 {
   local pattern="${1:-%}"
+  # Sanitize pattern to prevent SQL injection
+  local sanitized_pattern=$(echo "$pattern" | sed "s/'/''/g")
   cat << EOF | $PSQL_CMD
 SELECT
     schemaname,
@@ -2412,7 +2639,7 @@ SELECT
     viewowner,
     definition
 FROM pg_views
-WHERE viewname LIKE '$pattern'
+WHERE viewname LIKE '%' || '$sanitized_pattern' || '%'
   AND schemaname NOT IN ('pg_catalog', 'information_schema')
 ORDER BY schemaname, viewname;
 EOF
@@ -2533,6 +2760,186 @@ EOF
 }
 
 # ============================================
+# UNIFIED QUERY HELPERS
+# ============================================
+
+# Generic query executor with extension check
+execute_with_extension_check()
+{
+  local extension_name="$1"
+  local query="$2"
+  local error_msg="$3"
+  
+  if [ -n "$extension_name" ]; then
+    local extension_check=$(echo "SELECT 1 FROM pg_extension WHERE extname = '$extension_name';" | $PSQL_CMD -t -A 2>/dev/null)
+    if [ -z "$extension_check" ]; then
+      if [ -n "$error_msg" ]; then
+        echo "$error_msg"
+      else
+        echo "Error: $extension_name extension is not installed."
+        echo "Run: CREATE EXTENSION $extension_name;"
+      fi
+      return 1
+    fi
+    if [ "$extension_name" = "pg_stat_statements" ]; then
+      init_pg_stat_statements_columns
+    fi
+  fi
+  
+  echo "$query" | $PSQL_CMD
+}
+
+# Unified pg_stat_* functions query
+get_stat_table()
+{
+  local stat_type="$1"
+  local schema_filter="$2"
+  local limit="$3"
+  local extra_where="$4"
+  
+  case "$stat_type" in
+    "user_tables")
+      cat << EOF
+SELECT schemaname,
+       relname,
+       seq_scan,
+       seq_tup_read,
+       idx_scan,
+       idx_tup_fetch,
+       n_tup_ins,
+       n_tup_upd,
+       n_tup_del,
+       n_tup_hot_upd,
+       n_live_tup,
+       n_dead_tup,
+       last_vacuum,
+       last_autovacuum,
+       last_analyze,
+       last_autoanalyze,
+       vacuum_count,
+       autovacuum_count,
+       analyze_count,
+       autoanalyze_count
+FROM pg_stat_user_tables
+WHERE 1=1 $schema_filter $extra_where
+ORDER BY seq_scan DESC
+LIMIT $limit;
+EOF
+      ;;
+    "user_indexes")
+      cat << EOF
+SELECT schemaname,
+       relname,
+       indexrelname,
+       idx_scan,
+       idx_tup_read,
+       idx_tup_fetch,
+       idx_tup_fetch / NULLIF(idx_scan, 0) AS tups_per_scan
+FROM pg_stat_user_indexes
+WHERE idx_scan > 0 $schema_filter $extra_where
+ORDER BY idx_scan DESC
+LIMIT $limit;
+EOF
+      ;;
+    "user_functions")
+      cat << EOF
+SELECT schemaname,
+       funcname,
+       calls,
+       total_time / 1000.0 AS total_time_sec,
+       (total_time / NULLIF(calls, 0)) / 1000.0 AS mean_time_sec,
+       self_time / 1000.0 AS self_time_sec
+FROM pg_stat_user_functions
+WHERE 1=1 $schema_filter $extra_where
+ORDER BY calls DESC
+LIMIT $limit;
+EOF
+      ;;
+  esac
+}
+
+# Unified pg_stat_statements query
+get_stat_statements_query()
+{
+  local order_by="$1"
+  local limit="$2"
+  local extra_select="$3"
+  local extra_where="$4"
+  
+  if [ -z "$PGS_TOTAL_COL" ] || [ -z "$PGS_MEAN_COL" ] || [ -z "$PGS_MAX_COL" ]; then
+    init_pg_stat_statements_columns
+  fi
+  local total_col="${PGS_TOTAL_COL:-total_exec_time}"
+  local mean_col="${PGS_MEAN_COL:-mean_exec_time}"
+  local max_col="${PGS_MAX_COL:-max_exec_time}"
+  local order_by_col="$order_by"
+  if [ "$order_by" = "total_exec_time" ] || [ "$order_by" = "total_time" ]; then
+    order_by_col="$total_col"
+  fi
+
+  cat << EOF
+SELECT 
+       LEFT(query, 100) AS query_preview,
+       calls,
+       $(pgs_ms_to_sec_expr "$total_col") AS total_time_sec,
+       $(pgs_ms_to_sec_expr "$mean_col") AS mean_time_sec,
+       $(pgs_ms_to_sec_expr "$max_col") AS max_time_sec,
+       rows $extra_select
+FROM pg_stat_statements
+WHERE 1=1 $extra_where
+ORDER BY $order_by_col DESC
+LIMIT $limit;
+EOF
+}
+
+# Unified size query helper
+get_size_query()
+{
+  local object_type="$1"
+  local pattern="$2"
+  local schema_filter="$3"
+  local limit="$4"
+  
+  case "$object_type" in
+    "table")
+      local limit_clause=""
+      if [ -n "$limit" ]; then
+        limit_clause="LIMIT $limit"
+      fi
+      cat << EOF
+SELECT t.schemaname,
+       t.tablename,
+       pg_size_pretty(pg_total_relation_size(t.schemaname||'.'||t.tablename)) AS total_size,
+       pg_size_pretty(pg_relation_size(t.schemaname||'.'||t.tablename)) AS table_size,
+       pg_size_pretty(COALESCE(pg_indexes_size(t.schemaname||'.'||t.tablename), 0)) AS indexes_size
+FROM pg_tables t
+WHERE t.schemaname NOT IN ('pg_catalog', 'information_schema') $schema_filter
+ORDER BY pg_total_relation_size(t.schemaname||'.'||t.tablename) DESC
+$limit_clause;
+EOF
+      ;;
+    "database")
+      cat << EOF
+SELECT datname,
+       pg_size_pretty(pg_database_size(datname)) AS size,
+       pg_database_size(datname) AS size_bytes
+FROM pg_database
+ORDER BY pg_database_size(datname) DESC;
+EOF
+      ;;
+    "tablespace")
+      cat << EOF
+SELECT spcname,
+       pg_size_pretty(pg_tablespace_size(spcname)) AS size,
+       pg_tablespace_size(spcname) AS size_bytes
+FROM pg_tablespace
+ORDER BY pg_tablespace_size(spcname) DESC;
+EOF
+      ;;
+  esac
+}
+
+# ============================================
 # UTILITY
 # ============================================
 
@@ -2647,20 +3054,26 @@ cmd_index_rebuild_recommendations()
 {
   cat << 'EOF' | $PSQL_CMD
 SELECT
-    schemaname,
-    tablename,
-    indexname,
-    idx_scan,
-    pg_size_pretty(pg_relation_size(indexrelid)) AS index_size,
+    s.schemaname,
+    t.relname AS tablename,
+    s.indexrelname,
+    s.idx_scan,
+    pg_size_pretty(pg_relation_size(s.indexrelid)) AS index_size,
+    pg_size_pretty(pg_total_relation_size(c.oid)) AS table_size,
+    i.indisunique AS is_unique,
+    i.indisprimary AS is_primary,
     CASE
-      WHEN idx_scan = 0 THEN 'DROP - Never used'
-      WHEN idx_scan < 10 THEN 'REVIEW - Rarely used'
-      WHEN idx_scan > 10000 THEN 'GOOD - Frequently used'
-      ELSE 'OK'
+      WHEN s.idx_scan = 0 AND NOT i.indisprimary AND NOT i.indisunique THEN 'DROP - Never used'
+      WHEN s.idx_scan < 10 AND NOT i.indisprimary THEN 'REVIEW - Rarely used'
+      WHEN s.idx_scan > 10000 THEN 'GOOD - Frequently used'
+      ELSE 'MONITOR'
     END AS recommendation
-FROM pg_stat_user_indexes
-WHERE indisunique = false
-ORDER BY idx_scan ASC
+FROM pg_stat_user_indexes s
+JOIN pg_class t ON s.relid = t.oid
+JOIN pg_class c ON s.relid = c.oid
+JOIN pg_index i ON s.indexrelid = i.indexrelid
+WHERE NOT i.indisprimary
+ORDER BY s.idx_scan ASC
 LIMIT 30;
 EOF
 }
@@ -2887,72 +3300,111 @@ cmd_restore_database()
 
 cmd_table_row_count()
 {
-  local table_name=$1
-  if [ -z "$table_name" ]; then
-    echo "Usage: $EXEC_NAME rowcount <table_name>"
+  if ! parse_params "$@"; then
+    return 1
+  fi
+  if [ -z "$PARAM_TABLE" ] && [ -z "$PARAM_PATTERN" ]; then
+    echo "Usage: $EXEC_NAME rowcount <table_name> | rowcount -s schema -t table"
     exit 1
   fi
-  cat << EOF | $PSQL_CMD
-SELECT '$table_name' AS table_name,
+  
+  local table_ref
+  if [ -n "$PARAM_SCHEMA" ] && [ -n "$PARAM_TABLE" ]; then
+    # Sanitize schema and table names
+    local sanitized_schema=$(echo "$PARAM_SCHEMA" | sed 's/[^a-zA-Z0-9_]/_/g')
+    local sanitized_table=$(echo "$PARAM_TABLE" | sed 's/[^a-zA-Z0-9_]/_/g')
+    table_ref="\"$sanitized_schema\".\"$sanitized_table\""
+  elif [ -n "$PARAM_TABLE" ]; then
+    local sanitized_table=$(echo "$PARAM_TABLE" | sed 's/[^a-zA-Z0-9_]/_/g')
+    table_ref="$sanitized_table"
+  else
+    local sanitized_pattern=$(echo "$PARAM_PATTERN" | sed 's/[^a-zA-Z0-9_]/_/g')
+    table_ref="$sanitized_pattern"
+  fi
+  
+  local cmd=$(get_psql_for_db)
+  cat << EOF | $cmd
+SELECT '$table_ref' AS table_name,
        count(*) AS row_count,
-       pg_size_pretty(pg_total_relation_size('$table_name')) AS table_size,
-       pg_size_pretty(pg_relation_size('$table_name')) AS data_size
-FROM $table_name;
+       pg_size_pretty(pg_total_relation_size('$table_ref')) AS table_size,
+       pg_size_pretty(pg_relation_size('$table_ref')) AS data_size
+FROM $table_ref;
 EOF
 }
 
 cmd_all_table_row_counts()
 {
-  cat << 'EOF' | $PSQL_CMD
+  if ! parse_params "$@"; then
+    return 1
+  fi
+  local cmd=$(get_psql_for_db)
+  local schema_filter=$(build_schema_where_clause "t.")
+  
+  cat << EOF | $cmd
 SELECT
-    schemaname,
-    tablename,
-    pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS total_size,
-    n_live_tup AS estimated_rows
-FROM pg_stat_user_tables
-WHERE schemaname NOT IN ('pg_catalog', 'information_schema')
-ORDER BY n_live_tup DESC;
+    t.schemaname,
+    t.tablename,
+    pg_size_pretty(pg_total_relation_size(t.schemaname||'.'||t.tablename)) AS total_size,
+    t.n_live_tup AS estimated_rows
+FROM pg_stat_user_tables t
+WHERE t.schemaname NOT IN ('pg_catalog', 'information_schema')
+$schema_filter
+ORDER BY t.n_live_tup DESC;
 EOF
 }
 
 cmd_largest_tables()
 {
-  local limit=${1:-$TOP_N}
-  cat << EOF | $PSQL_CMD
+  if ! parse_params "$@"; then
+    return 1
+  fi
+  local cmd=$(get_psql_for_db)
+  local limit=${PARAM_PATTERN:-$TOP_N}
+  local schema_filter=$(build_schema_where_clause "t.")
+  
+  cat << EOF | $cmd
 SELECT
-    schemaname,
-    tablename,
-    pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS total_size,
-    pg_size_pretty(pg_relation_size(schemaname||'.'||tablename)) AS table_size,
-    pg_size_pretty(pg_indexes_size(schemaname||'.'||tablename)) AS indexes_size,
-    n_live_tup AS rows
-FROM pg_stat_user_tables
-WHERE schemaname NOT IN ('pg_catalog', 'information_schema')
-ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC
+    t.schemaname,
+    t.tablename,
+    pg_size_pretty(pg_total_relation_size(t.schemaname||'.'||t.tablename)) AS total_size,
+    pg_size_pretty(pg_relation_size(t.schemaname||'.'||t.tablename)) AS table_size,
+    pg_size_pretty(COALESCE(pg_indexes_size(t.schemaname||'.'||t.tablename), 0)) AS indexes_size,
+    t.n_live_tup AS rows
+FROM pg_stat_user_tables t
+WHERE t.schemaname NOT IN ('pg_catalog', 'information_schema')
+$schema_filter
+ORDER BY pg_total_relation_size(t.schemaname||'.'||t.tablename) DESC
 LIMIT $limit;
 EOF
 }
 
 cmd_table_growth_report()
 {
-  cat << 'EOF' | $PSQL_CMD
+  if ! parse_params "$@"; then
+    return 1
+  fi
+  local cmd=$(get_psql_for_db)
+  local schema_filter=$(build_schema_where_clause "t.")
+  
+  cat << EOF | $cmd
 SELECT
-    schemaname,
-    tablename,
-    n_live_tup AS live_rows,
-    n_dead_tup AS dead_rows,
-    n_tup_ins AS inserts,
-    n_tup_upd AS updates,
-    n_tup_del AS deletes,
-    round(n_dead_tup::numeric / NULLIF(n_live_tup, 0) * 100, 2) AS dead_pct,
+    t.schemaname,
+    t.tablename,
+    t.n_live_tup AS live_rows,
+    t.n_dead_tup AS dead_rows,
+    t.n_tup_ins AS inserts,
+    t.n_tup_upd AS updates,
+    t.n_tup_del AS deletes,
+    round(t.n_dead_tup::numeric / NULLIF(t.n_live_tup, 0) * 100, 2) AS dead_pct,
     CASE
-      WHEN n_tup_ins = 0 THEN 'No changes'
-      WHEN (n_tup_upd + n_tup_del)::float / n_tup_ins > 0.5 THEN 'High modification rate'
-      WHEN (n_tup_upd + n_tup_del)::float / n_tup_ins > 0.2 THEN 'Medium modification rate'
+      WHEN t.n_tup_ins = 0 THEN 'No changes'
+      WHEN (t.n_tup_upd + t.n_tup_del)::float / t.n_tup_ins > 0.5 THEN 'High modification rate'
+      WHEN (t.n_tup_upd + t.n_tup_del)::float / t.n_tup_ins > 0.2 THEN 'Medium modification rate'
       ELSE 'Low modification rate'
     END AS activity_level
-FROM pg_stat_user_tables
-WHERE schemaname NOT IN ('pg_catalog', 'information_schema')
+FROM pg_stat_user_tables t
+WHERE t.schemaname NOT IN ('pg_catalog', 'information_schema')
+$schema_filter
   AND n_tup_ins > 0
 ORDER BY (n_tup_upd + n_tup_del)::float / NULLIF(n_tup_ins, 0) DESC
 LIMIT 20;
@@ -2977,7 +3429,7 @@ EOF
 
   # Connection check
   cat << 'EOF' | $PSQL_CMD -t
-SELECT 'Active Connections:' AS check, count(*) FILTER (WHERE state = 'active') AS status
+SELECT 'Active Connections:' AS check, count(*) FILTER (WHERE state = 'active')::text AS status
 FROM pg_stat_activity
 UNION ALL
 SELECT 'Max Connections:' AS check, setting AS status
@@ -3059,16 +3511,19 @@ EOF
 
 cmd_query_performance_summary()
 {
-  cat << 'EOF' | $PSQL_CMD
+  init_pg_stat_statements_columns
+  local total_col="${PGS_TOTAL_COL:-total_exec_time}"
+  local mean_col="${PGS_MEAN_COL:-mean_exec_time}"
+  execute_with_extension_check "pg_stat_statements" "$(cat << EOF
 SELECT '=== Query Performance Summary (pg_stat_statements) ===' AS section
 UNION ALL
 SELECT 'Total queries recorded: ' || count(*) AS status
 FROM pg_stat_statements
 UNION ALL
-SELECT 'Total execution time (sec): ' || round(sum(total_exec_time) / 1000 / 1000, 2) AS status
+SELECT 'Total execution time (sec): ' || round(sum(${total_col}) / 1000, 2) AS status
 FROM pg_stat_statements
 UNION ALL
-SELECT 'Average execution time (ms): ' || round(avg(mean_exec_time) / 1000, 2) AS status
+SELECT 'Average execution time (ms): ' || round(avg(${mean_col}), 2) AS status
 FROM pg_stat_statements
 UNION ALL
 SELECT 'Total rows processed: ' || sum(rows) AS status
@@ -3077,6 +3532,7 @@ UNION ALL
 SELECT 'Cache hit ratio: ' || round(sum(shared_blks_hit)::numeric / NULLIF(sum(shared_blks_hit) + sum(shared_blks_read), 0) * 100, 2) || '%' AS status
 FROM pg_stat_statements;
 EOF
+)" "pg_stat_statements extension is not installed."
 }
 
 # ============================================
@@ -3087,29 +3543,31 @@ cmd_index_usage_summary()
 {
   cat << 'EOF' | $PSQL_CMD
 SELECT
-    schemaname,
-    tablename,
-    indexname,
-    idx_scan AS index_scans,
-    idx_tup_read AS tuples_read,
-    idx_tup_fetch AS tuples_fetched,
-    pg_size_pretty(pg_relation_size(indexrelid)) AS index_size,
+    s.schemaname,
+    t.relname AS tablename,
+    s.indexrelname,
+    s.idx_scan AS index_scans,
+    s.idx_tup_read AS tuples_read,
+    s.idx_tup_fetch AS tuples_fetched,
+    pg_size_pretty(pg_relation_size(s.indexrelid)) AS index_size,
     CASE
-      WHEN idx_scan = 0 THEN 'UNUSED'
-      WHEN idx_scan < 10 THEN 'RARELY'
-      WHEN idx_scan < 100 THEN 'LOW'
-      WHEN idx_scan < 1000 THEN 'MEDIUM'
+      WHEN s.idx_scan = 0 THEN 'UNUSED'
+      WHEN s.idx_scan < 10 THEN 'RARELY'
+      WHEN s.idx_scan < 100 THEN 'LOW'
+      WHEN s.idx_scan < 1000 THEN 'MEDIUM'
       ELSE 'HIGH'
     END AS usage_level,
     CASE
-      WHEN idx_scan = 0 THEN 'Consider dropping'
-      WHEN idx_scan < 10 THEN 'Review necessity'
-      WHEN idx_scan < 100 THEN 'Monitor usage'
+      WHEN s.idx_scan = 0 THEN 'Consider dropping'
+      WHEN s.idx_scan < 10 THEN 'Review necessity'
+      WHEN s.idx_scan < 100 THEN 'Monitor usage'
       ELSE 'OK'
     END AS recommendation
-FROM pg_stat_user_indexes
-WHERE schemaname NOT IN ('pg_catalog', 'information_schema')
-ORDER BY idx_scan ASC NULLS LAST;
+FROM pg_stat_user_indexes s
+JOIN pg_class t ON s.relid = t.oid
+JOIN pg_namespace n ON t.relnamespace = n.oid
+WHERE n.nspname NOT IN ('pg_catalog', 'information_schema')
+ORDER BY s.idx_scan ASC NULLS LAST;
 EOF
 }
 
@@ -3117,28 +3575,29 @@ cmd_missing_indexes_detailed()
 {
   cat << 'EOF' | $PSQL_CMD
 SELECT
-    schemaname,
-    tablename,
-    attname AS column,
-    n_distinct AS distinct_values,
-    n_live_tup AS total_rows,
-    round(n_distinct::numeric / n_live_tup * 100, 2) AS cardinality_pct,
+    s.schemaname,
+    s.tablename,
+    s.attname AS column,
+    s.n_distinct AS distinct_values,
+    t.n_live_tup AS total_rows,
+    round(s.n_distinct::numeric / t.n_live_tup * 100, 2) AS cardinality_pct,
     CASE
-      WHEN n_distinct > 100 AND n_distinct::float / n_live_tup < 0.1 THEN 'HIGH - Likely benefit from index'
-      WHEN n_distinct > 10 AND n_distinct::float / n_live_tup < 0.3 THEN 'MEDIUM - May benefit from index'
-      WHEN n_distinct > 1 AND n_distinct::float / n_live_tup < 0.5 THEN 'LOW - Consider index'
+      WHEN s.n_distinct > 100 AND s.n_distinct::float / t.n_live_tup < 0.1 THEN 'HIGH - Likely benefit from index'
+      WHEN s.n_distinct > 10 AND s.n_distinct::float / t.n_live_tup < 0.3 THEN 'MEDIUM - May benefit from index'
+      WHEN s.n_distinct > 1 AND s.n_distinct::float / t.n_live_tup < 0.5 THEN 'LOW - Consider index'
       ELSE 'N/A'
     END AS recommendation
 FROM pg_stats s
 JOIN pg_stat_user_tables t ON s.schemaname = t.schemaname AND s.tablename = t.relname
 WHERE s.n_distinct > 1
   AND s.n_distinct::float / t.n_live_tup < 0.5
+  AND t.n_live_tup > 0
   AND NOT EXISTS (
     SELECT 1 FROM pg_indexes i
     WHERE i.schemaname = s.schemaname
       AND i.tablename = s.tablename
   )
-ORDER BY (n_distinct::float / t.n_live_tup) ASC
+ORDER BY (s.n_distinct::float / t.n_live_tup) ASC
 LIMIT 30;
 EOF
 }
@@ -3154,23 +3613,23 @@ SELECT
     '=== Session Summary ===' AS info
 UNION ALL
 SELECT
-    'Total Sessions: ' || count(*) AS info
+    'Total Sessions: ' || count(*)::text
 FROM pg_stat_activity
 UNION ALL
 SELECT
-    'Active: ' || count(*) FILTER (WHERE state = 'active') AS info
+    'Active: ' || count(*) FILTER (WHERE state = 'active')::text
 FROM pg_stat_activity
 UNION ALL
 SELECT
-    'Idle: ' || count(*) FILTER (WHERE state = 'idle') AS info
+    'Idle: ' || count(*) FILTER (WHERE state = 'idle')::text
 FROM pg_stat_activity
 UNION ALL
 SELECT
-    'Idle in Transaction: ' || count(*) FILTER (WHERE state = 'idle in transaction') AS info
+    'Idle in Transaction: ' || count(*) FILTER (WHERE state = 'idle in transaction')::text
 FROM pg_stat_activity
 UNION ALL
 SELECT
-    'Waiting for Lock: ' || count(*) FILTER (WHERE wait_event_type IN ('Lock', 'LWLock')) AS info
+    'Waiting for Lock: ' || count(*) FILTER (WHERE wait_event_type IN ('Lock', 'LWLock'))::text
 FROM pg_stat_activity;
 EOF
 }
@@ -3211,22 +3670,25 @@ SELECT
     '=== Lock Summary ===' AS info
 UNION ALL
 SELECT
-    'Total Locks: ' || count(*) AS info
+    'Total Locks: ' || count(*)::text AS info
 FROM pg_locks
 UNION ALL
 SELECT
-    'Granted Locks: ' || count(*) FILTER (WHERE granted = true) AS info
+    'Granted Locks: ' || count(*) FILTER (WHERE granted = true)::text AS info
 FROM pg_locks
 UNION ALL
 SELECT
-    'Waiting Locks: ' || count(*) FILTER (WHERE granted = false) AS info
+    'Waiting Locks: ' || count(*) FILTER (WHERE granted = false)::text AS info
 FROM pg_locks
 UNION ALL
 SELECT
-    'Lock Types:' AS info
+    'Lock Types by Count:' AS info
+UNION ALL
+SELECT
+    locktype || ': ' || count(*)::text
 FROM pg_locks
 GROUP BY locktype
-ORDER BY count(*) DESC;
+ORDER BY 1;
 EOF
 }
 
@@ -3297,6 +3759,8 @@ EOF
 cmd_function_dependencies()
 {
   local func_name=${1:-%}
+  # Sanitize function name to prevent SQL injection
+  local sanitized_func=$(echo "$func_name" | sed "s/'/''/g")
   cat << EOF | $PSQL_CMD
 SELECT
     n1.nspname AS schema,
@@ -3310,7 +3774,7 @@ JOIN pg_depend d ON d.objid = p1.oid
 JOIN pg_proc p2 ON d.refobjid = p2.oid
 JOIN pg_namespace n2 ON p2.pronamespace = n2.oid
 WHERE d.deptype = 'n'
-  AND p1.proname LIKE '$func_name'
+  AND p1.proname LIKE '$sanitized_func'
   AND n1.nspname NOT IN ('pg_catalog', 'information_schema')
 ORDER BY n1.nspname, p1.proname;
 EOF
@@ -3322,9 +3786,9 @@ cmd_constraint_info()
 SELECT
     n.nspname AS schema,
     c.relname AS table,
-    contype AS constraint_type,
-    conname AS constraint_name,
-    CASE c.contype
+    con.contype AS constraint_type,
+    con.conname AS constraint_name,
+    CASE con.contype
       WHEN 'c' THEN 'CHECK'
       WHEN 'f' THEN 'FOREIGN KEY'
       WHEN 'p' THEN 'PRIMARY KEY'
@@ -3332,11 +3796,11 @@ SELECT
       WHEN 'x' THEN 'EXCLUSION'
       ELSE 'OTHER'
     END AS constraint_type_name
-FROM pg_constraint c
-JOIN pg_class t ON c.conrelid = t.oid
-JOIN pg_namespace n ON t.relnamespace = n.oid
+FROM pg_constraint con
+JOIN pg_class c ON con.conrelid = c.oid
+JOIN pg_namespace n ON c.relnamespace = n.oid
 WHERE n.nspname NOT IN ('pg_catalog', 'information_schema')
-ORDER BY n.nspname, c.relname, c.contype;
+ORDER BY n.nspname, c.relname, con.contype;
 EOF
 }
 
@@ -3420,9 +3884,227 @@ WHERE NOT pg_is_in_recovery();
 EOF
 }
 
-cmd_checkpoint_history()
+# ============================================
+# ENHANCED DIAGNOSTIC COMMANDS (DBA-Grade)
+# ============================================
+
+cmd_cache_warmup_status()
 {
   cat << 'EOF' | $PSQL_CMD
+WITH startup_info AS (
+  SELECT
+    pg_postmaster_start_time() AS start_time,
+    NOW() AS current_time,
+    EXTRACT(EPOCH FROM (NOW() - pg_postmaster_start_time())) AS uptime_sec
+)
+SELECT
+  '=== PostgreSQL Cache Warmup Status ===' AS info
+UNION ALL
+SELECT 
+  'Startup Time: ' || TO_CHAR(start_time, 'YYYY-MM-DD HH24:MI:SS') AS info
+FROM startup_info
+UNION ALL
+SELECT
+  'Uptime: ' || ROUND(uptime_sec / 3600, 1) || ' hours' AS info
+FROM startup_info
+UNION ALL
+SELECT
+  CASE
+    WHEN uptime_sec < 3600 THEN 'CRITICAL: Less than 1 hour - Statistics UNRELIABLE'
+    WHEN uptime_sec < 86400 THEN 'WARNING: Less than 24 hours - Statistics MARGINAL'
+    WHEN uptime_sec < 604800 THEN 'CAUTION: Less than 7 days - Statistics REASONABLE'
+    ELSE 'GOOD: More than 7 days - Statistics RELIABLE'
+  END AS info
+FROM startup_info
+UNION ALL
+SELECT ''
+UNION ALL
+SELECT 'Implication for Index Recommendations:'
+UNION ALL
+SELECT
+  CASE
+    WHEN uptime_sec < 3600 THEN '  → idx_scan=0 may be unreliable (NOT safe to drop yet)'
+    WHEN uptime_sec < 86400 THEN '  → idx_scan=0 needs further confirmation (risky to drop)'
+    WHEN uptime_sec < 604800 THEN '  → idx_scan=0 is reasonably reliable (okay to monitor)'
+    ELSE '  → idx_scan=0 is highly reliable (safe to consider dropping)'
+  END AS info
+FROM startup_info;
+EOF
+}
+
+cmd_key_metrics()
+{
+  echo ""
+  echo "╔════════════════════════════════════════════════════════════╗"
+  echo "║  PostgreSQL Key Metrics ($(date '+%Y-%m-%d %H:%M:%S'))           ║"
+  echo "╚════════════════════════════════════════════════════════════╝"
+  echo ""
+  
+  cat << 'EOF' | $PSQL_CMD
+-- Storage Metrics
+SELECT 'STORAGE' as section
+UNION ALL
+SELECT '  Database Size: ' || pg_size_pretty(sum_size) 
+FROM (SELECT SUM(pg_database_size(datname)) as sum_size 
+      FROM pg_database 
+      WHERE datname NOT IN ('template0', 'template1')) x
+UNION ALL
+SELECT '  Tables: ' || (SELECT COUNT(*) FROM pg_tables WHERE schemaname NOT IN ('pg_catalog', 'information_schema'))::text
+UNION ALL
+SELECT '  Indexes: ' || (SELECT COUNT(*) FROM pg_indexes WHERE schemaname NOT IN ('pg_catalog', 'information_schema'))::text
+UNION ALL
+SELECT ''
+UNION ALL
+SELECT 'PERFORMANCE'
+UNION ALL
+SELECT 
+  '  Cache Hit Ratio: ' || 
+  ROUND(100.0 * cache_ratio, 2)::text || 
+  '%' ||
+  CASE 
+    WHEN ROUND(100.0 * cache_ratio, 2) > 99 THEN ' EXCELLENT'
+    WHEN ROUND(100.0 * cache_ratio, 2) > 95 THEN ' GOOD'
+    WHEN ROUND(100.0 * cache_ratio, 2) > 90 THEN ' FAIR'
+    ELSE ' POOR'
+  END
+FROM (SELECT sum(heap_blks_hit)::float / NULLIF(sum(heap_blks_hit) + sum(heap_blks_read), 0) as cache_ratio
+      FROM pg_statio_user_tables) x
+UNION ALL
+SELECT '  Unused Indexes: ' || COUNT(*)::text
+FROM pg_stat_user_indexes
+WHERE idx_scan = 0
+UNION ALL
+SELECT '  Slow Tables (seq_scan>1000): ' || COUNT(*)::text
+FROM pg_stat_user_tables
+WHERE seq_scan > 1000
+UNION ALL
+SELECT ''
+UNION ALL
+SELECT 'REPLICATION'
+UNION ALL
+SELECT 
+  CASE 
+    WHEN NOT pg_is_in_recovery() THEN '  Role: PRIMARY'
+    ELSE '  Role: STANDBY'
+  END
+UNION ALL
+SELECT '  Connected Replicas: ' || COUNT(*)::text
+FROM pg_stat_replication
+UNION ALL
+SELECT ''
+UNION ALL
+SELECT 'MAINTENANCE'
+UNION ALL
+SELECT '  Tables with High Dead Tuples (>20%): ' || 
+  dead_count::text ||
+  CASE WHEN dead_count > 0 THEN ' HIGH' ELSE ' OK' END
+FROM (SELECT COUNT(*) as dead_count
+      FROM pg_stat_user_tables
+      WHERE n_dead_tup::float / NULLIF(n_live_tup + n_dead_tup, 0) > 0.2) x
+UNION ALL
+SELECT '  Avg Dead Tuple Ratio: ' || 
+  ROUND(dead_ratio * 100, 2)::text || '%'
+FROM (SELECT AVG(n_dead_tup::float / NULLIF(n_live_tup + n_dead_tup, 0)) as dead_ratio
+      FROM pg_stat_user_tables
+      WHERE n_live_tup + n_dead_tup > 0) x;
+EOF
+}
+
+cmd_system_health_score()
+{
+  echo ""
+  echo "╔════════════════════════════════════════════════════════════╗"
+  echo "║  PostgreSQL Health Score Card                           ║"
+  echo "╚════════════════════════════════════════════════════════════╝"
+  echo ""
+  
+  cat << 'EOF' | $PSQL_CMD
+SELECT '═══════════════════════════════════════════' as health_info
+UNION ALL
+SELECT 'PostgreSQL Health Score: (Simplified Check)' 
+UNION ALL
+SELECT '═══════════════════════════════════════════'
+UNION ALL
+SELECT '  Cache Efficiency: ' || 
+  CASE 
+    WHEN ratio > 0.99 THEN '20/20 (Excellent)'
+    WHEN ratio > 0.95 THEN '15/20 (Good)'
+    WHEN ratio > 0.90 THEN '10/20 (Fair)'
+    ELSE '5/20 (Poor)'
+  END
+FROM (SELECT SUM(heap_blks_hit)::float / NULLIF(SUM(heap_blks_hit) + SUM(heap_blks_read), 0) as ratio
+      FROM pg_statio_user_tables) x
+UNION ALL
+SELECT '  Index Health: ' || unused_count::text || ' unused indexes'
+FROM (SELECT COUNT(*) as unused_count FROM pg_stat_user_indexes WHERE idx_scan = 0) x
+UNION ALL
+SELECT '  Table Maintenance: ' || bloat_count::text || ' tables with high dead tuples'
+FROM (SELECT COUNT(*) as bloat_count 
+      FROM pg_stat_user_tables 
+      WHERE n_dead_tup::float / NULLIF(n_live_tup + n_dead_tup, 0) > 0.20) x
+UNION ALL
+SELECT ''
+UNION ALL
+SELECT 'Status: Database is running. Full health check requires pg_stat_statements.';
+EOF
+}
+
+cmd_smart_index_recommendations()
+{
+  cat << 'EOF' | $PSQL_CMD
+SELECT
+    s.schemaname,
+    t.relname AS tablename,
+    s.indexrelname,
+    s.idx_scan,
+    st.n_tup_ins + st.n_tup_upd + st.n_tup_del AS mutation_count,
+    pg_size_pretty(pg_relation_size(s.indexrelid)) AS index_size,
+    -- Smart scoring logic
+    CASE
+      WHEN s.idx_scan > 100 THEN 'KEEP - Frequently used'
+      WHEN s.idx_scan = 0 AND (st.n_tup_ins + st.n_tup_upd + st.n_tup_del) > 10000 
+        THEN 'RISKY - High maintenance cost'
+      WHEN s.idx_scan = 0 AND (st.n_tup_ins + st.n_tup_upd + st.n_tup_del) < 100 
+        AND st.last_vacuum IS NOT NULL
+        THEN 'SAFE_TO_DROP - Unused and low maintenance'
+      WHEN s.idx_scan = 0 AND st.last_vacuum IS NULL
+        THEN 'MONITOR - Too new, may be under startup'
+      ELSE 'MONITOR'
+    END AS smart_action
+FROM pg_stat_user_indexes s
+JOIN pg_class t ON s.relid = t.oid
+JOIN pg_stat_user_tables st ON s.relid = st.relid
+ORDER BY 
+  CASE
+    WHEN s.idx_scan > 100 THEN 1
+    WHEN s.idx_scan = 0 AND (st.n_tup_ins + st.n_tup_upd + st.n_tup_del) > 10000 THEN 2
+    WHEN s.idx_scan = 0 THEN 3
+    ELSE 4
+  END,
+  pg_relation_size(s.indexrelid) DESC;
+EOF
+}
+
+cmd_checkpoint_history()
+{
+  if [ "${PG_MAJOR_VERSION:-0}" -ge 17 ]; then
+    cat << 'EOF' | $PSQL_CMD
+SELECT
+    c.num_timed AS scheduled,
+    c.num_requested AS requested,
+    c.write_time AS checkpoint_write_time,
+    c.sync_time AS checkpoint_sync_time,
+    c.buffers_written AS buffers_checkpoint,
+    b.buffers_clean,
+    b.maxwritten_clean,
+    b.buffers_backend,
+    b.buffers_backend_fsync,
+    round(b.buffers_backend_fsync::numeric / NULLIF(b.buffers_backend, 0) * 100, 2) AS backend_fsync_pct
+FROM pg_stat_checkpointer c
+CROSS JOIN pg_stat_bgwriter b;
+EOF
+  else
+    cat << 'EOF' | $PSQL_CMD
 SELECT
     checkpoints_timed AS scheduled,
     checkpoints_req AS requested,
@@ -3436,6 +4118,7 @@ SELECT
     round(buffers_backend_fsync::numeric / NULLIF(buffers_backend, 0) * 100, 2) AS backend_fsync_pct
 FROM pg_stat_bgwriter;
 EOF
+  fi
 }
 
 # ============================================
@@ -3476,18 +4159,18 @@ case "$COMMAND" in
   local_stats) cmd_pg_stat_tables ;;
 
   # Table & Index Analysis
-  table_size) cmd_table_size "$1" ;;
-  index_size) cmd_index_size "$1" ;;
-  bloat_tables) cmd_bloat_tables "$1" ;;
-  bloat_indexes) cmd_bloat_indexes "$1" ;;
-  seq_scans) cmd_seq_scans "$1" ;;
+  table_size) cmd_table_size "$@" ;;
+  index_size) cmd_index_size "$@" ;;
+  bloat_tables) cmd_bloat_tables "$@" ;;
+  bloat_indexes) cmd_bloat_indexes "$@" ;;
+  seq_scans) cmd_seq_scans "$@" ;;
   missing_indexes) cmd_missing_indexes ;;
   unused_indexes) cmd_unused_indexes ;;
   duplicate_indexes) cmd_duplicate_indexes ;;
 
   # Vacuum & Autovacuum
   vacuum_status) cmd_vacuum_status ;;
-  dead_tuples) cmd_dead_tuples "$1" ;;
+  dead_tuples) cmd_dead_tuples "$@" ;;
   autovacuum_config) cmd_autovacuum_config ;;
   vacuum_progress) cmd_vacuum_progress ;;
 
@@ -3506,9 +4189,9 @@ case "$COMMAND" in
   pg_stat_wal) cmd_pg_stat_wal ;;
 
   # Configuration
-  config) cmd_config "$1" ;;
+  config) cmd_config "$@" ;;
   all_settings) cmd_all_settings ;;
-  pg_settings_filter) cmd_pg_settings_filter "$1" ;;
+  pg_settings_filter) cmd_pg_settings_filter "$@" ;;
   reload_config) cmd_reload_config ;;
 
   # Transaction & WAL
@@ -3520,7 +4203,7 @@ case "$COMMAND" in
   # System & Size
   database_size) cmd_database_size ;;
   tablespace_size) cmd_tablespace_size ;;
-  relation_size) cmd_relation_size "$1" ;;
+  relation_size) cmd_relation_size "$@" ;;
 
   # Version & Info
   version) cmd_version ;;
@@ -3551,11 +4234,11 @@ case "$COMMAND" in
   connection_history) cmd_connection_history ;;
   schema_size) cmd_schema_size ;;
   long_running_transactions) cmd_long_running_transactions ;;
-  table_statistics) cmd_table_statistics "$1" ;;
-  index_statistics) cmd_index_statistics "$1" ;;
+  table_statistics) cmd_table_statistics "$@" ;;
+  index_statistics) cmd_index_statistics "$@" ;;
   database_statistics) cmd_database_statistics ;;
   system_summary) cmd_system_summary ;;
-  top_queries_by_io) cmd_top_queries_by_io "$1" ;;
+  top_queries_by_io) cmd_top_queries_by_io "$@" ;;
 
   # Security & Users
   users) cmd_users ;;
@@ -3606,9 +4289,9 @@ case "$COMMAND" in
   restore) cmd_restore_database "$1" "$2" ;;
 
   # Data Analysis
-  rowcount) cmd_table_row_count "$1" ;;
+  rowcount) cmd_table_row_count "$@" ;;
   all_row_counts) cmd_all_table_row_counts ;;
-  largest_tables) cmd_largest_tables "$1" ;;
+  largest_tables) cmd_largest_tables "$@" ;;
   table_growth_report) cmd_table_growth_report ;;
 
   # Monitoring & Health
@@ -3636,6 +4319,14 @@ case "$COMMAND" in
   composite_types) cmd_composite_types ;;
   search_path) cmd_search_path ;;
   set_search_path) cmd_set_search_path "$1" ;;
+
+  # ============================================
+  # ENHANCED DIAGNOSTIC COMMANDS (DBA-Grade)
+  # ============================================
+  cache_warmup_status) cmd_cache_warmup_status ;;
+  key_metrics) cmd_key_metrics ;;
+  system_health_score) cmd_system_health_score ;;
+  smart_index_recommendations) cmd_smart_index_recommendations ;;
 
   *)
     echo "Unknown command: $COMMAND"
