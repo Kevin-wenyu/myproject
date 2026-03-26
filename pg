@@ -297,6 +297,9 @@ Commands:
     users                   List users
     roles                   List roles
     permissions             Object permissions
+    privilege_audit         Privilege audit
+    security_checks         Security configuration checks
+    user_access_pattern     User access patterns
 
   === ACTIVITY AND SESSION ===
     long_txs [mins]         Transactions > N minutes
