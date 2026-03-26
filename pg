@@ -336,6 +336,14 @@ Commands:
     stats_check            Statistics check
     temp_stats              Temporary stats
 
+  === QUERY OPTIMIZATION ===
+    plan_analysis [N]       Query plan analysis
+    execution_profile [N]   Execution profile
+    histogram_stats <tbl>   Histogram statistics
+    parallel_efficiency     Parallel efficiency metrics
+    explain "<sql>"         Explain query plan
+    explain_json "<sql>"    Explain as JSON
+
   === UTILITY ===
     version                 PostgreSQL version
     ext                     Installed extensions
