@@ -1,1 +1,0 @@
-select txid_current();
