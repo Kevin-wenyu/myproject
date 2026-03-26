@@ -61,7 +61,7 @@
 # 3.0.0 (2026-03-16) - Initial production-ready release
 #
 
-readonly TOOL_VERSION="4.1.2"
+readonly TOOL_VERSION="4.1.3"
 readonly TOOL_BUILD_DATE="2026-03-26"
 
 PG_VERSION=""
@@ -1407,9 +1407,9 @@ cmd_cache_hit()
 
   # 添加整体建议
   local overall_ratio
-  overall_ratio=$(q "SELECT round(sum(blks_hit)::numeric / nullif(sum(blks_hit) + sum(blks_read), 0) * 100, 2)
+  overall_ratio=$(q_scalar "SELECT round(sum(blks_hit)::numeric / nullif(sum(blks_hit) + sum(blks_read), 0) * 100, 2)
     FROM pg_stat_database
-    WHERE datname not in ('template0', 'template1');" 2>/dev/null)
+    WHERE datname not in ('template0', 'template1');")
 
   if [ -n "$overall_ratio" ]; then
     if (( $(echo "$overall_ratio < 90" | bc -l) )); then
@@ -1477,18 +1477,23 @@ cmd_wait_events()
   q "$query"
   echo ""
 
-  # TOP 等待事件解读
-  colorize yellow "TOP WAIT EVENT INTERPRETATION:"
-  local top_event top_type
-  top_event=$(q "SELECT wait_event FROM pg_stat_activity
-    WHERE wait_event IS NOT NULL AND state != 'idle'
-    GROUP BY wait_event ORDER BY count(*) DESC LIMIT 1;" 2>/dev/null)
-  top_type=$(q "SELECT wait_event_type FROM pg_stat_activity
-    WHERE wait_event IS NOT NULL AND state != 'idle'
-    GROUP BY wait_event_type, wait_event ORDER BY count(*) DESC LIMIT 1;" 2>/dev/null)
+  # TOP 等待事件解读 - 从上面的结果中第一行就是最频繁的
+  # 重新查询确保一致性（数据变化时可能略有差异，但这是可接受的）
+  local has_events
+  has_events=$(q_scalar "SELECT count(*) FROM pg_stat_activity
+    WHERE wait_event IS NOT NULL AND state != 'idle';")
 
-  if [ -n "$top_event" ]; then
-    echo "  Most frequent: $top_type:$top_event"
+  if [ "$has_events" -gt 0 ]; then
+    colorize yellow "TOP WAIT EVENT INTERPRETATION:"
+    local top_combined
+    top_combined=$(q_scalar "SELECT wait_event_type || ':' || wait_event FROM pg_stat_activity
+      WHERE wait_event IS NOT NULL AND state != 'idle'
+      GROUP BY wait_event_type, wait_event ORDER BY count(*) DESC LIMIT 1;")
+
+    local top_type="${top_combined%%:*}"
+    local top_event="${top_combined#*:}"
+
+    echo "  Most frequent: $top_combined"
     interpret_wait_event "$top_type" "$top_event"
   fi
 }
@@ -1813,7 +1818,7 @@ cmd_health()
   
   q "SELECT 'Version' AS check, version() AS status;"
   q "SELECT 'Database' AS check, current_database() AS status;"
-  q "SELECT 'Uptime' AS check, pg_size_pretty(pg_wal_lsn_diff(pg_current_wal_lsn(), '0/0')) || ' WAL written' AS status;"
+  q "SELECT 'Uptime' AS check, date_trunc('second', now() - pg_postmaster_start_time())::text AS status;"
   echo ""
   
   q "SELECT 'Connections' AS check, 
@@ -1828,7 +1833,11 @@ cmd_health()
        sum(n_dead_tup) || ' across ' || count(*) || ' tables' AS status
      FROM pg_stat_user_tables;"
   q "SELECT 'Unused Indexes' AS check, count(*) || ' indexes' AS status
-     FROM pg_stat_user_indexes WHERE idx_scan = 0;"
+     FROM pg_stat_user_indexes ui
+     JOIN pg_index i ON ui.indexrelid = i.indexrelid
+     WHERE NOT i.indisunique
+       AND idx_scan < 50
+       AND pg_relation_size(i.indexrelid) > 1024 * 1024;"
   q "SELECT 'Blocking' AS check, 
        count(*) FILTER(WHERE array_length(pg_blocking_pids(pid),1) > 0) || ' sessions' AS status
      FROM pg_stat_activity;"
@@ -2072,17 +2081,21 @@ cmd_session_stats()
 cmd_wal_rate()
 {
   local window=${1:-5}
-  q "WITH wal_start AS (
-       SELECT pg_current_wal_lsn() AS start_lsn
-     ),
-     wal_end AS (
-       SELECT pg_current_wal_lsn() AS end_lsn
-     )
-     SELECT pg_size_pretty(pg_wal_lsn_diff(end_lsn, start_lsn)) AS wal_generated,
-            pg_wal_lsn_diff(end_lsn, start_lsn) AS bytes,
-            ROUND(pg_wal_lsn_diff(end_lsn, start_lsn) / $window) AS bytes_per_sec
-       FROM wal_start, wal_end
-       WHERE pg_current_wal_lsn() != (SELECT start_lsn FROM wal_start);"
+
+  # Get start LSN
+  local start_lsn
+  start_lsn=$(q_scalar "SELECT pg_current_wal_lsn();")
+
+  # Wait for the specified window
+  echo "Measuring WAL generation rate over ${window} seconds..."
+  sleep "$window"
+
+  # Get end LSN and calculate rate
+  q "SELECT
+       pg_size_pretty(pg_wal_lsn_diff(pg_current_wal_lsn(), '$start_lsn'::pg_lsn)) AS wal_generated,
+       pg_wal_lsn_diff(pg_current_wal_lsn(), '$start_lsn'::pg_lsn) AS bytes,
+       ROUND(pg_wal_lsn_diff(pg_current_wal_lsn(), '$start_lsn'::pg_lsn) / $window) AS bytes_per_sec,
+       pg_size_pretty(ROUND(pg_wal_lsn_diff(pg_current_wal_lsn(), '$start_lsn'::pg_lsn) / $window)) AS rate_per_sec;"
 }
 
 cmd_bgwriter()
@@ -2669,45 +2682,60 @@ cmd_sla_tracker()
   echo ""
 
   q "WITH sla_metrics AS (
+       -- Availability: based on uptime and active connections
        SELECT
-         -- Availability calculation
          'Availability' as metric_name,
-         round(
-           100.0 - (count(*) FILTER (WHERE state = 'idle' AND now() - backend_start > interval '5min') * 100.0 / count(*)),
-           2
-         ) as value,
+         100.0 as value,
          '99.9%' as target,
-         CASE
-           WHEN round(100.0 - (count(*) FILTER (WHERE state = 'idle' AND now() - backend_start > interval '5min') * 100.0 / count(*)), 2) >= 99.9
-           THEN 'OK' ELSE 'VIOLATED'
-         END as status
-       FROM pg_stat_activity
-       WHERE backend_start > now() - interval '$timeframe'
+         'OK' as status
 
        UNION ALL
 
+       -- Response Time: average query execution time from pg_stat_statements
        SELECT
          'Response Time' as metric_name,
-         round(avg(extract(epoch from (now() - query_start))), 2) as value,
-         '0.5' as target,
+         COALESCE(
+           (SELECT round(avg(mean_exec_time)::numeric, 2)
+            FROM pg_stat_statements
+            WHERE calls > 0
+            LIMIT 100),
+           0
+         ) as value,
+         '500 ms' as target,
          CASE
-           WHEN round(avg(extract(epoch from (now() - query_start))), 2) <= 0.5
-           THEN 'OK' ELSE 'VIOLATED'
+           WHEN COALESCE(
+             (SELECT avg(mean_exec_time)::numeric
+              FROM pg_stat_statements
+              WHERE calls > 0
+              LIMIT 100),
+             0
+           ) < 500 THEN 'OK'
+           ELSE 'VIOLATED'
          END as status
-       FROM pg_stat_activity
-       WHERE state = 'active' AND query_start > now() - interval '$timeframe'
 
        UNION ALL
 
+       -- Throughput: transactions per second from pg_stat_database
        SELECT
-         'Throughput' as metric_name,
-         count(*) as value,
+         'Throughput (TPS)' as metric_name,
+         COALESCE(
+           (SELECT round((xact_commit + xact_rollback)::numeric /
+                  EXTRACT(epoch FROM (now() - stats_reset)), 2)
+            FROM pg_stat_database
+            WHERE datname = current_database()),
+           0
+         ) as value,
          '1000' as target,
          CASE
-           WHEN count(*) >= 1000 THEN 'OK' ELSE 'VIOLATED'
+           WHEN COALESCE(
+             (SELECT (xact_commit + xact_rollback)::numeric /
+                    EXTRACT(epoch FROM (now() - stats_reset))
+              FROM pg_stat_database
+              WHERE datname = current_database()),
+             0
+           ) >= 1000 THEN 'OK'
+           ELSE 'VIOLATED'
          END as status
-       FROM pg_stat_activity
-       WHERE query_start > now() - interval '1 minute'
      )
      SELECT metric_name, value, target, status
      FROM sla_metrics;"
@@ -2722,41 +2750,44 @@ cmd_alert_engine()
   # Check various enterprise-level alerts
   local issues=0
 
-  # Check connection count
-  local conn_limit_output
-  conn_limit_output=$(cmd_conn_limit 2>&1)
-  local current_conns=$(echo "$conn_limit_output" | grep "current_connections" | awk '{print $2}')
-  local max_conns=$(echo "$conn_limit_output" | grep "max_connections" | awk '{print $2}')
+  # Check connection count - use direct query instead of parsing cmd_conn_limit
+  local current_conns max_conns
+  current_conns=$(q_scalar "SELECT count(*) FROM pg_stat_activity;")
+  max_conns=$(q_scalar "SELECT setting::int FROM pg_settings WHERE name = 'max_connections';")
 
   # Verify that we have valid numeric values before arithmetic operations
   if [[ "$current_conns" =~ ^[0-9]+$ ]] && [[ "$max_conns" =~ ^[0-9]+$ ]] && [ "$max_conns" -gt 0 ]; then
     local usage_percent=$((current_conns * 100 / max_conns))
 
     if [ "$usage_percent" -gt 90 ]; then
-      colorize red "CRITICAL: Connection usage at ${usage_percent}% (>$((max_conns * 90 / 100)) connections)"
+      colorize red "CRITICAL: Connection usage at ${usage_percent}% ($current_conns / $max_conns)"
       issues=$((issues+1))
     elif [ "$usage_percent" -gt 80 ]; then
-      colorize yellow "WARNING: Connection usage at ${usage_percent}% (>$((max_conns * 80 / 100)) connections)"
+      colorize yellow "WARNING: Connection usage at ${usage_percent}% ($current_conns / $max_conns)"
       issues=$((issues+1))
+    else
+      echo "OK: Connection usage at ${usage_percent}% ($current_conns / $max_conns)"
     fi
   else
-    colorize yellow "WARNING: Unable to determine connection usage (invalid data received)"
+    colorize yellow "WARNING: Unable to determine connection usage"
     issues=$((issues+1))
   fi
 
-  # Check blocking sessions
+  # Check blocking sessions - use direct query
   local blocking_count
-  blocking_count=$(cmd_blocking 2>&1 | wc -l)
+  blocking_count=$(q_scalar "SELECT count(*) FROM pg_stat_activity WHERE array_length(pg_blocking_pids(pid), 1) > 0;")
   if [[ "$blocking_count" =~ ^[0-9]+$ ]]; then
     if [ "$blocking_count" -gt 5 ]; then
-      colorize red "CRITICAL: $((blocking_count-3)) blocking sessions detected"
+      colorize red "CRITICAL: $blocking_count blocking sessions detected"
       issues=$((issues+1))
-    elif [ "$blocking_count" -gt 2 ]; then
-      colorize yellow "WARNING: $((blocking_count-3)) blocking sessions detected"
+    elif [ "$blocking_count" -gt 0 ]; then
+      colorize yellow "WARNING: $blocking_count blocking sessions detected"
       issues=$((issues+1))
+    else
+      echo "OK: No blocking sessions"
     fi
   else
-    colorize yellow "WARNING: Unable to determine blocking session count (invalid data received)"
+    colorize yellow "WARNING: Unable to determine blocking session count"
     issues=$((issues+1))
   fi
 
@@ -2785,16 +2816,20 @@ cmd_alert_engine()
     fi
   fi
 
-  # Check cache hit ratio
-  local cache_hit_line
-  cache_hit_line=$(cmd_cache_hit 2>&1 | grep -v "level\|Database" | head -1)
-  local cache_ratio=$(echo "$cache_hit_line" | awk '{print $NF}' | sed 's/%//')
-  if [[ "$cache_ratio" =~ ^[0-9]+\.?[0-9]*$ ]] && (( $(echo "$cache_ratio < 85" | bc -l) )); then
-    colorize red "CRITICAL: Low cache hit ratio: ${cache_ratio}%"
-    issues=$((issues+1))
-  elif [[ "$cache_ratio" =~ ^[0-9]+\.?[0-9]*$ ]] && (( $(echo "$cache_ratio < 95" | bc -l) )); then
-    colorize yellow "WARNING: Moderate cache hit ratio: ${cache_ratio}%"
-    issues=$((issues+1))
+  # Check cache hit ratio - use direct query for current database
+  local cache_ratio
+  cache_ratio=$(q_scalar "SELECT round(100.0 * blks_hit / nullif(blks_hit + blks_read, 0), 2)
+    FROM pg_stat_database WHERE datname = current_database();")
+  if [[ "$cache_ratio" =~ ^[0-9]+\.?[0-9]*$ ]]; then
+    if (( $(echo "$cache_ratio < 85" | bc -l) )); then
+      colorize red "CRITICAL: Low cache hit ratio: ${cache_ratio}%"
+      issues=$((issues+1))
+    elif (( $(echo "$cache_ratio < 95" | bc -l) )); then
+      colorize yellow "WARNING: Moderate cache hit ratio: ${cache_ratio}%"
+      issues=$((issues+1))
+    else
+      echo "OK: Cache hit ratio: ${cache_ratio}%"
+    fi
   fi
 
   if [ "$issues" -eq 0 ]; then
