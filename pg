@@ -408,6 +408,7 @@ Commands:
 
   === SLOW QUERY ANALYSIS ===
     slow [seconds]          Queries running > N seconds (default: 5)
+    slow_enhanced [pid] [sec] Enhanced slow query analysis with suggestions
     top_time [N]            Top queries by total time
     top_calls [N]           Top queries by call count
     top_io [N]              Top queries by I/O
@@ -794,6 +795,195 @@ cmd_slow()
     ORDER BY duration DESC;" 2>&1)
 
   handle_empty "$result" "No queries running longer than $threshold seconds"
+}
+
+# ============================================
+# ENHANCED SLOW QUERY DIAGNOSIS
+# ============================================
+
+cmd_slow_enhanced()
+{
+  local pid="$1"
+  local threshold="${2:-5}"
+
+  colorize blue "=== SLOW QUERY ENHANCED DIAGNOSIS ==="
+  echo ""
+
+  # 如果指定了 PID，分析特定查询
+  if [ -n "$pid" ]; then
+    analyze_specific_query "$pid"
+    return
+  fi
+
+  # 否则列出所有慢查询供选择
+  colorize yellow "CURRENT SLOW QUERIES (>${threshold}s):"
+  echo ""
+
+  local slow_queries
+  slow_queries=$(q "SELECT pid,
+    round(EXTRACT(EPOCH FROM (now() - query_start))::numeric, 2) as duration_sec,
+    usename,
+    application_name,
+    state,
+    wait_event_type || ':' || wait_event as wait_event,
+    left(query, 100) || CASE WHEN length(query) > 100 THEN '...' ELSE '' END as query_preview
+  FROM pg_stat_activity
+  WHERE state IN ('active', 'idle in transaction')
+    AND query_start IS NOT NULL
+    AND now() - query_start > interval '$threshold seconds'
+    AND query NOT LIKE '%pg_stat_activity%'
+  ORDER BY now() - query_start DESC;")
+
+  if [ -z "$slow_queries" ] || [ "$slow_queries" = " " ]; then
+    msg_info "No slow queries found (running > ${threshold}s)"
+    return 0
+  fi
+
+  echo "$slow_queries"
+  echo ""
+  msg_info "Run 'pg slow_enhanced <PID>' for detailed analysis of a specific query"
+}
+
+analyze_specific_query()
+{
+  local pid="$1"
+
+  colorize blue "=== QUERY ANALYSIS FOR PID $pid ==="
+  echo ""
+
+  # 基本信息
+  colorize yellow "BASIC INFO:"
+  q "SELECT
+    pid,
+    usename as user,
+    application_name as app,
+    client_addr::text as client,
+    round(EXTRACT(EPOCH FROM (now() - query_start))::numeric, 2) as duration_sec,
+    state,
+    wait_event_type || ':' || wait_event as wait_event
+  FROM pg_stat_activity
+  WHERE pid = $pid;"
+
+  if [ $? -ne 0 ]; then
+    msg_error "Process $pid not found or query error"
+    return 1
+  fi
+  echo ""
+
+  # 完整查询文本
+  colorize yellow "QUERY TEXT:"
+  local query_text
+  query_text=$(q "SELECT query FROM pg_stat_activity WHERE pid = $pid;" 2>/dev/null)
+  if [ -n "$query_text" ]; then
+    echo "$query_text" | fold -s -w 80
+  else
+    msg_warn "Could not retrieve query text"
+  fi
+  echo ""
+
+  # 等待事件分析
+  colorize yellow "WAIT EVENT ANALYSIS:"
+  local wait_info
+  wait_info=$(q "SELECT wait_event_type, wait_event FROM pg_stat_activity WHERE pid = $pid;" 2>/dev/null)
+  if [ -n "$wait_info" ] && [ "$wait_info" != " " ]; then
+    echo "Current wait: $wait_info"
+    # 等待事件解读
+    local wait_type wait_event
+    wait_type=$(echo "$wait_info" | cut -d'|' -f1)
+    wait_event=$(echo "$wait_info" | cut -d'|' -f2)
+    interpret_wait_event "$wait_type" "$wait_event"
+  else
+    echo "No active wait event"
+  fi
+  echo ""
+
+  # 优化建议
+  colorize yellow "OPTIMIZATION SUGGESTIONS:"
+  generate_query_suggestions "$pid" "$query_text"
+  echo ""
+
+  # 可用操作
+  colorize yellow "AVAILABLE ACTIONS:"
+  echo "  pg cancel $pid     - Cancel the query"
+  echo "  pg kill $pid       - Terminate the session"
+  echo "  pg explain <sql>   - Get execution plan (copy query text)"
+}
+
+interpret_wait_event()
+{
+  local wait_type="$1"
+  local wait_event="$2"
+
+  case "$wait_type" in
+    IO)
+      case "$wait_event" in
+        DataFileRead)   echo "  [!] IO bottleneck - reading from disk, consider increasing shared_buffers" ;;
+        WALWrite)       echo "  [!] WAL write wait - disk bottleneck, check wal_sync_method" ;;
+        *)              echo "  [i] IO wait: $wait_event" ;;
+      esac
+      ;;
+    Lock)
+      case "$wait_event" in
+        relation)       echo "  [!] Table-level lock wait - check for blocking DDL/long transactions" ;;
+        tuple)          echo "  [!] Row-level lock wait - concurrent updates on same rows" ;;
+        transactionid)  echo "  [!] Transaction ID wait - long-running transaction blocking" ;;
+        *)              echo "  [!] Lock wait: $wait_event - potential blocking issue" ;;
+      esac
+      ;;
+    LwLock)
+      case "$wait_event" in
+        WALWriteLock)   echo "  [!] WAL lock contention - high write load" ;;
+        BufferMapping)  echo "  [!] Buffer mapping contention - consider shared_buffers tuning" ;;
+        *)              echo "  [i] Lightweight lock wait: $wait_event" ;;
+      esac
+      ;;
+    Activity)
+      echo "  [i] Waiting for: $wait_event"
+      ;;
+    *)
+      echo "  [i] Wait type: $wait_type, event: $wait_event"
+      ;;
+  esac
+}
+
+generate_query_suggestions()
+{
+  local pid="$1"
+  local query="$2"
+
+  if [ -z "$query" ]; then
+    echo "  - Cannot analyze empty query"
+    return
+  fi
+
+  # 检测全表扫描特征
+  if echo "$query" | grep -qiE "SELECT \*|SELECT .* FROM .* WHERE"; then
+    echo "  - Consider adding specific columns instead of SELECT *"
+  fi
+
+  # 检测 LIKE '%...%' 模式
+  if echo "$query" | grep -qiE "LIKE '%[^%]+%'"; then
+    echo "  - Leading wildcard LIKE prevents index usage, consider pg_trgm extension"
+  fi
+
+  # 检测 OR 条件
+  if echo "$query" | grep -qiE "\bOR\b"; then
+    echo "  - OR conditions may prevent index usage, consider UNION or rewrite"
+  fi
+
+  # 检测子查询
+  if echo "$query" | grep -qiE "\(SELECT"; then
+    echo "  - Subquery detected, consider using JOINs or CTEs for better optimization"
+  fi
+
+  # 检测 DISTINCT
+  if echo "$query" | grep -qiE "\bDISTINCT\b"; then
+    echo "  - DISTINCT requires sorting/hashing, ensure proper indexes"
+  fi
+
+  # 通用建议
+  echo "  - Run 'pg explain <query>' to analyze execution plan"
+  echo "  - Check if table statistics are up to date (pg vacuum_status)"
 }
 
 cmd_top_time()
@@ -2899,6 +3089,7 @@ dispatch_command()
     sql|fulltext)          cmd_sql "$@" ;;
 
     slow|slow_queries)     cmd_slow "$@" ;;
+    slow_enhanced)          cmd_slow_enhanced "$@" ;;
     top_time|top_queries)  cmd_top_time "$@" ;;
     top_calls)             cmd_top_calls "$@" ;;
     top_io)                cmd_top_io "$@" ;;
