@@ -352,6 +352,12 @@ Commands:
     ext                     Installed extensions
     set_config <name> <val> Change setting (session)
     watch <sec> <cmd>       Repeat command every N seconds
+    explain "<sql>"          Explain query plan
+    explain_json "<sql>"     Explain as JSON
+    activity                 Session activity details
+    statements_reset        Reset pg_stat_statements
+    table_stats <table>      Table statistics
+    session_stats            Session statistics by user/app
 
   === ENTERPRISE MONITORING ===
     enterprise_monitor      Enterprise monitoring dashboard
