@@ -3,11 +3,16 @@
 # PostgreSQL Database Diagnostic Tool (pg)
 # Production-ready for PostgreSQL 9.6-18
 #
-# Version: 3.6.0 (2026-03-26)
-# Previous Version: 3.5.0 (2026-03-23)
+# Version: 4.0.0 (2026-03-26)
+# Previous Version: 3.6.0 (2026-03-26)
 # Author: Kevin
 #
 # Version History:
+# 4.0.0 (2026-03-26) - Enterprise DBA Tool Enhancement:
+#                       - Reliability infrastructure (error handling, version compatibility)
+#                       - Enhanced commands (slow_enhanced, blocking_enhanced)
+#                       - Combined diagnosis scenarios (7 diagnosis scenarios)
+#                       - Improved output depth with insights and suggestions
 # 3.6.0 (2026-03-26) - Documentation consistency fix:
 #                       - Added 66 undocumented commands to help output
 #                       - Fixed command alias conflicts (sessions, constraints)
@@ -37,7 +42,7 @@
 # 3.0.0 (2026-03-16) - Initial production-ready release
 #
 
-readonly TOOL_VERSION="3.6.0"
+readonly TOOL_VERSION="4.0.0"
 readonly TOOL_BUILD_DATE="2026-03-26"
 
 PG_VERSION=""
