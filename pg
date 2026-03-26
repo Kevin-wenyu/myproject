@@ -1,5 +1,7 @@
 #!/bin/bash
 #
+# Copyright (c) 1999, 2026, Kingbase Corporation.  All rights reserved.
+#
 # PostgreSQL Database Diagnostic Tool (pg)
 # Production-ready for PostgreSQL 9.6-18
 #
