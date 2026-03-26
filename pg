@@ -3,11 +3,17 @@
 # PostgreSQL Database Diagnostic Tool (pg)
 # Production-ready for PostgreSQL 9.6-18
 #
-# Version: 4.0.0 (2026-03-26)
-# Previous Version: 3.6.0 (2026-03-26)
+# Version: 4.1.0 (2026-03-26)
+# Previous Version: 4.0.0 (2026-03-26)
 # Author: Kevin
 #
 # Version History:
+# 4.1.0 (2026-03-26) - Command consolidation:
+#                       - Merged slow/slow_enhanced into slow (enhanced)
+#                       - Merged blocking/blocking_enhanced into blocking (enhanced)
+#                       - Deprecated quick_diagnosis/problem_summary/alert_status/enterprise_monitor (use diagnose health)
+#                       - Deprecated performance_insights (use diagnose performance)
+#                       - Deprecated cache_efficiency (use cache_hit)
 # 4.0.0 (2026-03-26) - Enterprise DBA Tool Enhancement:
 #                       - Reliability infrastructure (error handling, version compatibility)
 #                       - Enhanced commands (slow_enhanced, blocking_enhanced)
@@ -42,7 +48,7 @@
 # 3.0.0 (2026-03-16) - Initial production-ready release
 #
 
-readonly TOOL_VERSION="4.0.0"
+readonly TOOL_VERSION="4.1.0"
 readonly TOOL_BUILD_DATE="2026-03-26"
 
 PG_VERSION=""
@@ -405,16 +411,14 @@ Commands:
   === QUICK DIAGNOSTICS (Most Used) ===
     ps                      Process list (all sessions)
     running [N]             Active queries
-    blocking                Who is blocking whom
-    blocking_enhanced       Enhanced blocking analysis with root cause and actions
+    blocking                Enhanced blocking analysis with root cause
     locks                   Lock overview
     kill <pid>              Terminate session
     cancel <pid>            Cancel query
     sql <pid>               Show full SQL text
 
   === SLOW QUERY ANALYSIS ===
-    slow [seconds]          Queries running > N seconds (default: 5)
-    slow_enhanced [pid] [sec] Enhanced slow query analysis with suggestions
+    slow [pid] [seconds]    Enhanced slow query analysis (default: 5s)
     top_time [N]            Top queries by total time
     top_calls [N]           Top queries by call count
     top_io [N]              Top queries by I/O
@@ -3822,15 +3826,13 @@ dispatch_command()
   case "$cmd" in
     ps)                    cmd_ps "$@" ;;
     running)               cmd_running "$@" ;;
-    blocking|blocked)      cmd_blocking "$@" ;;
-    blocking_enhanced)     cmd_blocking_enhanced "$@" ;;
+    blocking|blocked)       cmd_blocking_enhanced "$@" ;;
     locks)                 cmd_locks "$@" ;;
     kill)                  cmd_kill "$@" ;;
     cancel)                cmd_cancel "$@" ;;
     sql|fulltext)          cmd_sql "$@" ;;
 
-    slow|slow_queries)     cmd_slow "$@" ;;
-    slow_enhanced)          cmd_slow_enhanced "$@" ;;
+    slow|slow_queries|slow_enhanced) cmd_slow_enhanced "$@" ;;
     top_time|top_queries)  cmd_top_time "$@" ;;
     top_calls)             cmd_top_calls "$@" ;;
     top_io)                cmd_top_io "$@" ;;
@@ -3917,7 +3919,7 @@ dispatch_command()
     deadlock_detect)       cmd_deadlock_detect "$@" ;;
     slowlog_analysis)      cmd_slowlog_analysis "$@" ;;
     maint_check|maintenance_check) cmd_maintenance_check "$@" ;;
-    cache_efficiency)      cmd_cache_efficiency "$@" ;;
+    cache_efficiency)       cmd_cache_hit "$@" ;;
     lock_graph)            cmd_lock_graph "$@" ;;
     bloat_detail)          cmd_bloat_detail "$@" ;;
     stats_check)           cmd_stats_check "$@" ;;
@@ -3934,8 +3936,8 @@ dispatch_command()
     security_checks)       cmd_security_checks "$@" ;;
     user_access_pattern)   cmd_user_access_pattern "$@" ;;
 
-    # ENTERPRISE MONITORING COMMANDS
-    enterprise_monitor)    cmd_enterprise_monitor "$@" ;;
+    # ENTERPRISE MONITORING COMMANDS (deprecated - use diagnose)
+    enterprise_monitor)    cmd_diagnose_health "$@" ;;
     sla_tracker)           cmd_sla_tracker "$@" ;;
     alert_engine)          cmd_alert_engine "$@" ;;
 
@@ -3943,12 +3945,12 @@ dispatch_command()
     security_scan)         cmd_security_scan "$@" ;;
     compliance_check)      cmd_compliance_check "$@" ;;
 
-    # PRODUCTION PROBLEM DIAGNOSIS COMMANDS
-    quick_diag|quick_diagnosis) cmd_quick_diagnosis "$@" ;;
-    problem_summary|summary)    cmd_problem_summary "$@" ;;
-    perf_insights|performance)  cmd_performance_insights "$@" ;;
+    # PRODUCTION PROBLEM DIAGNOSIS COMMANDS (deprecated - use diagnose)
+    quick_diag|quick_diagnosis) cmd_diagnose_health "$@" ;;
+    problem_summary|summary)    cmd_diagnose_health "$@" ;;
+    perf_insights|performance)  cmd_diagnose_performance "$@" ;;
     emergency_stop|emergency)   cmd_emergency_stop "$@" ;;
-    alerts|alert_status)        cmd_alert_status "$@" ;;
+    alerts|alert_status)        cmd_diagnose_health "$@" ;;
 
     # COMBINED DIAGNOSIS COMMAND
     diagnose)              cmd_diagnose "$@" ;;
