@@ -2017,6 +2017,12 @@ cmd_histogram_stats()
 
   local sanitized_table=$(q_sanitize "$table_name")
 
+  # Verify table name format
+  if [[ ! "$sanitized_table" =~ ^[a-zA-Z0-9_]+$ ]]; then
+    echo "Error: Invalid table name format" >&2
+    return 1
+  fi
+
   q "SELECT schemaname, tablename, attname, inherited,
        null_frac, avg_width, n_distinct, correlation,
        most_common_vals, most_common_freqs,
