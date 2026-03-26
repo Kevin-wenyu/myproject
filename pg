@@ -3,11 +3,17 @@
 # PostgreSQL Database Diagnostic Tool (pg)
 # Production-ready for PostgreSQL 9.6-18
 #
-# Version: 3.5.0 (2026-03-23)
-# Previous Version: 3.4.0 (2026-03-23)
+# Version: 3.6.0 (2026-03-26)
+# Previous Version: 3.5.0 (2026-03-23)
 # Author: Kevin
 #
 # Version History:
+# 3.6.0 (2026-03-26) - Documentation consistency fix:
+#                       - Added 66 undocumented commands to help output
+#                       - Fixed command alias conflicts (sessions, constraints)
+#                       - Removed references to unimplemented functions
+#                       - Enhanced input validation
+#                       - Improved help organization with new categories
 # 3.5.0 (2026-03-23) - Added enterprise-level monitoring and security features:
 #                       - enterprise_monitor, sla_tracker, alert_engine
 #                       - security_scan, compliance_check
@@ -31,8 +37,8 @@
 # 3.0.0 (2026-03-16) - Initial production-ready release
 #
 
-readonly TOOL_VERSION="3.5.0"
-readonly TOOL_BUILD_DATE="2026-03-23"
+readonly TOOL_VERSION="3.6.0"
+readonly TOOL_BUILD_DATE="2026-03-26"
 
 PG_VERSION=""
 PG_MAJOR_VERSION=""
