@@ -3290,6 +3290,53 @@ cmd_diagnose_slow_query()
   colorize green "Diagnosis complete. Use specific commands for deeper analysis."
 }
 
+cmd_diagnose_lock_issue()
+{
+  echo "╔════════════════════════════════════════════════════════════════╗"
+  echo "║              LOCK ISSUE DIAGNOSIS REPORT                        ║"
+  echo "╚════════════════════════════════════════════════════════════════╝"
+  echo ""
+  echo "Generated at: $(date '+%Y-%m-%d %H:%M:%S')"
+  echo ""
+
+  # Section 1: 阻塞链分析
+  colorize yellow "═══ SECTION 1: BLOCKING CHAIN ANALYSIS ═══"
+  echo ""
+  cmd_blocking_enhanced
+  echo ""
+
+  # Section 2: 锁详情
+  colorize yellow "═══ SECTION 2: CURRENT LOCKS ═══"
+  echo ""
+  cmd_locks
+  echo ""
+
+  # Section 3: 相关事务
+  colorize yellow "═══ SECTION 3: IDLE IN TRANSACTION ═══"
+  echo ""
+  cmd_idle_tx
+  echo ""
+
+  colorize yellow "═══ SECTION 4: LONG TRANSACTIONS ═══"
+  echo ""
+  cmd_long_transactions 10
+  echo ""
+
+  # Section 5: 总结
+  colorize yellow "═══ SECTION 5: RESOLUTION STEPS ═══"
+  echo ""
+  echo "1. Identify root blocker from Section 1"
+  echo "2. Try: pg cancel <root_pid>"
+  echo "3. If needed: pg kill <root_pid>"
+  echo "4. For prevention:"
+  echo "   - Set idle_in_transaction_session_timeout"
+  echo "   - Schedule DDL during maintenance windows"
+  echo "   - Monitor long-running transactions"
+  echo ""
+
+  colorize green "Lock diagnosis complete."
+}
+
 cmd_diagnose()
 {
   local scenario="$1"
