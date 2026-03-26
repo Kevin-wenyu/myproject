@@ -233,6 +233,79 @@ extension_installed()
   fi
 }
 
+# ============================================
+# ERROR HANDLING UTILITIES
+# ============================================
+
+# 安全执行 - 统一错误处理
+safe_execute() {
+  local cmd="$1"
+  local fallback="${2:-}"
+
+  local result
+  result=$(eval "$cmd" 2>&1)
+  local exit_code=$?
+
+  if [ $exit_code -ne 0 ]; then
+    case "$result" in
+      *"permission denied"*)
+        msg_error "Permission denied - check role privileges"
+        ;;
+      *"does not exist"*)
+        msg_warn "Required object not found"
+        ;;
+      *"connection"*|*"connect"*)
+        msg_error "Connection failed - check PostgreSQL status and connection parameters"
+        ;;
+      *"syntax error"*)
+        msg_error "SQL syntax error"
+        ;;
+      *)
+        msg_error "$result"
+        ;;
+    esac
+    [ -n "$fallback" ] && eval "$fallback"
+    return 1
+  fi
+  echo "$result"
+  return 0
+}
+
+# 扩展依赖检查 - 带提示
+require_extension() {
+  local ext="$1"
+  local hint="${2:-Run: CREATE EXTENSION $ext;}"
+
+  if [ -z "$(extension_installed "$ext")" ]; then
+    msg_warn "Extension '$ext' not installed. $hint"
+    return 1
+  fi
+  return 0
+}
+
+# 权限检查
+require_privilege() {
+  local privilege="$1"
+  local has_priv
+  has_priv=$(q "SELECT has_database_privilege(current_database(), '$privilege');" 2>/dev/null)
+  if [ "$has_priv" != "t" ]; then
+    msg_warn "Missing privilege: $privilege"
+    return 1
+  fi
+  return 0
+}
+
+# 超级用户检查
+require_superuser() {
+  local is_superuser
+  is_superuser=$(q "SELECT current_setting('is_superuser');" 2>/dev/null)
+  if [ "$is_superuser" != "on" ]; then
+    msg_warn "This command requires superuser privileges"
+    return 1
+  fi
+  return 0
+}
+
 run_stat_statements()
 {
   local query="$1"
