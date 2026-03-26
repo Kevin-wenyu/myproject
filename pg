@@ -82,7 +82,9 @@ setup_password
 
 use_color=true
 # Check if output is a terminal and TERM is not dumb, but also respect NO_COLOR environment variable
-if [ -t 1 ] && [ "$TERM" != "dumb" ] && [ -z "$NO_COLOR" ]; then
+if [ "$FORCE_COLOR" = "1" ] || [ "$FORCE_COLOR" = "true" ]; then
+    use_color=true
+elif [ -t 1 ] && [ "$TERM" != "dumb" ] && [ -z "$NO_COLOR" ]; then
     use_color=true
 else
     use_color=false
@@ -252,7 +254,6 @@ Commands:
     conn                    Connection summary
     conn_limit              Connection limits per user/db
     idle_tx                 Idle in transaction sessions
-    long_txs [mins]         Transactions > N minutes
     sessions                Session stats by user/app
 
   === PERFORMANCE ===
@@ -316,11 +317,46 @@ Commands:
     overview                System overview
     uptime                  Server uptime
 
+  === ADVANCED DIAGNOSTICS ===
+    lock_tree               Lock wait tree
+    activity                Active sessions
+    statements_reset        Reset pg_stat_statements
+    table_stats <table>     Table statistics
+    seq_scans [N]           Sequential scans
+    bgwriter                Background writer stats
+    lock_wait_chain         Lock wait chains
+    index_usage [N]         Index usage patterns
+    partitions [pattern]    Partition info
+    active_txs              Active transactions
+    deadlock_detect         Deadlock detection
+    slowlog_analysis        Slow log analysis
+    maint_check             Maintenance check
+    cache_efficiency        Cache efficiency
+    bloat_detail            Detailed bloat analysis
+    stats_check            Statistics check
+    temp_stats              Temporary stats
+
   === UTILITY ===
     version                 PostgreSQL version
     ext                     Installed extensions
     set_config <name> <val> Change setting (session)
     watch <sec> <cmd>       Repeat command every N seconds
+
+  === ENTERPRISE MONITORING ===
+    enterprise_monitor      Enterprise monitoring dashboard
+    sla_tracker             SLA tracking
+    alert_engine            Alert engine
+
+  === ENTERPRISE SECURITY ===
+    security_scan           Security scan
+    compliance_check        Compliance checking
+
+  === PRODUCTION DIAGNOSIS ===
+    quick_diag              Quick diagnostic summary
+    problem_summary         Problem summary
+    perf_insights           Performance insights
+    emergency_stop          Emergency stop procedures
+    alerts                  Alert status
 
 Examples:
   $EXEC_NAME ps
@@ -412,7 +448,7 @@ q_sanitize()
   local lower_input=$(printf '%s' "$sanitized" | tr '[:upper:]' '[:lower:]')
 
   # Check for potentially dangerous patterns
-  if [[ "$lower_input" =~ (drop|truncate|delete|insert|update|exec|execute|alter|create|merge|replace|grant|revoke|commit|rollback|begin|transaction|union|select\b.*\bfrom) ]]; then
+  if [[ "$lower_input" =~ (drop|truncate|delete|insert|update|exec|execute|alter|create|merge|replace|grant|revoke|commit|rollback|begin|transaction|union|select\b.*\bfrom|order\s+by|group\s+by|having|limit|offset|join|into|values|where) ]]; then
     # If dangerous patterns are detected, strip them out
     sanitized=$(printf '%s' "$sanitized" | sed 's/[;,]//g')  # Remove potential statement terminators
     sanitized=$(printf '%s' "$sanitized" | sed 's/[-]{2,}//g')  # Remove comment indicators
@@ -479,16 +515,16 @@ cmd_kill()
   local pid=$1
   [ -z "$pid" ] && { echo "Usage: $EXEC_NAME kill <pid>"; return 1; }
   [[ ! "$pid" =~ ^[0-9]+$ ]] && { echo "Error: PID must be numeric"; return 1; }
-  
+
   local result
-  result=$(q "SELECT pg_terminate_backend($pid) AS result;")
+  result=$(q "SELECT pg_terminate_backend($pid::integer) AS result;")
   local exit_code=$?
-  
+
   if [ $exit_code -ne 0 ]; then
     echo "Error: Failed to terminate backend process $pid" >&2
     return $exit_code
   fi
-  
+
   echo "$result"
 }
 
@@ -497,16 +533,16 @@ cmd_cancel()
   local pid=$1
   [ -z "$pid" ] && { echo "Usage: $EXEC_NAME cancel <pid>"; return 1; }
   [[ ! "$pid" =~ ^[0-9]+$ ]] && { echo "Error: PID must be numeric"; return 1; }
-  
+
   local result
-  result=$(q "SELECT pg_cancel_backend($pid) AS result;")
+  result=$(q "SELECT pg_cancel_backend($pid::integer) AS result;")
   local exit_code=$?
-  
+
   if [ $exit_code -ne 0 ]; then
     echo "Error: Failed to cancel query for process $pid" >&2
     return $exit_code
   fi
-  
+
   echo "$result"
 }
 
@@ -673,9 +709,9 @@ cmd_unused_indexes()
 
 cmd_duplicate_indexes()
 {
-  q "SELECT i1.schemaname AS schema, t.relname AS \"table\",
+  q "SELECT i1.schemaname AS schema, t.relname AS table_name,
        i1.relname AS index1, i2.relname AS index2,
-       pg_size_pretty(pg_relation_size(i2.oid)) AS wasted_size
+       pg_size_pretty(pg_relation_size(i2.schemaname||'.'||i2.relname)) AS wasted_size
      FROM pg_index idx1
      JOIN pg_index idx2 ON idx1.indrelid = idx2.indrelid
        AND idx1.indexrelid < idx2.indexrelid
@@ -685,7 +721,7 @@ cmd_duplicate_indexes()
      JOIN pg_class i2 ON i2.oid = idx2.indexrelid
      JOIN pg_namespace n ON n.oid = t.relnamespace
      WHERE n.nspname NOT IN ('pg_catalog', 'information_schema')
-       AND pg_relation_size(i2.oid) > 1024
+       AND pg_relation_size(i2.schemaname||'.'||i2.relname) > 1024
      ORDER BY t.relname;"
 }
 
@@ -969,12 +1005,12 @@ cmd_ts_size()
 cmd_schema_size()
 {
   q "SELECT nspname AS schema, count(*) AS table_count,
-       pg_size_pretty(sum(pg_total_relation_size(c.oid))) AS total_size
+       pg_size_pretty(sum(pg_total_relation_size(nspname||'.'||relname))) AS total_size
      FROM pg_class c
      JOIN pg_namespace n ON c.relnamespace = n.oid
      WHERE c.relkind = 'r' AND n.nspname NOT IN ('pg_catalog', 'information_schema')
      GROUP BY nspname
-     ORDER BY sum(pg_total_relation_size(c.oid)) DESC;"
+     ORDER BY sum(pg_total_relation_size(nspname||'.'||relname)) DESC;"
 }
 
 # ============================================
@@ -1291,14 +1327,34 @@ cmd_explain()
 {
   local sql="$*"
   [ -z "$sql" ] && { echo "Usage: $EXEC_NAME explain \"<SQL>\""; return 1; }
-  q "EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT) $sql;"
+
+  # Basic SQL validation to prevent harmful statements
+  local sql_upper=$(echo "$sql" | tr '[:lower:]' '[:upper:]')
+  if [[ "$sql_upper" =~ ^(INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|TRUNCATE|GRANT|REVOKE|COMMIT|ROLLBACK|BEGIN|START TRANSACTION|SET|SHOW|RESET) ]]; then
+    echo "Error: Only SELECT statements are allowed in explain mode for security reasons" >&2
+    return 1
+  fi
+
+  # Sanitize the input before passing to EXPLAIN
+  local sanitized_sql=$(q_sanitize "$sql")
+  q "EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT) $sanitized_sql;"
 }
 
 cmd_explain_json()
 {
   local sql="$*"
   [ -z "$sql" ] && { echo "Usage: $EXEC_NAME explain_json \"<SQL>\""; return 1; }
-  q "EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) $sql;"
+
+  # Basic SQL validation to prevent harmful statements
+  local sql_upper=$(echo "$sql" | tr '[:lower:]' '[:upper:]')
+  if [[ "$sql_upper" =~ ^(INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|TRUNCATE|GRANT|REVOKE|COMMIT|ROLLBACK|BEGIN|START TRANSACTION|SET|SHOW|RESET) ]]; then
+    echo "Error: Only SELECT statements are allowed in explain mode for security reasons" >&2
+    return 1
+  fi
+
+  # Sanitize the input before passing to EXPLAIN
+  local sanitized_sql=$(q_sanitize "$sql")
+  q "EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) $sanitized_sql;"
 }
 
 cmd_lock_tree()
@@ -1542,16 +1598,16 @@ cmd_bloat_analysis()
 cmd_toast_tables()
 {
   q "SELECT n.nspname AS schema,
-       parent.relname AS \"table\",
+       parent.relname AS table_name,
        t.relname AS toast_table,
-       pg_size_pretty(pg_relation_size(t.oid)) AS toast_size,
-       pg_size_pretty(pg_total_relation_size(parent.oid)) AS total_table_size
+       pg_size_pretty(pg_relation_size(t.schemaname||'.'||t.relname)) AS toast_size,
+       pg_size_pretty(pg_total_relation_size(parent.schemaname||'.'||parent.relname)) AS total_table_size
      FROM pg_class parent
      JOIN pg_namespace n ON parent.relnamespace = n.oid
      JOIN pg_class t ON parent.reltoastrelid = t.oid
      WHERE n.nspname NOT IN ('pg_catalog', 'information_schema')
-       AND pg_relation_size(t.oid) > 1048576
-     ORDER BY pg_relation_size(t.oid) DESC;"
+       AND pg_relation_size(t.schemaname||'.'||t.relname) > 1048576
+     ORDER BY pg_relation_size(t.schemaname||'.'||t.relname) DESC;"
 }
 
 cmd_partition_info()
@@ -1562,7 +1618,7 @@ cmd_partition_info()
        parent.relname AS parent_table,
        child.relname AS partition,
        pg_get_expr(child.relpartbound, child.oid) AS partition_bound,
-       pg_size_pretty(pg_relation_size(child.oid)) AS size,
+       pg_size_pretty(pg_relation_size(child.schemaname||'.'||child.relname)) AS size,
        child.relkind AS type
      FROM pg_inherits i
      JOIN pg_class parent ON i.inhparent = parent.oid
@@ -1578,34 +1634,16 @@ cmd_partition_summary()
   q "SELECT n.nspname AS schema,
        parent.relname AS parent_table,
        count(*) AS num_partitions,
-       pg_size_pretty(sum(pg_relation_size(child.oid))) AS total_partition_size
+       pg_size_pretty(sum(pg_relation_size(child.schemaname||'.'||child.relname))) AS total_partition_size
      FROM pg_inherits i
      JOIN pg_class parent ON i.inhparent = parent.oid
      JOIN pg_class child ON i.inhrelid = child.oid
      JOIN pg_namespace n ON parent.relnamespace = n.oid
      WHERE n.nspname NOT IN ('pg_catalog', 'information_schema')
      GROUP BY n.nspname, parent.relname
-     ORDER BY sum(pg_relation_size(child.oid)) DESC;"
+     ORDER BY sum(pg_relation_size(child.schemaname||'.'||child.relname)) DESC;"
 }
 
-# ============================================
-# HIGH-PRIORITY DBA COMMANDS
-# ============================================
-
-cmd_bgwriter()
-{
-  q "SELECT checkpoints_timed, checkpoints_req,
-       CASE WHEN checkpoints_timed + checkpoints_req > 0
-            THEN round(100.0 * checkpoints_timed / (checkpoints_timed + checkpoints_req), 2)
-            ELSE 0 END AS timed_ratio,
-       buffers_checkpoint, buffers_clean, buffers_backend,
-       buffers_alloc,
-       pg_size_pretty(buffers_checkpoint*8192) AS checkpoint_bytes,
-       pg_size_pretty(buffers_clean*8192) AS clean_bytes,
-       pg_size_pretty(buffers_backend*8192) AS backend_bytes,
-       pg_size_pretty(buffers_alloc*8192) AS alloc_bytes
-     FROM pg_stat_bgwriter;"
-}
 
 cmd_active_transactions()
 {
@@ -1895,7 +1933,7 @@ cmd_temp_stats()
 
 cmd_plan_analysis()
 {
-  if ! check_pg_stat_statements; then
+  if [ -z "$(extension_installed pg_stat_statements)" ]; then
     echo "Error: pg_stat_statements extension not installed or not enabled."
     echo "Run: CREATE EXTENSION IF NOT EXISTS pg_stat_statements;"
     echo "And add pg_stat_statements to shared_preload_libraries in postgresql.conf"
@@ -1924,7 +1962,7 @@ cmd_plan_analysis()
 
 cmd_execution_profile()
 {
-  if ! check_pg_stat_statements; then
+  if [ -z "$(extension_installed pg_stat_statements)" ]; then
     echo "Error: pg_stat_statements extension not installed or not enabled."
     return 1
   fi
@@ -1975,7 +2013,7 @@ cmd_histogram_stats()
 
 cmd_parallel_efficiency()
 {
-  if ! check_pg_stat_statements; then
+  if [ -z "$(extension_installed pg_stat_statements)" ]; then
     echo "Error: pg_stat_statements extension not installed or not enabled."
     return 1
   fi
@@ -2154,46 +2192,62 @@ cmd_alert_engine()
   conn_limit_output=$(cmd_conn_limit 2>&1)
   local current_conns=$(echo "$conn_limit_output" | grep "current_connections" | awk '{print $2}')
   local max_conns=$(echo "$conn_limit_output" | grep "max_connections" | awk '{print $2}')
-  local usage_percent=$((current_conns * 100 / max_conns))
 
-  if [ "$usage_percent" -gt 90 ]; then
-    colorize red "CRITICAL: Connection usage at ${usage_percent}% (>$((max_conns * 90 / 100)) connections)"
-    issues=$((issues+1))
-  elif [ "$usage_percent" -gt 80 ]; then
-    colorize yellow "WARNING: Connection usage at ${usage_percent}% (>$((max_conns * 80 / 100)) connections)"
+  # Verify that we have valid numeric values before arithmetic operations
+  if [[ "$current_conns" =~ ^[0-9]+$ ]] && [[ "$max_conns" =~ ^[0-9]+$ ]] && [ "$max_conns" -gt 0 ]; then
+    local usage_percent=$((current_conns * 100 / max_conns))
+
+    if [ "$usage_percent" -gt 90 ]; then
+      colorize red "CRITICAL: Connection usage at ${usage_percent}% (>$((max_conns * 90 / 100)) connections)"
+      issues=$((issues+1))
+    elif [ "$usage_percent" -gt 80 ]; then
+      colorize yellow "WARNING: Connection usage at ${usage_percent}% (>$((max_conns * 80 / 100)) connections)"
+      issues=$((issues+1))
+    fi
+  else
+    colorize yellow "WARNING: Unable to determine connection usage (invalid data received)"
     issues=$((issues+1))
   fi
 
   # Check blocking sessions
   local blocking_count
   blocking_count=$(cmd_blocking 2>&1 | wc -l)
-  if [ "$blocking_count" -gt 5 ]; then
-    colorize red "CRITICAL: $((blocking_count-3)) blocking sessions detected"
-    issues=$((issues+1))
-  elif [ "$blocking_count" -gt 2 ]; then
-    colorize yellow "WARNING: $((blocking_count-3)) blocking sessions detected"
+  if [[ "$blocking_count" =~ ^[0-9]+$ ]]; then
+    if [ "$blocking_count" -gt 5 ]; then
+      colorize red "CRITICAL: $((blocking_count-3)) blocking sessions detected"
+      issues=$((issues+1))
+    elif [ "$blocking_count" -gt 2 ]; then
+      colorize yellow "WARNING: $((blocking_count-3)) blocking sessions detected"
+      issues=$((issues+1))
+    fi
+  else
+    colorize yellow "WARNING: Unable to determine blocking session count (invalid data received)"
     issues=$((issues+1))
   fi
 
   # Check slow queries if pg_stat_statements is available
-  if check_pg_stat_statements; then
+  if [ -n "$(extension_installed pg_stat_statements)" ]; then
     local slow_query_count
     slow_query_count=$(run_stat_statements "SELECT count(*) FROM pg_stat_statements WHERE mean_time > 1000;" 2>/dev/null | head -1)
-    if [ -n "$slow_query_count" ] && [ "$slow_query_count" -gt 10 ]; then
-      colorize red "CRITICAL: $slow_query_count queries with mean time > 1000ms"
-      issues=$((issues+1))
-    elif [ -n "$slow_query_count" ] && [ "$slow_query_count" -gt 5 ]; then
-      colorize yellow "WARNING: $slow_query_count queries with mean time > 1000ms"
-      issues=$((issues+1))
+    if [ -n "$slow_query_count" ] && [[ "$slow_query_count" =~ ^[0-9]+$ ]]; then
+      if [ "$slow_query_count" -gt 10 ]; then
+        colorize red "CRITICAL: $slow_query_count queries with mean time > 1000ms"
+        issues=$((issues+1))
+      elif [ "$slow_query_count" -gt 5 ]; then
+        colorize yellow "WARNING: $slow_query_count queries with mean time > 1000ms"
+        issues=$((issues+1))
+      fi
     fi
   fi
 
   # Check table bloat
   local bloat_issues
   bloat_issues=$(cmd_bloat 10 2>/dev/null | tail -n +2 | awk '$4 > 30 { count++ } END { print count+0 }' 2>/dev/null || echo 0)
-  if [ "$bloat_issues" -gt 5 ]; then
-    colorize yellow "WARNING: $bloat_issues tables with >30% bloat detected"
-    issues=$((issues+1))
+  if [[ "$bloat_issues" =~ ^[0-9]+$ ]]; then
+    if [ "$bloat_issues" -gt 5 ]; then
+      colorize yellow "WARNING: $bloat_issues tables with >30% bloat detected"
+      issues=$((issues+1))
+    fi
   fi
 
   # Check cache hit ratio
@@ -2388,22 +2442,37 @@ cmd_problem_summary()
 
   # Check for blocking
   local blocking_count=$(cmd_blocking 2>&1 | wc -l)
-  if [ "$blocking_count" -gt 3 ]; then  # Account for header lines
-    echo "- Blocking transactions detected ($((blocking_count-3)) sessions)"
+  if [[ "$blocking_count" =~ ^[0-9]+$ ]]; then
+    if [ "$blocking_count" -gt 3 ]; then  # Account for header lines
+      echo "- Blocking transactions detected ($((blocking_count-3)) sessions)"
+      issues=$((issues+1))
+    fi
+  else
+    echo "- Error determining blocking session count (received: $blocking_count)"
     issues=$((issues+1))
   fi
 
   # Check for long transactions
   local long_tx_count=$(cmd_long_transactions 10 2>&1 | wc -l)
-  if [ "$long_tx_count" -gt 1 ]; then
-    echo "- Long running transactions detected ($((long_tx_count-1)) sessions > 10 mins)"
+  if [[ "$long_tx_count" =~ ^[0-9]+$ ]]; then
+    if [ "$long_tx_count" -gt 1 ]; then
+      echo "- Long running transactions detected ($((long_tx_count-1)) sessions > 10 mins)"
+      issues=$((issues+1))
+    fi
+  else
+    echo "- Error determining long transaction count (received: $long_tx_count)"
     issues=$((issues+1))
   fi
 
   # Check for idle in transaction
   local idle_tx_count=$(cmd_idle_tx 2>&1 | wc -l)
-  if [ "$idle_tx_count" -gt 1 ]; then
-    echo "- Sessions idle in transaction detected ($((idle_tx_count-1)) sessions)"
+  if [[ "$idle_tx_count" =~ ^[0-9]+$ ]]; then
+    if [ "$idle_tx_count" -gt 1 ]; then
+      echo "- Sessions idle in transaction detected ($((idle_tx_count-1)) sessions)"
+      issues=$((issues+1))
+    fi
+  else
+    echo "- Error determining idle in transaction count (received: $idle_tx_count)"
     issues=$((issues+1))
   fi
 
@@ -2411,10 +2480,15 @@ cmd_problem_summary()
   local conn_details=$(cmd_conn_limit 2>&1)
   local current_conns=$(echo "$conn_details" | grep "current_connections" | awk '{print $2}')
   local max_conns=$(echo "$conn_details" | grep "max_connections" | awk '{print $2}')
-  local usage_percent=$((current_conns * 100 / max_conns))
+  if [[ "$current_conns" =~ ^[0-9]+$ ]] && [[ "$max_conns" =~ ^[0-9]+$ ]] && [ "$max_conns" -gt 0 ]; then
+    local usage_percent=$((current_conns * 100 / max_conns))
 
-  if [ "$usage_percent" -gt 80 ]; then
-    echo "- High connection usage: ${usage_percent}% ($current_conns/$max_conns)"
+    if [ "$usage_percent" -gt 80 ]; then
+      echo "- High connection usage: ${usage_percent}% ($current_conns/$max_conns)"
+      issues=$((issues+1))
+    fi
+  else
+    echo "- Error determining connection usage (invalid data received)"
     issues=$((issues+1))
   fi
 
@@ -2505,53 +2579,69 @@ cmd_alert_status()
 
   local current_conns=$(echo "$conn_details" | grep "current_connections" | awk '{print $2}')
   local max_conns=$(echo "$conn_details" | grep "max_connections" | awk '{print $2}')
-  local usage_percent=$((current_conns * 100 / max_conns))
+  if [[ "$current_conns" =~ ^[0-9]+$ ]] && [[ "$max_conns" =~ ^[0-9]+$ ]] && [ "$max_conns" -gt 0 ]; then
+    local usage_percent=$((current_conns * 100 / max_conns))
 
-  if [ "$usage_percent" -gt 90 ]; then
-    colorize red "CRITICAL: Connection usage at ${usage_percent}%"
-  elif [ "$usage_percent" -gt 75 ]; then
-    colorize yellow "WARNING: Connection usage at ${usage_percent}%"
+    if [ "$usage_percent" -gt 90 ]; then
+      colorize red "CRITICAL: Connection usage at ${usage_percent}%"
+    elif [ "$usage_percent" -gt 75 ]; then
+      colorize yellow "WARNING: Connection usage at ${usage_percent}%"
+    else
+      colorize green "OK: Connection usage at ${usage_percent}%"
+    fi
   else
-    colorize green "OK: Connection usage at ${usage_percent}%"
+    colorize yellow "WARNING: Unable to determine connection usage (invalid data received)"
   fi
   echo ""
 
   # Check for blocking sessions
   colorize yellow "BLOCKING SESSION STATUS:"
   local blocking_count=$(cmd_blocking 2>&1 | wc -l)
-  local actual_blocking=$((blocking_count-3))  # Account for header lines
-  if [ "$actual_blocking" -gt 5 ]; then
-    colorize red "CRITICAL: $actual_blocking blocking sessions detected"
-  elif [ "$actual_blocking" -gt 0 ]; then
-    colorize yellow "WARNING: $actual_blocking blocking sessions detected"
+  if [[ "$blocking_count" =~ ^[0-9]+$ ]]; then
+    local actual_blocking=$((blocking_count-3))  # Account for header lines
+    if [ "$actual_blocking" -gt 5 ]; then
+      colorize red "CRITICAL: $actual_blocking blocking sessions detected"
+    elif [ "$actual_blocking" -gt 0 ]; then
+      colorize yellow "WARNING: $actual_blocking blocking sessions detected"
+    else
+      colorize green "OK: No blocking sessions detected"
+    fi
   else
-    colorize green "OK: No blocking sessions detected"
+    colorize yellow "WARNING: Unable to determine blocking session count (invalid data received)"
   fi
   echo ""
 
   # Check for idle in transaction
   colorize yellow "IDLE IN TRANSACTION STATUS:"
   local idle_tx_count=$(cmd_idle_tx 2>&1 | wc -l)
-  local actual_idle=$((idle_tx_count-1))  # Account for header lines
-  if [ "$actual_idle" -gt 10 ]; then
-    colorize red "CRITICAL: $actual_idle idle in transaction sessions detected"
-  elif [ "$actual_idle" -gt 0 ]; then
-    colorize yellow "WARNING: $actual_idle idle in transaction sessions detected"
+  if [[ "$idle_tx_count" =~ ^[0-9]+$ ]]; then
+    local actual_idle=$((idle_tx_count-1))  # Account for header lines
+    if [ "$actual_idle" -gt 10 ]; then
+      colorize red "CRITICAL: $actual_idle idle in transaction sessions detected"
+    elif [ "$actual_idle" -gt 0 ]; then
+      colorize yellow "WARNING: $actual_idle idle in transaction sessions detected"
+    else
+      colorize green "OK: No idle in transaction sessions detected"
+    fi
   else
-    colorize green "OK: No idle in transaction sessions detected"
+    colorize yellow "WARNING: Unable to determine idle in transaction count (invalid data received)"
   fi
   echo ""
 
   # Check for long transactions
   colorize yellow "LONG TRANSACTION STATUS:"
   local long_tx_count=$(cmd_long_transactions 30 2>&1 | wc -l)
-  local actual_long_tx=$((long_tx_count-1))  # Account for header lines
-  if [ "$actual_long_tx" -gt 5 ]; then
-    colorize red "CRITICAL: $actual_long_tx long running transactions (>30 mins) detected"
-  elif [ "$actual_long_tx" -gt 0 ]; then
-    colorize yellow "WARNING: $actual_long_tx long running transactions (>30 mins) detected"
+  if [[ "$long_tx_count" =~ ^[0-9]+$ ]]; then
+    local actual_long_tx=$((long_tx_count-1))  # Account for header lines
+    if [ "$actual_long_tx" -gt 5 ]; then
+      colorize red "CRITICAL: $actual_long_tx long running transactions (>30 mins) detected"
+    elif [ "$actual_long_tx" -gt 0 ]; then
+      colorize yellow "WARNING: $actual_long_tx long running transactions (>30 mins) detected"
+    else
+      colorize green "OK: No long running transactions detected"
+    fi
   else
-    colorize green "OK: No long running transactions detected"
+    colorize yellow "WARNING: Unable to determine long transaction count (invalid data received)"
   fi
   echo ""
 
@@ -2679,6 +2769,12 @@ dispatch_command()
     bloat_detail)          cmd_bloat_detail "$@" ;;
     stats_check)           cmd_stats_check "$@" ;;
     temp_stats)            cmd_temp_stats "$@" ;;
+    health_plus)           cmd_health_plus "$@" ;;
+    advanced_explain)      cmd_advanced_explain "$@" ;;
+    top_wait_events)       cmd_top_wait_events "$@" ;;
+    find_blocking_chains)  cmd_find_blocking_chains "$@" ;;
+    safe_kill)             cmd_safe_kill "$@" ;;
+    safe_cancel)           cmd_safe_cancel "$@" ;;
 
     # ADVANCED QUERY OPTIMIZATION COMMANDS
     plan_analysis)         cmd_plan_analysis "$@" ;;
