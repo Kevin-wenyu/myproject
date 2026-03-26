@@ -115,6 +115,52 @@ colorize()
   esac
 }
 
+# ============================================
+# OUTPUT FORMATTING UTILITIES
+# ============================================
+
+# 统一消息前缀
+msg_info()  { echo "[INFO] $1"; }
+msg_warn()  { colorize yellow "[WARN] $1"; }
+msg_error() { colorize red "[ERROR] $1"; }
+
+# 空结果处理
+handle_empty() {
+  local result="$1"
+  local message="${2:-No results found}"
+  if [ -z "$result" ] || [ "$result" = " " ] || [ "$result" = "" ]; then
+    msg_info "$message"
+    return 0
+  fi
+  echo "$result"
+}
+
+# 数值格式化 - 百分比保留1位小数
+format_percent() {
+  local value="$1"
+  if [[ "$value" =~ ^[0-9]+\.?[0-9]*$ ]]; then
+    printf "%.1f%%" "$value"
+  else
+    echo "$value"
+  fi
+}
+
+# 数值格式化 - 大数字千分位
+format_number() {
+  local num="$1"
+  if [[ "$num" =~ ^[0-9]+$ ]]; then
+    printf "%'d" "$num"
+  else
+    echo "$num"
+  fi
+}
+
+# 表格分隔线
+print_separator() {
+  local width="${1:-80}"
+  printf "%${width}s\n" | tr ' ' '-'
+}
+
 get_version()
 {
   local version_output
@@ -211,8 +257,8 @@ run_stat_statements()
 
 usage()
 {
+  echo -e "${BLUE}PostgreSQL Database Diagnostic Tool${NC}"
   cat << EOF
-${BLUE}PostgreSQL Database Diagnostic Tool${NC}
 Version: $TOOL_VERSION | Build: $TOOL_BUILD_DATE
 
 Usage: $EXEC_NAME [options] <command> [arguments]
