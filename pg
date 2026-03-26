@@ -552,6 +552,7 @@ Commands:
     perf_insights           Performance insights
     emergency_stop          Emergency stop procedures
     alerts                  Alert status
+    diagnose <scenario>     Combined diagnosis for common DBA scenarios
 
 Examples:
   $EXEC_NAME ps
@@ -3236,6 +3237,38 @@ cmd_alert_status()
 }
 
 # ============================================
+# COMBINED DIAGNOSIS COMMANDS
+# ============================================
+
+cmd_diagnose()
+{
+  local scenario="$1"
+  shift
+
+  case "$scenario" in
+    slow_query|slow|query)    cmd_diagnose_slow_query "$@" ;;
+    lock_issue|lock|blocking)  cmd_diagnose_lock_issue "$@" ;;
+    connection|conn)           cmd_diagnose_connection "$@" ;;
+    replication|repl)          cmd_diagnose_replication "$@" ;;
+    performance|perf)          cmd_diagnose_performance "$@" ;;
+    health|full)               cmd_diagnose_health "$@" ;;
+    capacity|capacity_plan)    cmd_diagnose_capacity "$@" ;;
+    *)
+      echo "Usage: $EXEC_NAME diagnose <scenario> [options]"
+      echo ""
+      echo "Scenarios:"
+      echo "  slow_query [pid]     - Slow query complete diagnosis"
+      echo "  lock_issue           - Lock problem complete diagnosis"
+      echo "  connection           - Connection pool problem diagnosis"
+      echo "  replication          - Replication problem diagnosis"
+      echo "  performance          - Performance degradation diagnosis"
+      echo "  health               - Comprehensive health check"
+      echo "  capacity             - Capacity planning analysis"
+      ;;
+  esac
+}
+
+# ============================================
 # MAIN DISPATCHER
 # ============================================
 
@@ -3374,6 +3407,9 @@ dispatch_command()
     perf_insights|performance)  cmd_performance_insights "$@" ;;
     emergency_stop|emergency)   cmd_emergency_stop "$@" ;;
     alerts|alert_status)        cmd_alert_status "$@" ;;
+
+    # COMBINED DIAGNOSIS COMMAND
+    diagnose)              cmd_diagnose "$@" ;;
 
     *)
       echo "Unknown command: $cmd"
