@@ -3,11 +3,17 @@
 # PostgreSQL Database Diagnostic Tool (pg)
 # Production-ready for PostgreSQL 9.6-18
 #
-# Version: 4.1.0 (2026-03-26)
-# Previous Version: 4.0.0 (2026-03-26)
+# Version: 4.1.1 (2026-03-26)
+# Previous Version: 4.1.0 (2026-03-26)
 # Author: Kevin
 #
 # Version History:
+# 4.1.1 (2026-03-26) - Bug fix release:
+#                       - Fixed q() function returning formatted output with headers
+#                       - Added q_scalar() for single value queries
+#                       - Fixed arithmetic errors in diagnose_health, diagnose_connection
+#                       - Fixed blocking_enhanced command parsing errors
+#                       - Added numeric validation before arithmetic operations
 # 4.1.0 (2026-03-26) - Command consolidation:
 #                       - Merged slow/slow_enhanced into slow (enhanced)
 #                       - Merged blocking/blocking_enhanced into blocking (enhanced)
@@ -636,6 +642,25 @@ q()
   echo "$result"
 }
 
+# Scalar value query - returns single value without headers
+# Use for queries that return a single numeric/text value for use in arithmetic
+q_scalar()
+{
+  local query="$1"
+  local result
+
+  # Execute with -t (tuples only) and -A (unaligned) to get just the value
+  result=$(echo "$query" | $PSQL_CMD -t -A 2>&1)
+  local exit_code=$?
+
+  if [ $exit_code -ne 0 ]; then
+    return $exit_code
+  fi
+
+  # Trim whitespace and return
+  echo "$result" | tr -d '[:space:]'
+}
+
 q_sanitize()
 {
   local input="$1"
@@ -734,7 +759,7 @@ cmd_blocking_enhanced()
 
   # 检查是否有阻塞
   local blocking_exists
-  blocking_exists=$(q "SELECT count(*) FROM pg_locks bl1
+  blocking_exists=$(q_scalar "SELECT count(*) FROM pg_locks bl1
     JOIN pg_locks bl2 ON bl1.locktype = bl2.locktype
       AND bl1.database IS NOT DISTINCT FROM bl2.database
       AND bl1.relation IS NOT DISTINCT FROM bl2.relation
@@ -746,9 +771,9 @@ cmd_blocking_enhanced()
       AND bl1.objid IS NOT DISTINCT FROM bl2.objid
       AND bl1.objsubid IS NOT DISTINCT FROM bl2.objsubid
       AND bl1.pid != bl2.pid
-      AND NOT bl1.granted AND bl2.granted;")
+      AND NOT bl1.granted AND bl2.granted;" 2>/dev/null || echo 0)
 
-  if [ "$blocking_exists" -eq 0 ]; then
+  if [ "${blocking_exists:-0}" -eq 0 ]; then
     msg_info "No blocking sessions detected"
     return 0
   fi
@@ -763,7 +788,7 @@ cmd_blocking_enhanced()
   # 根因分析
   colorize yellow "ROOT CAUSE ANALYSIS:"
   local root_pid root_query root_duration
-  root_pid=$(q "SELECT bl.pid
+  root_pid=$(q_scalar "SELECT bl.pid
     FROM pg_locks bl
     WHERE bl.granted = true
       AND EXISTS (
@@ -777,9 +802,9 @@ cmd_blocking_enhanced()
     ORDER BY bl.pid
     LIMIT 1;" 2>/dev/null)
 
-  if [ -n "$root_pid" ] && [ "$root_pid" != " " ]; then
-    root_query=$(q "SELECT left(query, 80) FROM pg_stat_activity WHERE pid = $root_pid;" 2>/dev/null)
-    root_duration=$(q "SELECT round(EXTRACT(EPOCH FROM (now() - query_start))::numeric, 2) FROM pg_stat_activity WHERE pid = $root_pid;" 2>/dev/null)
+  if [ -n "$root_pid" ] && [ "$root_pid" != " " ] && [[ "$root_pid" =~ ^[0-9]+$ ]]; then
+    root_query=$(q_scalar "SELECT left(query, 80) FROM pg_stat_activity WHERE pid = $root_pid;" 2>/dev/null)
+    root_duration=$(q_scalar "SELECT round(EXTRACT(EPOCH FROM (now() - query_start))::numeric, 2) FROM pg_stat_activity WHERE pid = $root_pid;" 2>/dev/null)
 
     echo "  Root blocker: PID $root_pid"
     echo "  Query: ${root_query:-N/A}"
@@ -799,11 +824,11 @@ cmd_blocking_enhanced()
   # 影响范围
   colorize yellow "IMPACT ASSESSMENT:"
   local waiter_count total_wait_time
-  waiter_count=$(q "SELECT count(DISTINCT pid) FROM pg_locks WHERE NOT granted;" 2>/dev/null)
-  total_wait_time=$(q "SELECT coalesce(round(sum(EXTRACT(EPOCH FROM (now() - query_start)))::numeric, 0), 0)
+  waiter_count=$(q_scalar "SELECT count(DISTINCT pid) FROM pg_locks WHERE NOT granted;" 2>/dev/null || echo 0)
+  total_wait_time=$(q_scalar "SELECT coalesce(round(sum(EXTRACT(EPOCH FROM (now() - query_start)))::numeric, 0), 0)
     FROM pg_stat_activity a
     JOIN pg_locks l ON a.pid = l.pid
-    WHERE NOT l.granted;" 2>/dev/null)
+    WHERE NOT l.granted;" 2>/dev/null || echo 0)
 
   echo "  Sessions waiting: ${waiter_count:-0}"
   echo "  Total wait time: ${total_wait_time:-0} seconds"
@@ -811,7 +836,7 @@ cmd_blocking_enhanced()
 
   # 建议操作
   colorize yellow "RECOMMENDED ACTIONS:"
-  if [ -n "$root_pid" ] && [ "$root_pid" != " " ]; then
+  if [ -n "$root_pid" ] && [ "$root_pid" != " " ] && [[ "$root_pid" =~ ^[0-9]+$ ]]; then
     echo "  1. pg cancel $root_pid    (Try cancel first - graceful)"
     echo "  2. pg kill $root_pid      (If cancel fails - forceful)"
     echo ""
@@ -3404,16 +3429,21 @@ cmd_diagnose_connection()
   echo ""
   echo "Connection Pool Configuration:"
   local max_conn current_conn
-  max_conn=$(q "SELECT setting FROM pg_settings WHERE name = 'max_connections';")
-  current_conn=$(q "SELECT count(*) FROM pg_stat_activity;")
+  max_conn=$(q_scalar "SELECT setting FROM pg_settings WHERE name = 'max_connections';" 2>/dev/null || echo 100)
+  current_conn=$(q_scalar "SELECT count(*) FROM pg_stat_activity;" 2>/dev/null || echo 0)
 
-  echo "  max_connections: $max_conn"
-  echo "  current connections: $current_conn"
-  echo "  Utilization: $(( current_conn * 100 / max_conn ))%"
-  echo ""
-  echo "  Recommended pool size (per pgbouncer):"
-  echo "    - Session pool: $(( max_conn / 2 )) - $(( max_conn * 3 / 4 ))"
-  echo "    - Transaction pool: $(( max_conn / 4 )) - $(( max_conn / 2 ))"
+  # Validate numeric values before arithmetic
+  if [[ "$max_conn" =~ ^[0-9]+$ ]] && [[ "$current_conn" =~ ^[0-9]+$ ]] && [ "$max_conn" -gt 0 ]; then
+    echo "  max_connections: $max_conn"
+    echo "  current connections: $current_conn"
+    echo "  Utilization: $(( current_conn * 100 / max_conn ))%"
+    echo ""
+    echo "  Recommended pool size (per pgbouncer):"
+    echo "    - Session pool: $(( max_conn / 2 )) - $(( max_conn * 3 / 4 ))"
+    echo "    - Transaction pool: $(( max_conn / 4 )) - $(( max_conn / 2 ))"
+  else
+    echo "  Unable to calculate pool recommendations (connection error?)"
+  fi
   echo ""
 
   colorize green "Connection diagnosis complete."
@@ -3568,28 +3598,35 @@ cmd_diagnose_health()
   echo ""
 
   local current_conn max_conn
-  current_conn=$(q "SELECT count(*) FROM pg_stat_activity;")
-  max_conn=$(q "SELECT setting::int FROM pg_settings WHERE name = 'max_connections';")
-  local conn_pct=$(( current_conn * 100 / max_conn ))
+  current_conn=$(q_scalar "SELECT count(*) FROM pg_stat_activity;" 2>/dev/null || echo 0)
+  max_conn=$(q_scalar "SELECT setting::int FROM pg_settings WHERE name = 'max_connections';" 2>/dev/null || echo 100)
 
-  echo "Connections: $current_conn / $max_conn ($conn_pct%)"
+  # Validate numeric values before arithmetic
+  if [[ "$current_conn" =~ ^[0-9]+$ ]] && [[ "$max_conn" =~ ^[0-9]+$ ]] && [ "$max_conn" -gt 0 ]; then
+    local conn_pct=$(( current_conn * 100 / max_conn ))
+    echo "Connections: $current_conn / $max_conn ($conn_pct%)"
 
-  if [ "$conn_pct" -gt 90 ]; then
-    colorize red "CRITICAL: Connection usage > 90%"
-    issues=$((issues + 1))
-  elif [ "$conn_pct" -gt 75 ]; then
-    colorize yellow "WARNING: Connection usage > 75%"
-    issues=$((issues + 1))
+    if [ "$conn_pct" -gt 90 ]; then
+      colorize red "CRITICAL: Connection usage > 90%"
+      issues=$((issues + 1))
+    elif [ "$conn_pct" -gt 75 ]; then
+      colorize yellow "WARNING: Connection usage > 75%"
+      issues=$((issues + 1))
+    else
+      colorize green "OK: Connection usage healthy"
+    fi
   else
-    colorize green "OK: Connection usage healthy"
+    echo "Connections: Unable to determine (connection error?)"
+    colorize yellow "WARNING: Could not retrieve connection info"
+    issues=$((issues + 1))
   fi
   echo ""
 
   # 检查空闲事务
   local idle_count
-  idle_count=$(q "SELECT count(*) FROM pg_stat_activity WHERE state = 'idle in transaction';" 2>/dev/null || echo 0)
+  idle_count=$(q_scalar "SELECT count(*) FROM pg_stat_activity WHERE state = 'idle in transaction';" 2>/dev/null || echo 0)
   echo "Idle in transaction: $idle_count"
-  if [ "$idle_count" -gt 5 ]; then
+  if [[ "$idle_count" =~ ^[0-9]+$ ]] && [ "$idle_count" -gt 5 ]; then
     colorize yellow "WARNING: $idle_count sessions idle in transaction"
     issues=$((issues + 1))
   fi
@@ -3600,19 +3637,23 @@ cmd_diagnose_health()
   echo ""
 
   local cache_ratio
-  cache_ratio=$(q "SELECT round(100.0 * sum(blks_hit) / nullif(sum(blks_hit) + sum(blks_read), 0), 2)
+  cache_ratio=$(q_scalar "SELECT round(100.0 * sum(blks_hit) / nullif(sum(blks_hit) + sum(blks_read), 0), 2)
     FROM pg_stat_database WHERE datname not in ('template0', 'template1');" 2>/dev/null)
 
-  echo "Cache hit ratio: ${cache_ratio}%"
+  if [ -n "$cache_ratio" ] && [[ "$cache_ratio" =~ ^[0-9]+\.?[0-9]*$ ]]; then
+    echo "Cache hit ratio: ${cache_ratio}%"
 
-  if (( $(echo "${cache_ratio:-100} < 90" | bc -l) )); then
-    colorize red "CRITICAL: Cache hit ratio < 90%"
-    issues=$((issues + 1))
-  elif (( $(echo "${cache_ratio:-100} < 95" | bc -l) )); then
-    colorize yellow "WARNING: Cache hit ratio < 95%"
-    issues=$((issues + 1))
+    if (( $(echo "${cache_ratio} < 90" | bc -l) )); then
+      colorize red "CRITICAL: Cache hit ratio < 90%"
+      issues=$((issues + 1))
+    elif (( $(echo "${cache_ratio} < 95" | bc -l) )); then
+      colorize yellow "WARNING: Cache hit ratio < 95%"
+      issues=$((issues + 1))
+    else
+      colorize green "OK: Cache hit ratio healthy"
+    fi
   else
-    colorize green "OK: Cache hit ratio healthy"
+    echo "Cache hit ratio: Unable to determine"
   fi
   echo ""
 
@@ -3621,17 +3662,19 @@ cmd_diagnose_health()
   echo ""
 
   local blocking_count
-  blocking_count=$(q "SELECT count(*) FROM pg_locks WHERE NOT granted;" 2>/dev/null || echo 0)
+  blocking_count=$(q_scalar "SELECT count(*) FROM pg_locks WHERE NOT granted;" 2>/dev/null || echo 0)
   echo "Blocked sessions: $blocking_count"
 
-  if [ "$blocking_count" -gt 5 ]; then
-    colorize red "CRITICAL: $blocking_count blocked sessions"
-    issues=$((issues + 1))
-  elif [ "$blocking_count" -gt 0 ]; then
-    colorize yellow "WARNING: $blocking_count blocked sessions"
-    issues=$((issues + 1))
-  else
-    colorize green "OK: No blocking sessions"
+  if [[ "$blocking_count" =~ ^[0-9]+$ ]]; then
+    if [ "$blocking_count" -gt 5 ]; then
+      colorize red "CRITICAL: $blocking_count blocked sessions"
+      issues=$((issues + 1))
+    elif [ "$blocking_count" -gt 0 ]; then
+      colorize yellow "WARNING: $blocking_count blocked sessions"
+      issues=$((issues + 1))
+    else
+      colorize green "OK: No blocking sessions"
+    fi
   fi
   echo ""
 
@@ -3640,14 +3683,16 @@ cmd_diagnose_health()
   echo ""
 
   local bloated_tables
-  bloated_tables=$(q "SELECT count(*) FROM pg_stat_user_tables WHERE n_dead_tup > 10000;" 2>/dev/null || echo 0)
+  bloated_tables=$(q_scalar "SELECT count(*) FROM pg_stat_user_tables WHERE n_dead_tup > 10000;" 2>/dev/null || echo 0)
   echo "Tables with significant dead tuples: $bloated_tables"
 
-  if [ "$bloated_tables" -gt 10 ]; then
-    colorize yellow "WARNING: $bloated_tables tables need vacuum"
-    issues=$((issues + 1))
-  else
-    colorize green "OK: Table bloat manageable"
+  if [[ "$bloated_tables" =~ ^[0-9]+$ ]]; then
+    if [ "$bloated_tables" -gt 10 ]; then
+      colorize yellow "WARNING: $bloated_tables tables need vacuum"
+      issues=$((issues + 1))
+    else
+      colorize green "OK: Table bloat manageable"
+    fi
   fi
   echo ""
 
@@ -3656,12 +3701,12 @@ cmd_diagnose_health()
   echo ""
 
   local repl_count
-  repl_count=$(q "SELECT count(*) FROM pg_stat_replication;" 2>/dev/null || echo 0)
+  repl_count=$(q_scalar "SELECT count(*) FROM pg_stat_replication;" 2>/dev/null || echo 0)
   echo "Replication streams: $repl_count"
 
-  if [ "$repl_count" -gt 0 ]; then
+  if [[ "$repl_count" =~ ^[0-9]+$ ]] && [ "$repl_count" -gt 0 ]; then
     local max_lag
-    max_lag=$(q "SELECT round(EXTRACT(EPOCH FROM max(replay_lag))) FROM pg_stat_replication;" 2>/dev/null || echo 0)
+    max_lag=$(q_scalar "SELECT round(EXTRACT(EPOCH FROM max(replay_lag))) FROM pg_stat_replication;" 2>/dev/null || echo 0)
     echo "Max replication lag: ${max_lag}s"
 
     if [ "${max_lag:-0}" -gt 300 ]; then
