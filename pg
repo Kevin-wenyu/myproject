@@ -401,6 +401,7 @@ Commands:
     ps                      Process list (all sessions)
     running [N]             Active queries
     blocking                Who is blocking whom
+    blocking_enhanced       Enhanced blocking analysis with root cause and actions
     locks                   Lock overview
     kill <pid>              Terminate session
     cancel <pid>            Cancel query
@@ -710,6 +711,105 @@ cmd_blocking()
   WHERE NOT blocked_locks.GRANTED;")
 
   handle_empty "$result" "No blocking sessions detected"
+}
+
+# ============================================
+# ENHANCED LOCK CHAIN DIAGNOSIS
+# ============================================
+
+cmd_blocking_enhanced()
+{
+  colorize blue "=== BLOCKING CHAIN ENHANCED DIAGNOSIS ==="
+  echo ""
+
+  # 检查是否有阻塞
+  local blocking_exists
+  blocking_exists=$(q "SELECT count(*) FROM pg_locks bl1
+    JOIN pg_locks bl2 ON bl1.locktype = bl2.locktype
+      AND bl1.database IS NOT DISTINCT FROM bl2.database
+      AND bl1.relation IS NOT DISTINCT FROM bl2.relation
+      AND bl1.page IS NOT DISTINCT FROM bl2.page
+      AND bl1.tuple IS NOT DISTINCT FROM bl2.tuple
+      AND bl1.virtualxid IS NOT DISTINCT FROM bl2.virtualxid
+      AND bl1.transactionid IS NOT DISTINCT FROM bl2.transactionid
+      AND bl1.classid IS NOT DISTINCT FROM bl2.classid
+      AND bl1.objid IS NOT DISTINCT FROM bl2.objid
+      AND bl1.objsubid IS NOT DISTINCT FROM bl2.objsubid
+      AND bl1.pid != bl2.pid
+      AND NOT bl1.granted AND bl2.granted;")
+
+  if [ "$blocking_exists" -eq 0 ]; then
+    msg_info "No blocking sessions detected"
+    return 0
+  fi
+  echo ""
+
+  # 阻塞链分析
+  colorize yellow "BLOCKING CHAIN:"
+  echo ""
+  cmd_blocking
+  echo ""
+
+  # 根因分析
+  colorize yellow "ROOT CAUSE ANALYSIS:"
+  local root_pid root_query root_duration
+  root_pid=$(q "SELECT bl.pid
+    FROM pg_locks bl
+    WHERE bl.granted = true
+      AND EXISTS (
+        SELECT 1 FROM pg_locks wl
+        WHERE wl.locktype = bl.locktype
+          AND wl.database IS NOT DISTINCT FROM bl.database
+          AND wl.relation IS NOT DISTINCT FROM bl.relation
+          AND NOT wl.granted
+          AND wl.pid != bl.pid
+      )
+    ORDER BY bl.pid
+    LIMIT 1;" 2>/dev/null)
+
+  if [ -n "$root_pid" ] && [ "$root_pid" != " " ]; then
+    root_query=$(q "SELECT left(query, 80) FROM pg_stat_activity WHERE pid = $root_pid;" 2>/dev/null)
+    root_duration=$(q "SELECT round(EXTRACT(EPOCH FROM (now() - query_start))::numeric, 2) FROM pg_stat_activity WHERE pid = $root_pid;" 2>/dev/null)
+
+    echo "  Root blocker: PID $root_pid"
+    echo "  Query: ${root_query:-N/A}"
+    echo "  Duration: ${root_duration:-N/A} seconds"
+
+    # 分析根因类型
+    if echo "$root_query" | grep -qiE "ALTER|DROP|TRUNCATE|REINDEX|VACUUM FULL"; then
+      echo "  Type: DDL operation blocking other sessions"
+      echo "  Recommendation: Schedule DDL during maintenance window"
+    elif echo "$root_query" | grep -qiE "BEGIN|START TRANSACTION" && [ "${root_duration:-0}" -gt 60 ]; then
+      echo "  Type: Long-running transaction holding locks"
+      echo "  Recommendation: Check for idle in transaction, consider terminating"
+    fi
+  fi
+  echo ""
+
+  # 影响范围
+  colorize yellow "IMPACT ASSESSMENT:"
+  local waiter_count total_wait_time
+  waiter_count=$(q "SELECT count(DISTINCT pid) FROM pg_locks WHERE NOT granted;" 2>/dev/null)
+  total_wait_time=$(q "SELECT coalesce(round(sum(EXTRACT(EPOCH FROM (now() - query_start)))::numeric, 0), 0)
+    FROM pg_stat_activity a
+    JOIN pg_locks l ON a.pid = l.pid
+    WHERE NOT l.granted;" 2>/dev/null)
+
+  echo "  Sessions waiting: ${waiter_count:-0}"
+  echo "  Total wait time: ${total_wait_time:-0} seconds"
+  echo ""
+
+  # 建议操作
+  colorize yellow "RECOMMENDED ACTIONS:"
+  if [ -n "$root_pid" ] && [ "$root_pid" != " " ]; then
+    echo "  1. pg cancel $root_pid    (Try cancel first - graceful)"
+    echo "  2. pg kill $root_pid      (If cancel fails - forceful)"
+    echo ""
+    echo "  Prevention:"
+    echo "  - Schedule DDL during maintenance windows"
+    echo "  - Set idle_in_transaction_session_timeout"
+    echo "  - Monitor long-running transactions"
+  fi
 }
 
 cmd_locks()
@@ -3083,6 +3183,7 @@ dispatch_command()
     ps)                    cmd_ps "$@" ;;
     running)               cmd_running "$@" ;;
     blocking|blocked)      cmd_blocking "$@" ;;
+    blocking_enhanced)     cmd_blocking_enhanced "$@" ;;
     locks)                 cmd_locks "$@" ;;
     kill)                  cmd_kill "$@" ;;
     cancel)                cmd_cancel "$@" ;;
