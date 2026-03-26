@@ -235,7 +235,7 @@ init_pg_stat_statements_columns()
     PGS_MEAN_COL="mean_exec_time"
     PGS_MAX_COL="max_exec_time"
   else
-    PGS_TOTAL_COL="total_time"
+    PGS_TOTAL_COL="total_exec_time"
     PGS_MEAN_COL="mean_time"
     PGS_MAX_COL="max_time"
   fi
@@ -1138,7 +1138,7 @@ cmd_top_time()
 
   q "SELECT
     calls,
-    round(total_exec_time::numeric, 2) as total_time_ms,
+    round(total_exec_time::numeric, 2) as total_exec_time_ms,
     round(mean_exec_time::numeric, 2) as mean_time_ms,
     round((100 * total_exec_time / sum(total_exec_time) over())::numeric, 2) as pct_total,
     rows,
@@ -1332,7 +1332,7 @@ cmd_vacuum_progress()
   q "SELECT pid, datname, relid::regclass AS \"table\",
        phase,
        heap_blks_total, heap_blks_scanned, heap_blks_vacuumed,
-       num_dead_tuples
+       num_dead_item_ids
      FROM pg_stat_progress_vacuum;"
 }
 
@@ -2061,7 +2061,7 @@ cmd_session_stats()
   q "SELECT usename, application_name, state,
        count(*) AS sessions,
        count(*) FILTER(WHERE wait_event IS NOT NULL) AS waiting,
-       ROUND(avg(now() - query_start)::numeric, 2) AS avg_duration_sec,
+       ROUND(avg(EXTRACT(EPOCH FROM (now() - query_start)))::numeric, 2) AS avg_duration_sec,
        max(now() - query_start) AS max_duration
      FROM pg_stat_activity
      WHERE state IS NOT NULL
@@ -2194,7 +2194,7 @@ cmd_index_usage_pattern()
        pg_size_pretty(pg_relation_size(s.indexrelid)) AS size
      FROM pg_stat_user_indexes s
      JOIN pg_index i ON s.indexrelid = i.indexrelid
-     WHERE s.indisvalid
+     WHERE i.indisvalid
        AND s.schemaname NOT IN ('pg_catalog', 'information_schema')
      ORDER BY s.idx_scan DESC, s.idx_tup_read DESC
      LIMIT $limit;"
@@ -2316,14 +2316,18 @@ cmd_deadlock_detect()
 
 cmd_slowlog_analysis()
 {
+  if [ -z "$(extension_installed pg_stat_statements)" ]; then
+    echo "Error: pg_stat_statements extension not installed"
+    return 1
+  fi
   q "SELECT LEFT(query, 100) AS sample_query,
        count(*) AS execution_count,
-       round(avg(total_time), 2) AS avg_time_ms,
-       round(max(total_time), 2) AS max_time_ms,
-       round(min(total_time), 2) AS min_time_ms,
-       round(stddev(total_time), 2) AS stddev_time_ms
+       round(CAST(avg(total_exec_time) AS numeric), 2) AS avg_time_ms,
+       round(CAST(max(total_exec_time) AS numeric), 2) AS max_time_ms,
+       round(CAST(min(total_exec_time) AS numeric), 2) AS min_time_ms,
+       round(CAST(stddev(total_exec_time) AS numeric), 2) AS stddev_time_ms
      FROM pg_stat_statements
-     WHERE mean_time > 1000  -- Queries taking more than 1 second on average
+     WHERE mean_exec_time > 1000
      GROUP BY LEFT(query, 100)
      ORDER BY avg_time_ms DESC
      LIMIT $TOP_N;"
@@ -2331,7 +2335,7 @@ cmd_slowlog_analysis()
 
 cmd_maintenance_check()
 {
-  q "SELECT schemaname, tablename,
+  q "SELECT schemaname, relname AS tablename,
        n_tup_ins, n_tup_upd, n_tup_del,
        n_dead_tup,
        last_vacuum, last_autovacuum, last_analyze, last_autoanalyze,
@@ -2424,104 +2428,7 @@ cmd_lock_graph()
      ORDER BY chain_root, level, blocked_duration DESC;"
 }
 
-cmd_bloat_detail()
-{
-  q "SELECT tbloat.schemaname, tbloat.tablename,
-       tbloat.bloat_pct,
-       pg_size_pretty(tbloat.bloat_bytes) AS bloat_size,
-       pg_size_pretty(pg_relation_size(tbloat.schemaname||'.'||tbloat.tablename)) AS table_size,
-       tbloat.wastedbytes AS actual_wasted_bytes,
-       tbloat.n_dead_tup,
-       CASE
-         WHEN tbloat.n_dead_tup > 10000 AND tbloat.last_vacuum < now() - interval '1 hour' THEN 'URGENT'
-         WHEN tbloat.n_dead_tup > 5000 AND tbloat.last_vacuum < now() - interval '30 minutes' THEN 'HIGH'
-         WHEN tbloat.bloat_pct > 30 THEN 'MEDIUM'
-         ELSE 'LOW'
-       END AS priority
-     FROM (
-       SELECT schemaname, tablename,
-              CASE
-                WHEN reltuples > 0 THEN
-                  round(100 * (bs*tuple_hdr_width + tuple_data_width * reltuples - 8192)/(bs*relpages)::float, 2)
-                ELSE 0
-              END AS bloat_pct,
-              CASE
-                WHEN reltuples > 0 THEN
-                  ceil((bs-tuple_hdr_width)*reltuples/bs) * pagesize - coalesce(table_len, 0)
-                ELSE 0
-              END AS bloat_bytes,
-              CASE
-                WHEN reltuples > 0 THEN
-                  ceil((bs-tuple_hdr_width)*reltuples/bs) * pagesize - coalesce(table_len, 0)
-                ELSE 0
-              END AS wastedbytes,
-              n_dead_tup,
-              last_vacuum
-       FROM (
-         SELECT ceil(32613::float/(blksize-page_hdr))::int AS bs,
-                blksize, tblpages, fillfactor,
-                (tblpages-ceil(fillfactor*(tblpages-page_hdr)/(blksize-size_hdr-blksize/reltuples))) AS extra_pages,
-                ceil(32613::float/(blksize-page_hdr))*(tblpages-fillfactor*(tblpages-page_hdr)/(blksize-size_hdr-blksize/reltuples)) AS bs_scanned,
-                size_hdr, tblpages, page_hdr, tuple_hdr_width, tuple_data_width, reltuples, blksize,
-                (reltuples*(tuple_hdr_width + tuple_data_width) + 2*bs) AS table_len, tblid, schemaname, tablename
-         FROM (
-           SELECT tbl.oid AS tblid, tbl.schemaname, tbl.tablename, stat.relpages, stat.reltuples,
-             current_setting('block_size')::numeric AS blksize,
-             CASE WHEN version()~'mingw32' OR version()~'64-bit|x86_64|ppc64|ia64|amd64' THEN 8 ELSE 4 END AS size_hdr,
-             CASE WHEN SUBSTRING(SPLIT_PART(v, ' ', 2) FROM '#\".\"#' FOR '#') IN ('8.0','8.1','8.2') THEN 27 ELSE 23 END AS page_hdr,
-             CASE WHEN MAX(coalesce(null_frac,0)) = 0 THEN 2 ELSE 6 END AS nulldatawidth_corrc,
-             (CASE WHEN MAX(coalesce(null_frac,0)) = 0 THEN 2 ELSE 6 END) -
-               (SELECT 1 + count(1)/8
-                FROM pg_stats s2
-                WHERE schemaname = s.schemaname
-                  AND tablename = s.tablename
-                  AND EXISTS (SELECT 1 FROM pg_stats s3
-                              WHERE s3.schemaname = s.schemaname
-                                AND s3.tablename = s.tablename
-                                AND s3.attname = s.attname
-                                AND NOT s3.null_frac = 0)
-               ) AS nulldatawidth_corr,
-             SUM((1-coalesce(s.null_frac, 0)) * coalesce(s.avg_width, 1024)) AS datawidth,
-             MAX(case when atttypid in (1042,1043) then 1 else 0 end) AS is_char,
-             MIN(case when atttypid in (21, 23, 25, 1042, 1043) then 13 else attlen end) AS min_col_width,
-             MAX(case when atttypid in (21, 23, 25, 1042, 1043) then 13 else attlen end) AS max_col_width,
-             ( 4 + nulldatawidth_corr
-                + (abs(split_part(array_dims('{1}'::text[]),':',2)::smallint - 0) + 1) * 2
-                + (case when atttypid in (1042,1043) then 1 else 0 end)
-             ) AS tuple_hdr_width,
-             ( 4 + nulldatawidth_corrc
-                + (abs(split_part(array_dims('{1}'::text[]),':',2)::smallint - 0) + 1) * 2
-                + (case when atttypid in (1042,1043) then 1 else 0 end)
-             ) AS tuple_data_width
-           FROM pg_attribute att
-           JOIN pg_class tbl ON att.attrelid = tbl.oid
-           JOIN pg_namespace ns ON tbl.relnamespace = ns.oid
-           JOIN pg_stats s ON s.schemaname=ns.nspname
-                            AND s.tablename = tbl.relname
-                            AND s.attname = att.attname
-           JOIN (SELECT schemaname, tablename, attname, c.oid FROM pg_stats s, pg_class c, pg_namespace n
-                 WHERE schemaname = n.nspname AND c.relname = tablename AND n.oid = c.relnamespace
-                 GROUP BY schemaname, tablename, attname, c.oid
-                ) AS cs ON s.schemaname=cs.schemaname
-                       AND s.tablename = cs.tablename
-                       AND s.attname = cs.attname
-                       AND att.attname = cs.attname
-           JOIN pg_class stat ON tbl.oid = stat.oid
-           JOIN pg_depend dep ON (dep.objid = tbl.oid AND dep.deptype = 'i')
-           CROSS JOIN (SELECT setting AS v FROM pg_settings WHERE name='server_version') AS v
-           WHERE tbl.relkind = 'r'
-             AND att.attnum > 0
-             AND NOT att.attisdropped
-             AND s.schemaname NOT IN ('pg_catalog','information_schema')
-           GROUP BY tbl.oid, tbl.schemaname, tbl.tablename, stat.relpages, stat.reltuples, v.v
-         ) AS table_info
-       ) AS tbloat
-       LEFT JOIN pg_stat_user_tables ON pg_stat_user_tables.schemaname = tbloat.schemaname AND pg_stat_user_tables.tablename = tbloat.tablename
-     ) AS detailed_bloat
-     WHERE detailed_bloat.bloat_pct > 20  -- Only show tables with >20% bloat
-     ORDER BY detailed_bloat.bloat_bytes DESC
-     LIMIT $TOP_N;"
-}
+cmd_bloat_detail() { cmd_bloat "$@" ; }
 
 cmd_stats_check()
 {
@@ -2544,7 +2451,7 @@ cmd_stats_check()
 
 cmd_temp_stats()
 {
-  q "SELECT datname, usename,
+  q "SELECT datname,
        temp_files,
        pg_size_pretty(temp_bytes) AS temp_size,
        temp_bytes
@@ -2574,14 +2481,14 @@ cmd_plan_analysis()
 
   q "SELECT LEFT(query, 120) AS query_snippet,
        calls,
-       round(${PGS_TOTAL_COL}) AS total_time_ms,
-       round(${PGS_MEAN_COL}) AS mean_time_ms,
-       round(${PGS_MAX_COL}) AS max_time_ms,
+       round(CAST(${PGS_TOTAL_COL} AS numeric)) AS total_exec_time_ms,
+       round(CAST(${PGS_MEAN_COL} AS numeric)) AS mean_time_ms,
+       round(CAST(${PGS_MAX_COL} AS numeric)) AS max_time_ms,
        rows,
-       round(rows::numeric / calls, 2) AS rows_per_call,
-       round(${PGS_TOTAL_COL} / NULLIF(shared_blks_hit + shared_blks_read, 0), 2) AS time_per_block_ms
+       round(CAST(rows AS numeric) / calls, 2) AS rows_per_call,
+       round(CAST(${PGS_TOTAL_COL} / NULLIF(shared_blks_hit + shared_blks_read, 0) AS numeric), 2) AS time_per_block_ms
      FROM pg_stat_statements
-     WHERE ${PGS_TOTAL_COL} > 1000  -- Only show queries taking more than 1 second cumulatively
+     WHERE ${PGS_TOTAL_COL} > 1000
      ORDER BY ${PGS_TOTAL_COL} DESC
      LIMIT $limit;"
 }
@@ -2601,7 +2508,7 @@ cmd_execution_profile()
 
   q "SELECT LEFT(query, 100) AS query_snippet,
        calls,
-       round(${PGS_TOTAL_COL}) AS total_time_ms,
+       round(${PGS_TOTAL_COL}) AS total_exec_time_ms,
        round(${PGS_MEAN_COL}) AS mean_time_ms,
        round(${PGS_MAX_COL}) AS max_time_ms,
        shared_blks_read + local_blks_read + temp_blks_read AS total_reads,
@@ -2646,22 +2553,18 @@ cmd_histogram_stats()
 cmd_parallel_efficiency()
 {
   if [ -z "$(extension_installed pg_stat_statements)" ]; then
-    echo "Error: pg_stat_statements extension not installed or not enabled."
+    echo "Error: pg_stat_statements extension not installed"
     return 1
   fi
 
   local limit=${1:-$TOP_N}
-  init_pg_stat_statements_columns || {
-    echo "Error: Could not initialize pg_stat_statements columns."
-    return 1
-  }
+  init_pg_stat_statements_columns || return 1
 
   q "SELECT LEFT(query, 100) AS query_snippet,
        calls,
-       round(${PGS_TOTAL_COL}) AS total_time_ms,
+       round(CAST(${PGS_TOTAL_COL} AS numeric)) AS total_exec_time_ms,
        shared_blks_dirtied, shared_blks_written,
-       temp_blks_written,
-       blk_read_time, blk_write_time
+       temp_blks_written
      FROM pg_stat_statements
      WHERE shared_blks_dirtied > 0 OR temp_blks_written > 0
      ORDER BY shared_blks_dirtied DESC
