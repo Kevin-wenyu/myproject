@@ -8,6 +8,14 @@
 # Author: Kevin
 #
 # Version History:
+# 4.1.3 (2026-03-26) - Command consistency and calculation fixes:
+#                       - Fixed health: Unused Indexes count now matches unused_indexes
+#                       - Fixed health: Uptime shows actual runtime not WAL written
+#                       - Fixed cache_hit: parse error in overall ratio calculation
+#                       - Fixed wait_events: empty result formatting, TOP INTERPRETATION mismatch
+#                       - Fixed wal_rate: added actual sleep interval for measurement
+#                       - Fixed sla_tracker: redesigned Response Time and Throughput metrics
+#                       - Fixed alert_engine: connection and blocking data parsing
 # 4.1.2 (2026-03-26) - PostgreSQL 17/18 compatibility fixes:
 #                       - Fixed checkpoint: use correct pg_stat_checkpointer columns
 #                       - Fixed io_stats: use correct pg_stat_io columns
