@@ -2786,12 +2786,6 @@ dispatch_command()
     bloat_detail)          cmd_bloat_detail "$@" ;;
     stats_check)           cmd_stats_check "$@" ;;
     temp_stats)            cmd_temp_stats "$@" ;;
-    health_plus)           cmd_health_plus "$@" ;;
-    advanced_explain)      cmd_advanced_explain "$@" ;;
-    top_wait_events)       cmd_top_wait_events "$@" ;;
-    find_blocking_chains)  cmd_find_blocking_chains "$@" ;;
-    safe_kill)             cmd_safe_kill "$@" ;;
-    safe_cancel)           cmd_safe_cancel "$@" ;;
 
     # ADVANCED QUERY OPTIMIZATION COMMANDS
     plan_analysis)         cmd_plan_analysis "$@" ;;
