@@ -682,14 +682,33 @@ cmd_running()
 
 cmd_blocking()
 {
-  q "SELECT blocked.pid AS blocked_pid, blocked.usename AS blocked_user,
-       blocking.pid AS blocking_pid, blocking.usename AS blocking_user,
-       blocked.wait_event, 
-       now() - blocked.query_start AS duration,
-       LEFT(blocked.query, 80) AS blocked_query
-     FROM pg_stat_activity blocked
-     JOIN pg_stat_activity blocking ON blocking.pid = ANY(pg_blocking_pids(blocked.pid))
-     WHERE blocked.state = 'active';"
+  local result
+  result=$(q "SELECT
+    blocked_locks.pid AS blocked_pid,
+    blocked_activity.usename AS blocked_user,
+    blocking_locks.pid AS blocking_pid,
+    blocking_activity.usename AS blocking_user,
+    blocked_activity.query AS blocked_statement,
+    blocking_activity.query AS current_statement_in_blocking_process,
+    blocked_activity.application_name AS blocked_application
+  FROM pg_catalog.pg_locks blocked_locks
+    JOIN pg_catalog.pg_stat_activity blocked_activity ON blocked_activity.pid = blocked_locks.pid
+    JOIN pg_catalog.pg_locks blocking_locks
+      ON blocking_locks.locktype = blocked_locks.locktype
+      AND blocking_locks.DATABASE IS NOT DISTINCT FROM blocked_locks.DATABASE
+      AND blocking_locks.relation IS NOT DISTINCT FROM blocked_locks.relation
+      AND blocking_locks.page IS NOT DISTINCT FROM blocked_locks.page
+      AND blocking_locks.tuple IS NOT DISTINCT FROM blocked_locks.tuple
+      AND blocking_locks.virtualxid IS NOT DISTINCT FROM blocked_locks.virtualxid
+      AND blocking_locks.transactionid IS NOT DISTINCT FROM blocked_locks.transactionid
+      AND blocking_locks.classid IS NOT DISTINCT FROM blocked_locks.classid
+      AND blocking_locks.objid IS NOT DISTINCT FROM blocked_locks.objid
+      AND blocking_locks.objsubid IS NOT DISTINCT FROM blocked_locks.objsubid
+      AND blocking_locks.pid != blocked_locks.pid
+    JOIN pg_catalog.pg_stat_activity blocking_activity ON blocking_activity.pid = blocking_locks.pid
+  WHERE NOT blocked_locks.GRANTED;")
+
+  handle_empty "$result" "No blocking sessions detected"
 }
 
 cmd_locks()
@@ -760,24 +779,21 @@ cmd_sql()
 
 cmd_slow()
 {
-  local secs=${1:-5}
-  # Validate input is numeric and reasonable
-  if ! [[ "$secs" =~ ^[0-9]+$ ]]; then
-    echo "Error: seconds must be a positive integer" >&2
+  local threshold="${1:-5}"
+
+  if ! require_extension pg_stat_statements; then
     return 1
   fi
-  if [ "$secs" -gt 86400 ]; then
-    echo "Error: maximum 24 hours (86400 seconds)" >&2
-    return 1
-  fi
-  q "SELECT pid, usename, application_name, client_addr::text,
-       now()-query_start AS duration, state, wait_event,
-       query
-     FROM pg_stat_activity 
-     WHERE state = 'active' 
-       AND now()-query_start > interval '$secs seconds'
-       AND query NOT LIKE '%pg_stat_activity%'
-     ORDER BY query_start;"
+
+  local result
+  result=$(run_stat_statements "SELECT pid, now() - pg_stat_activity.query_start AS duration, query
+    FROM pg_stat_activity
+    WHERE (pg_stat_activity.state != 'idle' AND pg_stat_activity.state != 'idle in transaction')
+      AND pg_stat_activity.query_start IS NOT NULL
+      AND now() - pg_stat_activity.query_start > interval '$threshold seconds'
+    ORDER BY duration DESC;" 2>&1)
+
+  handle_empty "$result" "No queries running longer than $threshold seconds"
 }
 
 cmd_top_time()
@@ -887,18 +903,23 @@ cmd_bloat()
 
 cmd_unused_indexes()
 {
-  q "SELECT s.schemaname, s.relname AS tablename, s.indexrelname AS indexname,
-       pg_size_pretty(pg_relation_size(s.indexrelid)) AS size,
-       s.idx_scan, s.idx_tup_read, s.idx_tup_fetch
-     FROM pg_stat_user_indexes s
-     JOIN pg_index i ON s.indexrelid = i.indexrelid
-     WHERE s.idx_scan = 0
-       AND NOT i.indisprimary
-       AND NOT i.indisunique
-       AND NOT i.indisclustered
-       AND s.schemaname NOT IN ('pg_catalog', 'information_schema')
-       AND pg_relation_size(s.indexrelid) > 1024
-     ORDER BY pg_relation_size(s.indexrelid) DESC;"
+  local limit="${1:-20}"
+
+  local result
+  result=$(q "SELECT
+    schemaname || '.' || relname AS table,
+    indexrelname AS index,
+    pg_size_pretty(pg_relation_size(i.indexrelid)) AS index_size,
+    idx_scan as index_scans
+  FROM pg_stat_user_indexes ui
+  JOIN pg_index i ON ui.indexrelid = i.indexrelid
+  WHERE NOT i.indisunique
+    AND idx_scan < 50
+    AND pg_relation_size(i.indexrelid) > 1024 * 1024
+  ORDER BY pg_relation_size(i.indexrelid) DESC
+  LIMIT $limit;")
+
+  handle_empty "$result" "No unused indexes found"
 }
 
 cmd_duplicate_indexes()
