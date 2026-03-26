@@ -3337,6 +3337,357 @@ cmd_diagnose_lock_issue()
   colorize green "Lock diagnosis complete."
 }
 
+cmd_diagnose_connection()
+{
+  echo "╔════════════════════════════════════════════════════════════════╗"
+  echo "║           CONNECTION POOL DIAGNOSIS REPORT                      ║"
+  echo "╚════════════════════════════════════════════════════════════════╝"
+  echo ""
+  echo "Generated at: $(date '+%Y-%m-%d %H:%M:%S')"
+  echo ""
+
+  # Section 1: 连接概览
+  colorize yellow "═══ SECTION 1: CONNECTION OVERVIEW ═══"
+  echo ""
+  cmd_conn
+  echo ""
+
+  # Section 2: 连接限制
+  colorize yellow "═══ SECTION 2: CONNECTION LIMITS ═══"
+  echo ""
+  cmd_conn_limit
+  echo ""
+
+  # Section 3: 连接来源分析
+  colorize yellow "═══ SECTION 3: CONNECTION SOURCES ═══"
+  echo ""
+  q "SELECT
+    application_name,
+    client_addr::text,
+    usename,
+    state,
+    count(*) as conn_count
+  FROM pg_stat_activity
+  GROUP BY application_name, client_addr, usename, state
+  ORDER BY count(*) DESC
+  LIMIT 15;"
+  echo ""
+
+  # Section 4: 问题连接
+  colorize yellow "═══ SECTION 4: PROBLEMATIC CONNECTIONS ═══"
+  echo ""
+  colorize blue "Idle in transaction (>5 min):"
+  cmd_idle_tx
+  echo ""
+  colorize blue "Long idle connections (>1 hour):"
+  q "SELECT pid, usename, application_name,
+    round(EXTRACT(EPOCH FROM (now() - query_start))/60) as idle_minutes,
+    client_addr::text
+  FROM pg_stat_activity
+  WHERE state = 'idle'
+    AND query_start < now() - interval '1 hour'
+  ORDER BY idle_minutes DESC
+  LIMIT 10;"
+  echo ""
+
+  # Section 5: 建议
+  colorize yellow "═══ SECTION 5: RECOMMENDATIONS ═══"
+  echo ""
+  echo "Connection Pool Configuration:"
+  local max_conn current_conn
+  max_conn=$(q "SELECT setting FROM pg_settings WHERE name = 'max_connections';")
+  current_conn=$(q "SELECT count(*) FROM pg_stat_activity;")
+
+  echo "  max_connections: $max_conn"
+  echo "  current connections: $current_conn"
+  echo "  Utilization: $(( current_conn * 100 / max_conn ))%"
+  echo ""
+  echo "  Recommended pool size (per pgbouncer):"
+  echo "    - Session pool: $(( max_conn / 2 )) - $(( max_conn * 3 / 4 ))"
+  echo "    - Transaction pool: $(( max_conn / 4 )) - $(( max_conn / 2 ))"
+  echo ""
+
+  colorize green "Connection diagnosis complete."
+}
+
+cmd_diagnose_replication()
+{
+  echo "╔════════════════════════════════════════════════════════════════╗"
+  echo "║            REPLICATION DIAGNOSIS REPORT                         ║"
+  echo "╚════════════════════════════════════════════════════════════════╝"
+  echo ""
+  echo "Generated at: $(date '+%Y-%m-%d %H:%M:%S')"
+  echo ""
+
+  # Section 1: 复制状态
+  colorize yellow "═══ SECTION 1: REPLICATION STATUS ═══"
+  echo ""
+  cmd_repl
+  echo ""
+
+  # Section 2: 复制延迟
+  colorize yellow "═══ SECTION 2: REPLICATION LAG ═══"
+  echo ""
+  cmd_repl_lag
+  echo ""
+
+  # Section 3: 复制槽
+  colorize yellow "═══ SECTION 3: REPLICATION SLOTS ═══"
+  echo ""
+  cmd_slot
+  echo ""
+  cmd_slot_usage
+  echo ""
+
+  # Section 4: 延迟分析
+  colorize yellow "═══ SECTION 4: LAG ANALYSIS ═══"
+  echo ""
+
+  if [ "$HAS_REPLICATION_SLOTS" = "true" ]; then
+    q "SELECT
+      client_addr,
+      state,
+      sync_state,
+      round(EXTRACT(EPOCH FROM write_lag)) as write_lag_sec,
+      round(EXTRACT(EPOCH FROM flush_lag)) as flush_lag_sec,
+      round(EXTRACT(EPOCH FROM replay_lag)) as replay_lag_sec,
+      CASE
+        WHEN replay_lag > interval '1 hour' THEN 'CRITICAL: Very high lag'
+        WHEN replay_lag > interval '5 minutes' THEN 'WARNING: High lag'
+        ELSE 'OK'
+      END as status
+    FROM pg_stat_replication;" 2>/dev/null || msg_info "No replication configured or no access"
+  else
+    msg_info "Replication lag analysis requires PostgreSQL 10+"
+  fi
+  echo ""
+
+  # Section 5: 建议
+  colorize yellow "═══ SECTION 5: RECOMMENDATIONS ═══"
+  echo ""
+  echo "Monitoring:"
+  echo "  - Monitor replication lag regularly"
+  echo "  - Set up alerts for lag > 5 minutes"
+  echo "  - Check WAL disk space on standby"
+  echo ""
+  echo "Troubleshooting:"
+  echo "  - High write_lag: Network issue"
+  echo "  - High flush_lag: Standby disk I/O issue"
+  echo "  - High replay_lag: Standby CPU/load issue"
+  echo ""
+
+  colorize green "Replication diagnosis complete."
+}
+
+cmd_diagnose_performance()
+{
+  echo "╔════════════════════════════════════════════════════════════════╗"
+  echo "║           PERFORMANCE DIAGNOSIS REPORT                          ║"
+  echo "╚════════════════════════════════════════════════════════════════╝"
+  echo ""
+  echo "Generated at: $(date '+%Y-%m-%d %H:%M:%S')"
+  echo ""
+
+  # Section 1: 快速健康检查
+  colorize yellow "═══ SECTION 1: HEALTH CHECK ═══"
+  echo ""
+  cmd_health
+  echo ""
+
+  # Section 2: 缓存效率
+  colorize yellow "═══ SECTION 2: CACHE EFFICIENCY ═══"
+  echo ""
+  cmd_cache_hit
+  echo ""
+
+  # Section 3: I/O 统计
+  colorize yellow "═══ SECTION 3: I/O STATISTICS ═══"
+  echo ""
+  cmd_io_stats
+  echo ""
+
+  # Section 4: 等待事件
+  colorize yellow "═══ SECTION 4: WAIT EVENTS ═══"
+  echo ""
+  cmd_wait_events
+  echo ""
+
+  # Section 5: TOP 查询
+  colorize yellow "═══ SECTION 5: TOP QUERIES BY TIME ═══"
+  echo ""
+  if require_extension pg_stat_statements; then
+    cmd_top_time 10
+    echo ""
+    colorize yellow "═══ SECTION 6: TOP QUERIES BY I/O ═══"
+    echo ""
+    cmd_top_io 10
+  fi
+  echo ""
+
+  # Section 7: 建议
+  colorize yellow "═══ SUMMARY: PERFORMANCE INSIGHTS ═══"
+  echo ""
+  echo "Check items:"
+  echo "  1. Cache hit ratio should be > 95%"
+  echo "  2. Top queries should not dominate total time"
+  echo "  3. Wait events should not show sustained IO/Lock waits"
+  echo ""
+  echo "Actions:"
+  echo "  - Run 'pg diagnose slow_query' for query analysis"
+  echo "  - Run 'pg diagnose lock_issue' if locks are problematic"
+  echo "  - Check 'pg missing_indexes' for index suggestions"
+  echo ""
+
+  colorize green "Performance diagnosis complete."
+}
+
+cmd_diagnose_health()
+{
+  echo "╔════════════════════════════════════════════════════════════════╗"
+  echo "║              COMPREHENSIVE HEALTH REPORT                        ║"
+  echo "╚════════════════════════════════════════════════════════════════╝"
+  echo ""
+  echo "Generated at: $(date '+%Y-%m-%d %H:%M:%S')"
+  echo "Database: $DBNAME @ $DBHOST:$DBPORT"
+  echo "PostgreSQL Version: $(cmd_version 2>/dev/null | head -1)"
+  echo ""
+
+  local issues=0
+
+  # Section 1: 连接健康
+  colorize yellow "═══ SECTION 1: CONNECTION HEALTH ═══"
+  echo ""
+
+  local current_conn max_conn
+  current_conn=$(q "SELECT count(*) FROM pg_stat_activity;")
+  max_conn=$(q "SELECT setting::int FROM pg_settings WHERE name = 'max_connections';")
+  local conn_pct=$(( current_conn * 100 / max_conn ))
+
+  echo "Connections: $current_conn / $max_conn ($conn_pct%)"
+
+  if [ "$conn_pct" -gt 90 ]; then
+    colorize red "CRITICAL: Connection usage > 90%"
+    issues=$((issues + 1))
+  elif [ "$conn_pct" -gt 75 ]; then
+    colorize yellow "WARNING: Connection usage > 75%"
+    issues=$((issues + 1))
+  else
+    colorize green "OK: Connection usage healthy"
+  fi
+  echo ""
+
+  # 检查空闲事务
+  local idle_count
+  idle_count=$(q "SELECT count(*) FROM pg_stat_activity WHERE state = 'idle in transaction';" 2>/dev/null || echo 0)
+  echo "Idle in transaction: $idle_count"
+  if [ "$idle_count" -gt 5 ]; then
+    colorize yellow "WARNING: $idle_count sessions idle in transaction"
+    issues=$((issues + 1))
+  fi
+  echo ""
+
+  # Section 2: 缓存健康
+  colorize yellow "═══ SECTION 2: CACHE HEALTH ═══"
+  echo ""
+
+  local cache_ratio
+  cache_ratio=$(q "SELECT round(100.0 * sum(blks_hit) / nullif(sum(blks_hit) + sum(blks_read), 0), 2)
+    FROM pg_stat_database WHERE datname not in ('template0', 'template1');" 2>/dev/null)
+
+  echo "Cache hit ratio: ${cache_ratio}%"
+
+  if (( $(echo "${cache_ratio:-100} < 90" | bc -l) )); then
+    colorize red "CRITICAL: Cache hit ratio < 90%"
+    issues=$((issues + 1))
+  elif (( $(echo "${cache_ratio:-100} < 95" | bc -l) )); then
+    colorize yellow "WARNING: Cache hit ratio < 95%"
+    issues=$((issues + 1))
+  else
+    colorize green "OK: Cache hit ratio healthy"
+  fi
+  echo ""
+
+  # Section 3: 锁健康
+  colorize yellow "═══ SECTION 3: LOCK HEALTH ═══"
+  echo ""
+
+  local blocking_count
+  blocking_count=$(q "SELECT count(*) FROM pg_locks WHERE NOT granted;" 2>/dev/null || echo 0)
+  echo "Blocked sessions: $blocking_count"
+
+  if [ "$blocking_count" -gt 5 ]; then
+    colorize red "CRITICAL: $blocking_count blocked sessions"
+    issues=$((issues + 1))
+  elif [ "$blocking_count" -gt 0 ]; then
+    colorize yellow "WARNING: $blocking_count blocked sessions"
+    issues=$((issues + 1))
+  else
+    colorize green "OK: No blocking sessions"
+  fi
+  echo ""
+
+  # Section 4: 表膨胀
+  colorize yellow "═══ SECTION 4: TABLE BLOAT ═══"
+  echo ""
+
+  local bloated_tables
+  bloated_tables=$(q "SELECT count(*) FROM pg_stat_user_tables WHERE n_dead_tup > 10000;" 2>/dev/null || echo 0)
+  echo "Tables with significant dead tuples: $bloated_tables"
+
+  if [ "$bloated_tables" -gt 10 ]; then
+    colorize yellow "WARNING: $bloated_tables tables need vacuum"
+    issues=$((issues + 1))
+  else
+    colorize green "OK: Table bloat manageable"
+  fi
+  echo ""
+
+  # Section 5: 复制健康
+  colorize yellow "═══ SECTION 5: REPLICATION HEALTH ═══"
+  echo ""
+
+  local repl_count
+  repl_count=$(q "SELECT count(*) FROM pg_stat_replication;" 2>/dev/null || echo 0)
+  echo "Replication streams: $repl_count"
+
+  if [ "$repl_count" -gt 0 ]; then
+    local max_lag
+    max_lag=$(q "SELECT round(EXTRACT(EPOCH FROM max(replay_lag))) FROM pg_stat_replication;" 2>/dev/null || echo 0)
+    echo "Max replication lag: ${max_lag}s"
+
+    if [ "${max_lag:-0}" -gt 300 ]; then
+      colorize red "CRITICAL: Replication lag > 5 minutes"
+      issues=$((issues + 1))
+    elif [ "${max_lag:-0}" -gt 60 ]; then
+      colorize yellow "WARNING: Replication lag > 1 minute"
+      issues=$((issues + 1))
+    else
+      colorize green "OK: Replication lag acceptable"
+    fi
+  else
+    echo "No replication configured"
+  fi
+  echo ""
+
+  # 总结
+  colorize yellow "═══ SUMMARY ═══"
+  echo ""
+  if [ "$issues" -eq 0 ]; then
+    colorize green "Database health: EXCELLENT - No issues detected"
+  else
+    colorize yellow "Database health: $issues issue(s) detected"
+    echo ""
+    echo "Recommended actions:"
+    echo "  - Run 'pg diagnose connection' if connection issues"
+    echo "  - Run 'pg diagnose lock_issue' if blocking detected"
+    echo "  - Run 'pg diagnose slow_query' if performance issues"
+    echo "  - Run 'pg vacuum_status' to check maintenance"
+  fi
+  echo ""
+
+  colorize green "Health check complete."
+}
+
 cmd_diagnose()
 {
   local scenario="$1"
