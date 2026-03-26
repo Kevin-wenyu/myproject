@@ -3688,6 +3688,95 @@ cmd_diagnose_health()
   colorize green "Health check complete."
 }
 
+cmd_diagnose_capacity()
+{
+  echo "╔════════════════════════════════════════════════════════════════╗"
+  echo "║             CAPACITY PLANNING REPORT                            ║"
+  echo "╚════════════════════════════════════════════════════════════════╝"
+  echo ""
+  echo "Generated at: $(date '+%Y-%m-%d %H:%M:%S')"
+  echo ""
+
+  # Section 1: 数据库大小
+  colorize yellow "═══ SECTION 1: DATABASE SIZES ═══"
+  echo ""
+  cmd_db_size
+  echo ""
+
+  # Section 2: 表空间大小
+  colorize yellow "═══ SECTION 2: TABLESPACE SIZES ═══"
+  echo ""
+  cmd_ts_size
+  echo ""
+
+  # Section 3: 大表分析
+  colorize yellow "═══ SECTION 3: TOP TABLES BY SIZE ═══"
+  echo ""
+  q "SELECT
+    schemaname || '.' || relname as table,
+    pg_size_pretty(pg_total_relation_size(relid)) as total_size,
+    pg_size_pretty(pg_relation_size(relid)) as table_size,
+    pg_size_pretty(pg_indexes_size(relid)) as index_size,
+    n_live_tup as row_count,
+    n_dead_tup as dead_tuples
+  FROM pg_stat_user_tables
+  ORDER BY pg_total_relation_size(relid) DESC
+  LIMIT 20;"
+  echo ""
+
+  # Section 4: 表膨胀评估
+  colorize yellow "═══ SECTION 4: TABLE BLOAT ASSESSMENT ═══"
+  echo ""
+  cmd_bloat 20
+  echo ""
+
+  # Section 5: 索引分析
+  colorize yellow "═══ SECTION 5: INDEX SIZE ANALYSIS ═══"
+  echo ""
+  cmd_index_size
+  echo ""
+
+  colorize yellow "═══ SECTION 6: UNUSED INDEXES ═══"
+  echo ""
+  cmd_unused_indexes 10
+  echo ""
+
+  # Section 7: 增长趋势数据
+  colorize yellow "═══ SECTION 7: GROWTH INDICATORS ═══"
+  echo ""
+  echo "Recent activity (approximate):"
+  q "SELECT
+    schemaname,
+    count(*) as table_count,
+    sum(n_tup_ins) as total_inserts,
+    sum(n_tup_upd) as total_updates,
+    sum(n_tup_del) as total_deletes,
+    sum(n_tup_ins + n_tup_upd + n_tup_del) as total_writes
+  FROM pg_stat_user_tables
+  GROUP BY schemaname
+  ORDER BY total_writes DESC;"
+  echo ""
+
+  # Section 8: 建议
+  colorize yellow "═══ CAPACITY PLANNING RECOMMENDATIONS ═══"
+  echo ""
+  echo "1. Storage Growth:"
+  echo "   - Monitor table sizes monthly"
+  echo "   - Plan for 20-30% buffer on disk space"
+  echo "   - Consider partitioning for tables > 100GB"
+  echo ""
+  echo "2. Index Optimization:"
+  echo "   - Review unused indexes for removal"
+  echo "   - Rebuild bloated indexes during maintenance"
+  echo ""
+  echo "3. Maintenance:"
+  echo "   - Schedule regular VACUUM for high-update tables"
+  echo "   - Monitor dead tuple accumulation"
+  echo ""
+
+  colorize green "Capacity analysis complete."
+}
+
 cmd_diagnose()
 {
   local scenario="$1"
