@@ -3240,6 +3240,56 @@ cmd_alert_status()
 # COMBINED DIAGNOSIS COMMANDS
 # ============================================
 
+cmd_diagnose_slow_query()
+{
+  local pid="$1"
+  local threshold="${2:-5}"
+
+  echo "╔════════════════════════════════════════════════════════════════╗"
+  echo "║              SLOW QUERY DIAGNOSIS REPORT                        ║"
+  echo "╚════════════════════════════════════════════════════════════════╝"
+  echo ""
+  echo "Generated at: $(date '+%Y-%m-%d %H:%M:%S')"
+  echo "Database: $DBNAME @ $DBHOST:$DBPORT"
+  echo ""
+
+  # Section 1: 当前慢查询列表
+  colorize yellow "═══ SECTION 1: CURRENT SLOW QUERIES ═══"
+  echo ""
+  cmd_slow_enhanced "$pid" "$threshold"
+  echo ""
+
+  # Section 2: 历史TOP查询
+  colorize yellow "═══ SECTION 2: HISTORICAL TOP QUERIES ═══"
+  echo ""
+  if require_extension pg_stat_statements; then
+    cmd_top_time 5
+    echo ""
+    cmd_top_io 5
+  fi
+  echo ""
+
+  # Section 3: 系统状态
+  colorize yellow "═══ SECTION 3: SYSTEM STATE ═══"
+  echo ""
+  cmd_cache_hit
+  echo ""
+  cmd_wait_events
+  echo ""
+
+  # Section 4: 总结和建议
+  colorize yellow "═══ SECTION 4: SUMMARY AND RECOMMENDATIONS ═══"
+  echo ""
+  echo "Key findings:"
+  echo "  - Run 'pg slow_enhanced <PID>' for detailed query analysis"
+  echo "  - Check if indexes are properly configured (pg missing_indexes)"
+  echo "  - Verify statistics are up to date (pg vacuum_status)"
+  echo "  - Monitor for patterns in query execution times"
+  echo ""
+
+  colorize green "Diagnosis complete. Use specific commands for deeper analysis."
+}
+
 cmd_diagnose()
 {
   local scenario="$1"
