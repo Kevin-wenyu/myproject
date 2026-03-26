@@ -45,6 +45,13 @@ PG_MAJOR_VERSION=""
 PGS_TOTAL_COL=""
 PGS_MEAN_COL=""
 PGS_MAX_COL=""
+# Version compatibility flags
+HAS_PG_WAIT_EVENTS=""
+WAIT_EVENTS_SOURCE=""
+HAS_REPLICATION_SLOTS=""
+PG_TERMINATE_FUNC=""
+HAS_PG_STAT_CHECKPOUNTS=""
+HAS_WAL_METRICS=""
 EXEC_NAME=$(basename "$0")
 DBHOST="${PGHOST:-localhost}"
 DBPORT="${PGPORT:-5432}"
@@ -209,6 +216,50 @@ init_pg_stat_statements_columns()
     PGS_MAX_COL="max_time"
   fi
   return 0
+}
+
+# ============================================
+# VERSION COMPATIBILITY
+# ============================================
+
+init_version_features() {
+  # pg_stat_statements 列名兼容 (PG 13+ 使用 total_exec_time)
+  init_pg_stat_statements_columns
+
+  # 等待事件 (PG 10+ 有独立的 pg_stat_wait_events, PG 17+ 有 pg_wait_events)
+  if [ "$PG_MAJOR_VERSION" -ge 17 ]; then
+    HAS_PG_WAIT_EVENTS=true
+    WAIT_EVENTS_SOURCE="pg_wait_events"
+  elif [ "$PG_MAJOR_VERSION" -ge 10 ]; then
+    HAS_PG_WAIT_EVENTS=false
+    WAIT_EVENTS_SOURCE="pg_stat_activity"
+  else
+    HAS_PG_WAIT_EVENTS=false
+    WAIT_EVENTS_SOURCE="pg_stat_activity"
+  fi
+
+  # 复制槽 (PG 10+)
+  HAS_REPLICATION_SLOTS=$([ "$PG_MAJOR_VERSION" -ge 10 ] && echo true || echo false)
+
+  # 进程管理 (PG 14+ terminate_backend 支持超时参数)
+  if [ "$PG_MAJOR_VERSION" -ge 14 ]; then
+    PG_TERMINATE_FUNC="pg_terminate_backend(pid, 60)"
+  else
+    PG_TERMINATE_FUNC="pg_terminate_backend(pid)"
+  fi
+
+  # Checkpoint 统计 (PG 17+)
+  HAS_PG_STAT_CHECKPOUNTS=$([ "$PG_MAJOR_VERSION" -ge 17 ] && echo true || echo false)
+
+  # WAL 指标 (PG 18+ pg_stat_statements 可能有 wal_fpi 列)
+  if [ "$PG_MAJOR_VERSION" -ge 18 ]; then
+    # 动态检测新列
+    local has_wal_metrics
+    has_wal_metrics=$(echo "SELECT 1 FROM pg_attribute WHERE attrelid = 'pg_stat_statements'::regclass AND attname = 'wal_fpi' LIMIT 1;" | $PSQL_CMD -t -A 2>/dev/null || echo "")
+    HAS_WAL_METRICS=$([ -n "$has_wal_metrics" ] && echo true || echo false)
+  else
+    HAS_WAL_METRICS=false
+  fi
 }
 
 extension_installed()
@@ -532,6 +583,7 @@ else
 fi
 
 get_version
+init_version_features
 
 [ $# -lt 1 ] && usage
 
