@@ -28,8 +28,8 @@ A comprehensive command-line tool for PostgreSQL database monitoring, diagnostic
 
 ```bash
 # Clone the repository
-git clone https://github.com/Kevin-wenyu/pg-tool.git
-cd pg-tool
+git clone https://github.com/Kevin-wenyu/pg-diagnostic.git
+cd pg-diagnostic
 
 # Make executable
 chmod +x pg
@@ -239,9 +239,8 @@ The `diagnose` command provides combined analysis for common DBA scenarios:
 ./pg diagnose performance   # Performance analysis
 ./pg diagnose connection    # Connection issues
 ./pg diagnose blocking      # Blocking analysis
-./pg diagnose storage       # Storage analysis
+./pg diagnose capacity      # Capacity planning
 ./pg diagnose replication   # Replication health
-./pg diagnose security      # Security audit
 ```
 
 ## Examples
