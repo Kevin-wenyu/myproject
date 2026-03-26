@@ -2686,7 +2686,7 @@ dispatch_command()
   shift
 
   case "$cmd" in
-    ps|sessions)           cmd_ps "$@" ;;
+    ps)                    cmd_ps "$@" ;;
     running)               cmd_running "$@" ;;
     blocking|blocked)      cmd_blocking "$@" ;;
     locks)                 cmd_locks "$@" ;;
@@ -2768,7 +2768,7 @@ dispatch_command()
     sessions|session_stats) cmd_session_stats "$@" ;;
     wal_rate)              cmd_wal_rate "$@" ;;
     db_growth)             cmd_db_growth "$@" ;;
-    constraints|constraint_issues) cmd_constraint_issues "$@" ;;
+    constraint_issues)     cmd_constraint_issues "$@" ;;
     table_gaps)            cmd_table_gaps "$@" ;;
     lock_chain|lock_wait_chain) cmd_lock_wait_chain "$@" ;;
     index_usage)           cmd_index_usage_pattern "$@" ;;
